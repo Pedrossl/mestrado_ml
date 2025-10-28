@@ -1,0 +1,43 @@
+1. Algoritmos Utilizados:
+
+Algoritmo Principal: Alternating Decision Trees (ADtrees), otimizado com ADBoost.
+
+Algoritmo de Base (Baseline): J48 (C4.5), que utiliza o critério de Ganho de Informação Normalizado (Normalized Information Gain).
+
+2. Tratamento de Dados (Pré-processamento):
+
+Seleção de Características: Utilizou-se o CBF Subset Evaluation Criterion combinado com a busca Greedy Stepwise Search para identificar os features mais relevantes.
+
+Combate ao Desequilíbrio de Classes: Foi aplicada uma Técnica de Amostragem de Dados (Data-Sampling) para balancear a amostra de treinamento.
+
+Problema: Baixa prevalência de GAD (4.7%) e SAD (2.7%) na população geral.
+
+Solução: Super-representação (oversampling) do grupo de alto risco e subamostragem (undersampling) do grupo de baixo risco, visando melhorar o desempenho do classificador na classe minoritária (casos positivos).
+
+3. Validação e Métricas de Avaliação:
+
+Método de Validação: Validação Cruzada de 10-dobras (10-fold Cross-validation).
+
+Métricas de Desempenho:
+
+Acurácia (Accuracy - Acc)
+
+Sensibilidade (Sensitivity)
+
+Especificidade (Specificity)
+
+Métricas Específicas do Modelo:
+
+AD-score: Saída bruta do ADtree, usada como medida de confiança.
+
+Pontuação de Risco (Risk Score): O AD-score foi normalizado em uma escala contínua de 0 a 1.
+
+Razão de Verossimilhança Tipo 3: Usada para validar a associação entre a Pontuação de Risco e características clínicas (comorbidades, estressores, etc.).
+
+Dados faltantes:
+
+```
+Colunas com valores faltantes e contagens:
+Poverty Status    19
+Social Phobia      1
+```
