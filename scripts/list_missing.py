@@ -2,7 +2,7 @@ import pandas as pd
 import sys
 
 # script rápido para listar colunas com missing
-file_path = sys.argv[1] if len(sys.argv) > 1 else "mestrado-teste.csv"
+file_path = sys.argv[1] if len(sys.argv) > 1 else "datasets/mestrado-teste.csv"
 na_vals = ['', 'NA', 'N/A', 'n/a', '.', '...', ' .', 'nan', 'NaN']
 
 try:
@@ -31,5 +31,5 @@ else:
     print(missing.to_string())
     out = missing.reset_index()
     out.columns = ['column', 'missing_count']
-    out.to_csv('colunas_com_missing.csv', index=False)
+    out.to_csv('output/colunas_com_missing.csv', index=False)
     print("\nSalvo em: colunas_com_missing.csv")
