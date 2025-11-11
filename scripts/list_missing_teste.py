@@ -16,20 +16,40 @@ df.columns = df.columns.str.strip()
 for c in df.select_dtypes(include=['object']).columns:
     df[c] = df[c].str.strip()
 
+# tentar converter object numérico em número real
 for col in df.columns:
     sample = df[col].dropna().astype(str).head(100)
     if not sample.empty and sample.str.match(r'^[\d\-\+ ,\.eE]+$').all():
-        df[col] = pd.to_numeric(df[col].astype(str).str.replace(',', '.').str.replace(' ', ''), errors='coerce')
+        df[col] = pd.to_numeric(
+            df[col].astype(str).str.replace(',', '.').str.replace(' ', ''),
+            errors='coerce'
+        )
 
+# cálculo de missing
+total_rows = len(df)
 missing = df.isnull().sum()
 missing = missing[missing > 0].sort_values(ascending=False)
+
+print("\n===== RESUMO DO DATASET =====")
+print(f"Total de linhas: {total_rows}")
+print(f"Total de colunas: {len(df.columns)}")
+print(f"Colunas sem nenhum valor faltante: {(missing == 0).sum()}/{len(df.columns)}")
+print("==============================\n")
 
 if missing.empty:
     print("Nenhuma coluna com valores faltantes.")
 else:
-    print("Colunas com valores faltantes e contagens:\n")
-    print(missing.to_string())
+    print("Colunas com valores faltantes:\n")
+
+    # criar dataframe com porcentagem
     out = missing.reset_index()
     out.columns = ['column', 'missing_count']
+    out["missing_pct"] = (out["missing_count"] / total_rows * 100).round(2)
+
+    # exibir formatado
+    for _, row in out.iterrows():
+        print(f"{row['column']} - {row['missing_count']} ({row['missing_pct']}%)")
+
+    # exportar CSV
     out.to_csv('output/colunas_com_missing.csv', index=False)
-    print("\nSalvo em: colunas_com_missing.csv")
+    print("\nArquivo salvo em: output/colunas_com_missing.csv")
