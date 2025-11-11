@@ -53,3 +53,45 @@ else:
     # exportar CSV
     out.to_csv('output/colunas_com_missing.csv', index=False)
     print("\nArquivo salvo em: output/colunas_com_missing.csv")
+
+
+def analisar_balanceamento(df_to_analyze, vars_to_check, all_rows_count):
+    """
+    Imprime a contagem e a porcentagem de cada valor nas colunas-alvo especificadas.
+
+    :param df_to_analyze: DataFrame pandas contendo os dados.
+    :param vars_to_check: Lista de strings com os nomes das colunas-alvo.
+    :param all_rows_count: Número total de linhas no dataframe (para pct).
+    """
+    print("\n\n===== BALANCEAMENTO DAS VARIÁVEIS ALVO =====")
+
+    for var in vars_to_check:
+        if var in df_to_analyze.columns:
+            print(f"\n--- Distribuição da variável: {var} ---")
+
+            # Obter contagem de valores (inclui NaNs para ver se há alvos faltando)
+            counts = df_to_analyze[var].value_counts(dropna=False)
+
+            # Calcular porcentagens
+            percentages = (counts / all_rows_count * 100).round(2)
+
+            # Criar um DataFrame de resumo para impressão limpa
+            balance_df = pd.DataFrame({
+                'Valor': counts.index.astype(str), # Usar .astype(str) para lidar com NaNs
+                'Contagem': counts.values,
+                'Porcentagem (%)': percentages.values
+            })
+
+            print(balance_df.to_string(index=False))
+            print("---------------------------------------")
+        else:
+            print(f"\nAVISO: A coluna alvo '{var}' não foi encontrada no dataset.")
+
+    print("=============================================")
+
+
+    # Definir as variáveis-alvo (se ainda não o fez)
+target_vars = ['SAD', 'GAD']
+
+# Chamar a função
+analisar_balanceamento(df, target_vars, total_rows)
