@@ -1,0 +1,23 @@
+{
+  "threshold": 0.68,
+  "matches": {
+    "Subject": [
+      {
+        "test_col": "Subject",
+        "score": 1.0
+      }
+    ],
+    "SAD": [
+      {
+        "test_col": "SAD",
+        "score": 1.0
+      }
+    ],
+    "GAD": [
+      {
+        "test_col": "GAD",
+        "score": 1.0
+      }
+    ]
+  }
+}

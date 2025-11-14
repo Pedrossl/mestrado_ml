@@ -3,6 +3,7 @@ import sys
 
 # script rápido para listar colunas com missing
 file_path = sys.argv[1] if len(sys.argv) > 1 else "datasets/mestrado-teste.csv"
+file_path_train = sys.argv[1] if len(sys.argv) > 1 else "datasets/mestrado-treino.csv"
 na_vals = ['', 'NA', 'N/A', 'n/a', '.', '...', ' .', 'nan', 'NaN']
 
 try:
