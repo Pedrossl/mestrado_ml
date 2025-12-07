@@ -1,0 +1,131 @@
+================================================================================
+MAPEAMENTO DE VARIÁVEIS - DATASET DE TREINO
+================================================================================
+
+BOOLEANAS (int_bool): 4
+  - Child leaves daycare/school due to anxiety
+  - Onset Child leaves daycare/school due to anxiety
+  - SAD
+  - GAD
+
+INTEIRAS (int): 72
+  - Irritability
+  - Increased unnecessary whole body movements in specific situations
+  - Difficulty concentrating on tasks or play activity independently
+  - Difficulty concentrating on adult-directed tasks or play activities
+  - Inattention
+  - Fear about possible harm befalling major attachment figures
+  - Onset Fear about possible harm befalling major attachment figures
+  - Fear about calamitous separation
+  - Onset Fear about calamitous separation
+  - Avoidance of being alone
+  - Onset Avoidance of being alone
+  - Anticipatory distress/resistance to separation
+  - Onset Anticipatory distress/resistance to separation
+  - Withdrawal when attachement figure absent
+  - Onset Withdrawal when attachement figure absent
+  - Actual distress when attachment figure absent
+  - Onset Actual distress when attachment figure absent
+  - Complaints of physical symptoms when separation from major attachment figure is anticipated
+  - Onset Complaints of physical symptoms when separation from major attachment figure is anticipated
+  - Parent's plan disrupted due to child's distress at separation
+  - Onset Parent's plan disrupted due to child's distress at separation
+  - Complaints of physical symptoms when attendance at school/daycare is anticipated or occurs
+  - Onset Complaints of physical symptoms when attendance at school/daycare is anticipated or occurs
+  - Fear/anxiety about daycare/school attendance screen positive
+  - Fear/Anxiety about leaving home for daycare/school
+  - Onset Fear/Anxiety about leaving home for daycare/school
+  - Anticipatory fear of daycare/school
+  - Onset Anticipatory fear of daycare/school
+  - Daycare/school non-attendance due to anxiety
+  - Onset Daycare/school non-attendance due to anxiety
+  - Has to be taken to daycare/school
+  - Onset Has to be taken to daycare/school because of separation anxiety
+  - Has to be taken to daycare/school because of separation anxiety
+  - Picked up early from daycare/school due to anxiety
+  - Onset Picked up early from daycare/school due to anxiety
+  - Child tries unsuccessfully to leave daycare/school due to anxiety
+  - Onset Child tries unsuccessfully to leave daycare/school due to anxiety
+  - Frequency of reluctance to go to sleep
+  - Onset Frequency of reluctance to go to sleep
+  - Frequency of sleeping with family member due to a reluctance to sleep alone
+  - Onset Frequency of sleeping with family member due to a reluctance to sleep alone
+  - Sleep resistence
+  - Freqency of nights child wakes up during the night
+  - Rising at night to check on family members
+  - Onset Rising at night to check on family members
+  - Increased need for sleep
+  - Restless sleep
+  - Inadequately rested by sleep
+  - Falls asleep in carseat for unscheduled nap
+  - Tiredness
+  - Child becomes tired or "worn out" more easily than normal
+  - Separation dreams
+  - Onset Separation dreams
+  - Nervous tension
+  - Anxious affect that occurs in certain situations/environments
+  - Anxiety not associated with any particular situation
+  - Exaggerated tartle response
+  - Concentration difficulties
+  - Easy fatigability
+  - Muscle Tension
+  - Restlessness
+  - Worries that cannot be stopped voluntarily and occur across more than one acctivity
+  - Frequency of worries
+  - Hypochondriasis
+  - Worry that family members will become ill
+  - Worry about the future
+  - Worries about natural calamity
+  - Worries about past behavior
+  - Worries about competence or performance
+  - Worries about appearance
+  - Worries about money/food
+  - Other worries
+
+DECIMAIS (float): 2
+  - Hours taken to fall asleep
+  - How long awak per night
+
+TEXTO (string): 2
+  - Subject
+  - Sampling Weight
+
+
+================================================================================
+MAPEAMENTO DE VARIÁVEIS - DATASET DE TESTE
+================================================================================
+
+BOOLEANAS (int_bool): 11
+  - Race
+  - Poverty Status
+  - SAD
+  - GAD
+  - Social Phobia
+  - ADHD
+  - CD
+  - Depression
+  - ODD
+  - Family History - Substance Abuse
+  - Family History - Psychiatric Diagnosis
+
+INTEIRAS (int): 11
+  - Age
+  - Number of Bio. Parents
+  - Number of Siblings
+  - Number of Impairments
+  - Number of Type A Stressors
+  - Number of Type B Stressors
+  - Frequency Temper Tantrums
+  - Frequency Irritable Mood
+  - Number of Sleep Disturbances
+  - Number of Physical Symptoms
+  - Number of Sensory Sensitivities
+
+DECIMAIS (float): 0
+
+TEXTO (string): 5
+  - Subject
+  - Sex
+  - GAD Probabiliy - Gamma
+  - SAD Probability - Gamma
+  - Sample Weight
