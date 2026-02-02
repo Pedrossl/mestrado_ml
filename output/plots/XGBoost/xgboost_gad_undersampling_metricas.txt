@@ -1,0 +1,17 @@
+XGBoost (com Undersampling) - GAD
+========================================
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    64.81%
+Sensitivity: 65.91%
+Specificity: 64.61%
+PPV:         25.22%
+NPV:         91.28%
+F1-Score:    36.48%
+Kappa:       0.1838
+
+MATRIZ DE CONFUSÃO
+----------------------------------------
+VN=157 | FP=86
+FN=15 | VP=29

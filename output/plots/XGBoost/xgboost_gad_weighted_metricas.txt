@@ -1,0 +1,17 @@
+XGBoost (scale_pos_weight=5.5) - GAD
+========================================
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    83.62%
+Sensitivity: 38.64%
+Specificity: 91.77%
+PPV:         45.95%
+NPV:         89.20%
+F1-Score:    41.98%
+Kappa:       0.3252
+
+MATRIZ DE CONFUSÃO
+----------------------------------------
+VN=223 | FP=20
+FN=27 | VP=17

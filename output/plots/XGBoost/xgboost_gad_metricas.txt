@@ -1,0 +1,17 @@
+XGBoost (sem balanceamento) - GAD
+========================================
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    85.71%
+Sensitivity: 25.00%
+Specificity: 96.71%
+PPV:         57.89%
+NPV:         87.69%
+F1-Score:    34.92%
+Kappa:       0.2829
+
+MATRIZ DE CONFUSÃO
+----------------------------------------
+VN=235 | FP=8
+FN=33 | VP=11
