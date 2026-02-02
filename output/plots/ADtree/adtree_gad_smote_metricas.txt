@@ -1,0 +1,25 @@
+MODELO ADTree (com SMOTE corrigido) - GAD
+========================================
+
+NOTA: SMOTE aplicado apenas no treino de cada fold
+      para evitar data leakage.
+
+Amostras originais: 287 | Features: 17
+Validação: 10-fold Stratified CV
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    32.75%
+Sensitivity: 84.09%
+Specificity: 23.46%
+PPV:         16.59%
+NPV:         89.06%
+F1-Score:    27.72%
+Kappa:       0.0283
+
+MATRIZ DE CONFUSÃO AGREGADA
+----------------------------------------
+VN=57 | FP=186
+FN=7 | VP=37
+
+Total: 287 | Acertos: 94 | Erros: 193

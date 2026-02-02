@@ -1,0 +1,22 @@
+MODELO ADTree (com weighting 5.5x) - GAD
+========================================
+
+Amostras: 287 | Features: 17
+Validação: 10-fold CV (treino=259, teste=28)
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    65.85%
+Sensitivity: 47.73%
+Specificity: 69.14%
+PPV:         21.88%
+NPV:         87.96%
+F1-Score:    30.00%
+Kappa:       0.1136
+
+MATRIZ DE CONFUSÃO
+----------------------------------------
+VN=168 | FP=75
+FN=23 | VP=21
+
+Total: 287 | Acertos: 189 | Erros: 98

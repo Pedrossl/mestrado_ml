@@ -1,0 +1,25 @@
+MODELO ADTree (com Undersampling corrigido) - GAD
+========================================
+
+NOTA: Undersampling aplicado apenas no treino de cada fold
+      para evitar data leakage.
+
+Amostras originais: 287 | Features: 17
+Validação: 10-fold Stratified CV
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    65.85%
+Sensitivity: 56.82%
+Specificity: 67.49%
+PPV:         24.04%
+NPV:         89.62%
+F1-Score:    33.78%
+Kappa:       0.1560
+
+MATRIZ DE CONFUSÃO AGREGADA
+----------------------------------------
+VN=164 | FP=79
+FN=19 | VP=25
+
+Total: 287 | Acertos: 189 | Erros: 98
