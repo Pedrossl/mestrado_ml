@@ -1,0 +1,17 @@
+SVM (class_weight='balanced') - GAD
+========================================
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    77.00%
+Sensitivity: 38.64%
+Specificity: 83.95%
+PPV:         30.36%
+NPV:         88.31%
+F1-Score:    34.00%
+Kappa:       0.2032
+
+MATRIZ DE CONFUSÃO
+----------------------------------------
+VN=204 | FP=39
+FN=27 | VP=17

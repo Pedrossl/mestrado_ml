@@ -1,0 +1,17 @@
+SVM (sem balanceamento) - GAD
+========================================
+
+MÉTRICAS
+----------------------------------------
+Accuracy:    84.67%
+Sensitivity: 0.00%
+Specificity: 100.00%
+PPV:         0.00%
+NPV:         84.67%
+F1-Score:    0.00%
+Kappa:       0.0000
+
+MATRIZ DE CONFUSÃO
+----------------------------------------
+VN=243 | FP=0
+FN=44 | VP=0
