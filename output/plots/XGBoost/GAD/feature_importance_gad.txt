@@ -1,0 +1,23 @@
+FEATURE IMPORTANCE - XGBoost + SMOTE - GAD
+============================================================
+Método: média das importâncias dos 10 folds (IC 95%)
+
+Rank  Feature                         Importância   ± IC 95%
+------------------------------------------------------------
+1     Number of Impairments                0.1629 ± 0.0462
+2     Race                                 0.1115 ± 0.0237
+3     ODD                                  0.0830 ± 0.0474
+4     Social Phobia                        0.0801 ± 0.0218
+5     ADHD                                 0.0775 ± 0.0347
+6     Sex                                  0.0536 ± 0.0142
+7     Age                                  0.0527 ± 0.0101
+8     Family History - Psychiatric Diagnosis       0.0507 ± 0.0390
+9     Number of Bio. Parents               0.0504 ± 0.0156
+10    Number of Type B Stressors           0.0489 ± 0.0130
+11    Number of Siblings                   0.0487 ± 0.0290
+12    Number of Sensory Sensitivities       0.0433 ± 0.0135
+13    Number of Sleep Disturbances         0.0313 ± 0.0034
+14    Frequency Irritable Mood             0.0295 ± 0.0074
+15    CD                                   0.0289 ± 0.0108
+16    Frequency Temper Tantrums            0.0279 ± 0.0034
+17    Poverty Status                       0.0190 ± 0.0050

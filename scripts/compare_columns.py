@@ -181,6 +181,8 @@ def suggest_and_save_matches(train_path, test_path, threshold=0.7):
 
 
 if __name__ == '__main__':
+    main()
+
     # Comportamento adicional: sugerir matches similares
     train_path = sys.argv[1] if len(sys.argv) > 1 else "datasets/mestrado-treino.csv"
     test_path = sys.argv[2] if len(sys.argv) > 2 else "datasets/mestrado-teste.csv"
@@ -188,7 +190,3 @@ if __name__ == '__main__':
         suggest_and_save_matches(train_path, test_path, threshold=0.68)
     except Exception:
         pass
-
-
-if __name__ == '__main__':
-    main()

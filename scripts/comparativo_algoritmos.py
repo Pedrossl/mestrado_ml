@@ -1,6 +1,7 @@
 """
 Comparativo de Algoritmos: ADTree vs XGBoost vs SVM
 Compara o melhor modelo de cada algoritmo (usando SMOTE corrigido)
+Inclui Intervalos de Confiança (IC 95%)
 """
 
 import pandas as pd
@@ -9,79 +10,25 @@ import os
 import matplotlib.pyplot as plt
 
 from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import confusion_matrix
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 
-from normalizacao import carregar_teste_normalizado
+from utils import (
+    preparar_dados, calcular_metricas_fold, calcular_metricas_fold_cm,
+    agregar_metricas_com_ic, plotar_comparativo_grafico, plotar_comparativo_tabela
+)
 
 OUTPUT_PATH = 'output/plots/Comparativo'
 PLOTS_PATH = 'output/plots/Comparativo/plots'
-
-
-def preparar_dados(target='GAD'):
-    """Prepara os dados para os modelos."""
-    df = carregar_teste_normalizado()
-
-    colunas_remover = [
-        'Subject',
-        'GAD Probabiliy - Gamma',
-        'SAD Probability - Gamma',
-        'Sample Weight'
-    ]
-
-    if target == 'GAD':
-        colunas_remover.append('SAD')
-    else:
-        colunas_remover.append('GAD')
-
-    df_modelo = df.drop(columns=[c for c in colunas_remover if c in df.columns])
-
-    if 'Sex' in df_modelo.columns:
-        df_modelo['Sex'] = df_modelo['Sex'].map({'M': 0, 'F': 1})
-
-    cols = [c for c in df_modelo.columns if c != target] + [target]
-    df_modelo = df_modelo[cols]
-    df_modelo = df_modelo.dropna()
-
-    return df_modelo, target
-
-
-def calcular_metricas(y_true, y_pred):
-    """Calcula todas as métricas."""
-    cm = confusion_matrix(y_true, y_pred)
-    vn, fp, fn, vp = cm.ravel()
-
-    total = vn + fp + fn + vp
-    accuracy = (vn + vp) / total * 100
-    sensitivity = vp / (vp + fn) * 100 if (vp + fn) > 0 else 0
-    specificity = vn / (vn + fp) * 100 if (vn + fp) > 0 else 0
-    ppv = vp / (vp + fp) * 100 if (vp + fp) > 0 else 0
-    npv = vn / (vn + fn) * 100 if (vn + fn) > 0 else 0
-
-    precision = vp / (vp + fp) if (vp + fp) > 0 else 0
-    recall = vp / (vp + fn) if (vp + fn) > 0 else 0
-    f1 = 2 * (precision * recall) / (precision + recall) * 100 if (precision + recall) > 0 else 0
-
-    po = (vn + vp) / total
-    pe = ((vn + fp) * (vn + fn) + (fn + vp) * (fp + vp)) / (total * total)
-    kappa = (po - pe) / (1 - pe) if (1 - pe) > 0 else 0
-
-    return {
-        'vn': vn, 'fp': fp, 'fn': fn, 'vp': vp,
-        'accuracy': accuracy, 'sensitivity': sensitivity,
-        'specificity': specificity, 'ppv': ppv, 'npv': npv,
-        'f1': f1, 'kappa': kappa
-    }
 
 
 def treinar_xgboost_smote(X, y):
     """Treina XGBoost com SMOTE dentro de cada fold."""
     n_folds = 10
     skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
-    all_y_true, all_y_pred = [], []
+    metricas_folds = []
 
     for train_idx, test_idx in skf.split(X, y):
         X_train, X_test = X[train_idx], X[test_idx]
@@ -98,17 +45,16 @@ def treinar_xgboost_smote(X, y):
         model.fit(X_train_res, y_train_res)
         y_pred = model.predict(X_test)
 
-        all_y_true.extend(y_test)
-        all_y_pred.extend(y_pred)
+        metricas_folds.append(calcular_metricas_fold(y_test, y_pred))
 
-    return calcular_metricas(all_y_true, all_y_pred)
+    return agregar_metricas_com_ic(metricas_folds)
 
 
 def treinar_svm_smote(X, y):
     """Treina SVM com SMOTE dentro de cada fold."""
     n_folds = 10
     skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
-    all_y_true, all_y_pred = [], []
+    metricas_folds = []
 
     for train_idx, test_idx in skf.split(X, y):
         X_train, X_test = X[train_idx], X[test_idx]
@@ -125,10 +71,9 @@ def treinar_svm_smote(X, y):
         model.fit(X_train_res, y_train_res)
         y_pred = model.predict(X_test_scaled)
 
-        all_y_true.extend(y_test)
-        all_y_pred.extend(y_pred)
+        metricas_folds.append(calcular_metricas_fold(y_test, y_pred))
 
-    return calcular_metricas(all_y_true, all_y_pred)
+    return agregar_metricas_com_ic(metricas_folds)
 
 
 def treinar_adtree_smote(X, y, feature_names, target_name):
@@ -149,7 +94,6 @@ def treinar_adtree_smote(X, y, feature_names, target_name):
         jvm.start(packages=True, logging_level=logging.ERROR)
         sys.stderr = old_stderr
 
-        # Verificar pacote ADTree
         import weka.core.packages as packages
         pkg_name = "alternatingDecisionTrees"
         installed = [p.name for p in packages.installed_packages()]
@@ -185,7 +129,7 @@ def treinar_adtree_smote(X, y, feature_names, target_name):
 
         n_folds = 10
         skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
-        total_vp, total_vn, total_fp, total_fn = 0, 0, 0, 0
+        metricas_folds = []
 
         for train_idx, test_idx in skf.split(X, y):
             X_train, X_test = X[train_idx], X[test_idx]
@@ -209,35 +153,10 @@ def treinar_adtree_smote(X, y, feature_names, target_name):
             evaluation = Evaluation(dataset_train)
             evaluation.test_model(adtree, dataset_test)
 
-            cm = evaluation.confusion_matrix
-            total_vn += int(cm[0][0])
-            total_fp += int(cm[0][1])
-            total_fn += int(cm[1][0])
-            total_vp += int(cm[1][1])
+            metricas_folds.append(calcular_metricas_fold_cm(evaluation.confusion_matrix))
 
         jvm.stop()
-
-        total = total_vn + total_fp + total_fn + total_vp
-        accuracy = (total_vn + total_vp) / total * 100
-        sensitivity = total_vp / (total_vp + total_fn) * 100 if (total_vp + total_fn) > 0 else 0
-        specificity = total_vn / (total_vn + total_fp) * 100 if (total_vn + total_fp) > 0 else 0
-        ppv = total_vp / (total_vp + total_fp) * 100 if (total_vp + total_fp) > 0 else 0
-        npv = total_vn / (total_vn + total_fn) * 100 if (total_vn + total_fn) > 0 else 0
-
-        precision = total_vp / (total_vp + total_fp) if (total_vp + total_fp) > 0 else 0
-        recall = total_vp / (total_vp + total_fn) if (total_vp + total_fn) > 0 else 0
-        f1 = 2 * (precision * recall) / (precision + recall) * 100 if (precision + recall) > 0 else 0
-
-        po = (total_vn + total_vp) / total
-        pe = ((total_vn + total_fp) * (total_vn + total_fn) + (total_fn + total_vp) * (total_fp + total_vp)) / (total * total)
-        kappa = (po - pe) / (1 - pe) if (1 - pe) > 0 else 0
-
-        return {
-            'vn': total_vn, 'fp': total_fp, 'fn': total_fn, 'vp': total_vp,
-            'accuracy': accuracy, 'sensitivity': sensitivity,
-            'specificity': specificity, 'ppv': ppv, 'npv': npv,
-            'f1': f1, 'kappa': kappa
-        }
+        return agregar_metricas_com_ic(metricas_folds)
 
     except Exception as e:
         print(f"  [ERRO] ADTree: {e}")
@@ -245,197 +164,112 @@ def treinar_adtree_smote(X, y, feature_names, target_name):
 
 
 def comparativo_algoritmos(resultados_dict, target_name):
-    """Exibe tabela comparativa dos algoritmos."""
-    print("\n" + "=" * 90)
-    print("              COMPARATIVO DE ALGORITMOS - ADTree vs XGBoost vs SVM")
-    print("=" * 90)
+    """Exibe tabela comparativa dos algoritmos com IC."""
+    print("\n" + "=" * 110)
+    print("              COMPARATIVO DE ALGORITMOS - ADTree vs XGBoost vs SVM (com IC 95%)")
+    print("=" * 110)
 
-    print(f"\n{'Algoritmo':<20} {'Acc':>8} {'Sens':>8} {'Spec':>8} {'PPV':>8} {'F1':>8} {'Kappa':>8}")
-    print("-" * 90)
+    print(f"\n{'Algoritmo':<15} {'Accuracy':>18} {'Sensitivity':>18} {'Specificity':>18} {'F1-Score':>18} {'Kappa':>16}")
+    print("-" * 110)
 
     resultados = []
     for nome, m in resultados_dict.items():
         if m is not None:
-            print(f"{nome:<20} {m['accuracy']:>7.2f}% {m['sensitivity']:>7.2f}% {m['specificity']:>7.2f}% {m['ppv']:>7.2f}% {m['f1']:>7.2f}% {m['kappa']:>8.4f}")
+            acc_str = f"{m['accuracy']:.1f}±{m['accuracy_ic']:.1f}"
+            sens_str = f"{m['sensitivity']:.1f}±{m['sensitivity_ic']:.1f}"
+            spec_str = f"{m['specificity']:.1f}±{m['specificity_ic']:.1f}"
+            f1_str = f"{m['f1']:.1f}±{m['f1_ic']:.1f}"
+            kappa_str = f"{m['kappa']:.3f}±{m['kappa_ic']:.3f}"
+
+            print(f"{nome:<15} {acc_str:>18} {sens_str:>18} {spec_str:>18} {f1_str:>18} {kappa_str:>16}")
+
             resultados.append({
-                'Algoritmo': nome,
+                'Modelo': nome,
                 'Accuracy': m['accuracy'],
+                'Accuracy_IC': m['accuracy_ic'],
                 'Sensitivity': m['sensitivity'],
+                'Sensitivity_IC': m['sensitivity_ic'],
                 'Specificity': m['specificity'],
+                'Specificity_IC': m['specificity_ic'],
                 'PPV': m['ppv'],
+                'PPV_IC': m['ppv_ic'],
                 'F1-Score': m['f1'],
-                'Kappa': m['kappa']
+                'F1-Score_IC': m['f1_ic'],
+                'Kappa': m['kappa'],
+                'Kappa_IC': m['kappa_ic']
             })
 
-    print("-" * 90)
+    print("-" * 110)
 
-    print("\n[MELHORES POR MÉTRICA]")
-    metricas = ['Accuracy', 'Sensitivity', 'Specificity', 'PPV', 'F1-Score', 'Kappa']
-    for metrica in metricas:
-        melhor = max(resultados, key=lambda x: x[metrica])
-        print(f"  {metrica:<12}: {melhor['Algoritmo']} ({melhor[metrica]:.2f}{'%' if metrica != 'Kappa' else ''})")
-
-    # Salvar
-    os.makedirs(OUTPUT_PATH, exist_ok=True)
-    output_file = f'{OUTPUT_PATH}/comparativo_algoritmos_{target_name.lower()}.txt'
+    output_path_target = f'{OUTPUT_PATH}/{target_name.upper()}'
+    os.makedirs(output_path_target, exist_ok=True)
+    output_file = f'{output_path_target}/comparativo_algoritmos_{target_name.lower()}.txt'
     with open(output_file, 'w') as f:
-        f.write(f"COMPARATIVO DE ALGORITMOS - {target_name}\n")
+        f.write(f"COMPARATIVO DE ALGORITMOS - {target_name} (com IC 95%)\n")
         f.write("ADTree vs XGBoost vs SVM (todos com SMOTE corrigido)\n")
-        f.write("=" * 90 + "\n\n")
-        f.write(f"{'Algoritmo':<20} {'Acc':>8} {'Sens':>8} {'Spec':>8} {'PPV':>8} {'F1':>8} {'Kappa':>8}\n")
-        f.write("-" * 90 + "\n")
+        f.write("=" * 110 + "\n\n")
+        f.write(f"{'Algoritmo':<15} {'Accuracy':>18} {'Sensitivity':>18} {'Specificity':>18} {'F1-Score':>18} {'Kappa':>16}\n")
+        f.write("-" * 110 + "\n")
         for r in resultados:
-            f.write(f"{r['Algoritmo']:<20} {r['Accuracy']:>7.2f}% {r['Sensitivity']:>7.2f}% {r['Specificity']:>7.2f}% {r['PPV']:>7.2f}% {r['F1-Score']:>7.2f}% {r['Kappa']:>8.4f}\n")
-        f.write("-" * 90 + "\n\n")
-        f.write("MELHORES POR MÉTRICA\n")
-        f.write("-" * 40 + "\n")
-        for metrica in metricas:
-            melhor = max(resultados, key=lambda x: x[metrica])
-            f.write(f"{metrica:<12}: {melhor['Algoritmo']} ({melhor[metrica]:.2f}{'%' if metrica != 'Kappa' else ''})\n")
+            acc_str = f"{r['Accuracy']:.1f}±{r['Accuracy_IC']:.1f}"
+            sens_str = f"{r['Sensitivity']:.1f}±{r['Sensitivity_IC']:.1f}"
+            spec_str = f"{r['Specificity']:.1f}±{r['Specificity_IC']:.1f}"
+            f1_str = f"{r['F1-Score']:.1f}±{r['F1-Score_IC']:.1f}"
+            kappa_str = f"{r['Kappa']:.3f}±{r['Kappa_IC']:.3f}"
+            f.write(f"{r['Modelo']:<15} {acc_str:>18} {sens_str:>18} {spec_str:>18} {f1_str:>18} {kappa_str:>16}\n")
 
     print(f"\n  Comparativo salvo em: {output_file}")
-    print("\n" + "=" * 90 + "\n")
+    print("\n" + "=" * 110 + "\n")
 
     return resultados
 
 
-def plotar_comparativo(resultados, target_name):
-    """Gera gráfico e tabela comparativa dos algoritmos."""
-    algoritmos = [r['Algoritmo'] for r in resultados]
-    metricas = ['Accuracy', 'Sensitivity', 'Specificity', 'PPV', 'F1-Score', 'Kappa']
-    metricas_grafico = ['Accuracy', 'Sensitivity', 'Specificity', 'PPV', 'F1-Score']
-
-    cores = ['#e67e22', '#27ae60', '#8e44ad']  # Laranja, Verde, Roxo
-
-    # Gráfico de barras
-    plt.style.use('seaborn-v0_8-whitegrid')
-    fig, ax = plt.subplots(figsize=(14, 8))
-
-    x = np.arange(len(metricas_grafico))
-    largura = 0.25
-    offsets = [-1, 0, 1]
-
-    for i, (algo, cor) in enumerate(zip(algoritmos, cores)):
-        valores = [resultados[i][m] for m in metricas_grafico]
-        barras = ax.bar(x + offsets[i] * largura, valores, largura,
-                        label=algo, color=cor, edgecolor='white', linewidth=0.5)
-        for barra, valor in zip(barras, valores):
-            ax.annotate(f'{valor:.1f}',
-                        xy=(barra.get_x() + barra.get_width() / 2, barra.get_height()),
-                        xytext=(0, 3), textcoords="offset points",
-                        ha='center', va='bottom', fontsize=9, fontweight='bold')
-
-    ax.set_xlabel('Métricas', fontsize=12, fontweight='bold')
-    ax.set_ylabel('Porcentagem (%)', fontsize=12, fontweight='bold')
-    ax.set_title(f'Comparativo de Algoritmos - {target_name}\nADTree vs XGBoost vs SVM (com SMOTE)',
-                 fontsize=14, fontweight='bold', pad=20)
-    ax.set_xticks(x)
-    ax.set_xticklabels(metricas_grafico, fontsize=11)
-    ax.set_ylim(0, 105)
-    ax.axhline(y=50, color='gray', linestyle='--', alpha=0.5)
-    ax.legend(loc='upper right', fontsize=11)
-    ax.yaxis.grid(True, linestyle='--', alpha=0.7)
-
-    plt.tight_layout()
-    os.makedirs(PLOTS_PATH, exist_ok=True)
-    grafico_file = f'{PLOTS_PATH}/comparativo_algoritmos_{target_name.lower()}_grafico.png'
-    plt.savefig(grafico_file, dpi=150, bbox_inches='tight', facecolor='white')
-    plt.close()
-    print(f"  Gráfico salvo em: {grafico_file}")
-
-    # Tabela
-    fig, ax = plt.subplots(figsize=(12, 4))
-    ax.axis('off')
-
-    colunas = ['Algoritmo'] + metricas
-    dados_tabela = []
-    for r in resultados:
-        linha = [r['Algoritmo']]
-        for m in metricas:
-            if m == 'Kappa':
-                linha.append(f"{r[m]:.4f}")
-            else:
-                linha.append(f"{r[m]:.2f}%")
-        dados_tabela.append(linha)
-
-    tabela = ax.table(cellText=dados_tabela, colLabels=colunas, cellLoc='center', loc='center',
-                      colColours=['#2c3e50'] + ['#34495e'] * len(metricas))
-    tabela.auto_set_font_size(False)
-    tabela.set_fontsize(11)
-    tabela.scale(1.2, 2.2)
-
-    for j in range(len(colunas)):
-        tabela[(0, j)].set_text_props(color='white', fontweight='bold')
-
-    for i, r in enumerate(resultados):
-        cor_fundo = cores[i] + '30'
-        for j in range(len(colunas)):
-            tabela[(i + 1, j)].set_facecolor(cor_fundo)
-
-    for j, metrica in enumerate(metricas):
-        valores = [r[metrica] for r in resultados]
-        melhor_idx = valores.index(max(valores))
-        tabela[(melhor_idx + 1, j + 1)].set_text_props(fontweight='bold', color='#27ae60')
-
-    ax.set_title(f'Comparativo de Algoritmos - {target_name}',
-                 fontsize=14, fontweight='bold', pad=20, y=0.98)
-    plt.tight_layout()
-
-    tabela_file = f'{PLOTS_PATH}/comparativo_algoritmos_{target_name.lower()}_tabela.png'
-    plt.savefig(tabela_file, dpi=150, bbox_inches='tight', facecolor='white')
-    plt.close()
-    print(f"  Tabela salva em: {tabela_file}")
-
-    return grafico_file, tabela_file
-
-
 if __name__ == "__main__":
-    target = 'GAD'
+    cores_algoritmos = ['#e67e22', '#27ae60', '#8e44ad']  # Laranja, Verde, Roxo
 
-    print("\n" + "=" * 90)
-    print("         COMPARATIVO DE ALGORITMOS: ADTree vs XGBoost vs SVM")
-    print("         Todos usando SMOTE com correção de data leakage")
-    print("=" * 90)
+    for target in ['GAD', 'SAD']:
+        print("\n" + "#" * 90)
+        print(f"         COMPARATIVO DE ALGORITMOS: ADTree vs XGBoost vs SVM - {target}")
+        print("         Todos usando SMOTE com correção de data leakage")
+        print("         Inclui Intervalos de Confiança (IC 95%)")
+        print("#" * 90)
 
-    # Preparar dados
-    df, target_name = preparar_dados(target)
-    X = df.drop(columns=[target_name]).values
-    y = df[target_name].values
-    feature_names = df.drop(columns=[target_name]).columns.tolist()
+        df, target_name = preparar_dados(target)
+        X = df.drop(columns=[target_name]).values
+        y = df[target_name].values
+        feature_names = df.drop(columns=[target_name]).columns.tolist()
 
-    print(f"\n[DATASET]")
-    print(f"  Amostras: {df.shape[0]} | Features: {df.shape[1] - 1} | Target: {target_name}")
-    dist = df[target_name].value_counts()
-    print(f"  Classe 0: {dist[0]} ({dist[0]/len(df)*100:.1f}%) | Classe 1: {dist[1]} ({dist[1]/len(df)*100:.1f}%)")
+        print(f"\n[DATASET]")
+        print(f"  Amostras: {df.shape[0]} | Features: {df.shape[1] - 1} | Target: {target_name}")
+        dist = df[target_name].value_counts()
+        print(f"  Classe 0: {dist[0]} ({dist[0]/len(df)*100:.1f}%) | Classe 1: {dist[1]} ({dist[1]/len(df)*100:.1f}%)")
 
-    resultados_dict = {}
+        plots_path_target = f'{PLOTS_PATH}/{target_name.upper()}'
+        os.makedirs(plots_path_target, exist_ok=True)
 
-    # XGBoost
-    print("\n" + "-" * 60)
-    print("  Treinando XGBoost + SMOTE...", end=" ")
-    m_xgb = treinar_xgboost_smote(X, y)
-    print("OK")
-    resultados_dict['XGBoost'] = m_xgb
+        resultados_dict = {}
 
-    # SVM
-    print("  Treinando SVM + SMOTE...", end=" ")
-    m_svm = treinar_svm_smote(X, y)
-    print("OK")
-    resultados_dict['SVM'] = m_svm
-
-    # ADTree
-    print("  Treinando ADTree + SMOTE...", end=" ")
-    m_adtree = treinar_adtree_smote(X, y, feature_names, target_name)
-    if m_adtree:
+        print("\n" + "-" * 60)
+        print("  Treinando XGBoost + SMOTE...", end=" ")
+        m_xgb = treinar_xgboost_smote(X, y)
         print("OK")
-        resultados_dict['ADTree'] = m_adtree
-    else:
-        print("FALHOU (Weka não disponível)")
+        resultados_dict['XGBoost'] = m_xgb
 
-    print("-" * 60)
+        print("  Treinando SVM + SMOTE...", end=" ")
+        m_svm = treinar_svm_smote(X, y)
+        print("OK")
+        resultados_dict['SVM'] = m_svm
 
-    # Comparativo
-    resultados = comparativo_algoritmos(resultados_dict, target_name)
+        print("  Treinando ADTree + SMOTE...", end=" ")
+        m_adtree = treinar_adtree_smote(X, y, feature_names, target_name)
+        if m_adtree:
+            print("OK")
+            resultados_dict['ADTree'] = m_adtree
+        else:
+            print("FALHOU (Weka não disponível)")
 
-    # Gráficos
-    plotar_comparativo(resultados, target_name)
+        print("-" * 60)
+
+        resultados = comparativo_algoritmos(resultados_dict, target_name)
+        plotar_comparativo_grafico(resultados, target_name, "Algoritmos", plots_path_target, cores=cores_algoritmos)
+        plotar_comparativo_tabela(resultados, target_name, "Algoritmos", plots_path_target, cores=cores_algoritmos)

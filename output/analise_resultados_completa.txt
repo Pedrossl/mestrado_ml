@@ -1,0 +1,321 @@
+================================================================================
+   ANÁLISE COMPLETA DOS RESULTADOS - PREDIÇÃO DE GAD E SAD EM CRIANÇAS
+   Dissertação de Mestrado
+================================================================================
+
+
+================================================================================
+1. O QUE É GAD E SAD
+================================================================================
+
+GAD (Generalized Anxiety Disorder) - Transtorno de Ansiedade Generalizada:
+  Condição em que a criança apresenta preocupação excessiva e persistente
+  sobre diversas situações do dia a dia (escola, saúde, família, desempenho).
+  Difere da ansiedade normal por ser desproporcional, difícil de controlar
+  e causar prejuízo funcional significativo.
+
+SAD (Social Anxiety Disorder) - Transtorno de Ansiedade Social:
+  Condição em que a criança apresenta medo intenso e persistente de
+  situações sociais ou de desempenho, como falar em público, interagir
+  com desconhecidos ou ser observada. Evita essas situações ou as enfrenta
+  com sofrimento intenso, prejudicando seu desenvolvimento social e escolar.
+
+Ambos são transtornos comuns na infância e o diagnóstico precoce é
+fundamental para intervenção e tratamento adequados.
+
+
+================================================================================
+2. INFORMAÇÕES DO ESTUDO
+================================================================================
+
+Dataset: 287 amostras | 17 features | Targets: GAD e SAD (binários)
+
+Distribuição GAD: Classe 0 (sem GAD) = 243 (84.7%) | Classe 1 (com GAD) = 44 (15.3%)
+Distribuição SAD: Classe 0 (sem SAD) = 241 (84.0%) | Classe 1 (com SAD) = 46 (16.0%)
+
+Validação: 10-fold Stratified Cross-Validation
+Algoritmos: XGBoost, SVM (RBF kernel)
+Técnicas de balanceamento: Sem balanceamento, Class Weighting, SMOTE, Undersampling
+SMOTE e Undersampling aplicados DENTRO de cada fold (sem data leakage)
+Todas as métricas apresentadas com IC 95% (distribuição t de Student)
+
+
+================================================================================
+3. RESULTADOS - GAD (Transtorno de Ansiedade Generalizada)
+================================================================================
+
+3.1 XGBOOST - GAD
+--------------------------------------------------------------------------------
+Técnica             Acc             Sens            Spec            F1              Kappa
+--------------------------------------------------------------------------------
+Sem Balanceamento   85.7% ± 2.9%   24.0% ± 10.5%  96.7% ± 2.3%   33.5% ± 15.1%  0.270 ± 0.162
+Class Weighting     83.6% ± 3.7%   38.0% ± 12.4%  91.8% ± 3.4%   41.1% ± 12.0%  0.319 ± 0.137
+SMOTE               85.0% ± 2.4%   34.5% ± 16.5%  94.3% ± 3.7%   37.5% ± 15.9%  0.307 ± 0.151
+Undersampling       64.9% ± 8.5%   67.0% ± 18.9%  64.6% ± 8.9%   37.4% ± 9.8%   0.195 ± 0.138
+--------------------------------------------------------------------------------
+
+Análise: O XGBoost com Class Weighting obteve o melhor Kappa (0.319)
+para GAD. O modelo sem balanceamento tem accuracy alta (85.7%) mas
+sensitivity de apenas 24% - ignora a maioria dos casos positivos.
+O Undersampling é o que mais detecta (Sens=67%) mas gera muitos
+falsos positivos (Spec=64.6%).
+
+3.2 SVM - GAD
+--------------------------------------------------------------------------------
+Técnica             Acc             Sens            Spec            F1              Kappa
+--------------------------------------------------------------------------------
+Sem Balanceamento   84.7% ± 1.2%    0.0% ± 0.0%  100.0% ± 0.0%    0.0% ± 0.0%   0.000 ± 0.000
+Class Weighting     77.0% ± 4.4%   39.0% ± 11.9%  84.1% ± 5.9%   33.9% ± 7.4%   0.210 ± 0.088
+SMOTE               75.7% ± 4.1%   22.5% ± 11.0%  85.3% ± 3.8%   22.5% ± 10.5%  0.084 ± 0.127
+Undersampling       66.6% ± 4.7%   65.0% ± 18.5%  67.1% ± 6.1%   36.3% ± 7.5%   0.189 ± 0.096
+--------------------------------------------------------------------------------
+
+Análise: O SVM sem balanceamento é COMPLETAMENTE INÚTIL - classifica
+TODAS as amostras como "sem GAD" (Sensitivity = 0%). A melhor
+configuração é Class Weighting (Kappa=0.210), mas muito abaixo do
+XGBoost. O SMOTE no SVM funciona pior que no XGBoost.
+
+3.3 MELHOR MODELO GAD
+--------------------------------------------------------------------------------
+XGBoost com Class Weighting: Kappa = 0.319 ± 0.137 (concordância razoável)
+  - Detecta 38% das crianças com GAD (sensitivity)
+  - Quando diz "tem GAD", acerta 46% (PPV)
+  - Quando diz "não tem GAD", acerta 89% (NPV)
+
+
+================================================================================
+4. RESULTADOS - SAD (Transtorno de Ansiedade Social)
+================================================================================
+
+4.1 XGBOOST - SAD
+--------------------------------------------------------------------------------
+Técnica             Acc             Sens            Spec            F1              Kappa
+--------------------------------------------------------------------------------
+Sem Balanceamento   82.9% ± 4.3%   22.0% ± 9.7%   94.6% ± 3.7%   29.4% ± 13.1%  0.213 ± 0.150
+Class Weighting     80.1% ± 6.2%   35.0% ± 16.6%  88.8% ± 5.6%   36.2% ± 16.9%  0.250 ± 0.201
+SMOTE               82.6% ± 3.9%   30.5% ± 14.1%  92.6% ± 3.6%   34.7% ± 15.5%  0.256 ± 0.172
+Undersampling       66.9% ± 8.9%   68.0% ± 14.1%  66.9% ± 9.7%   40.9% ± 9.3%   0.239 ± 0.125
+--------------------------------------------------------------------------------
+
+Análise: Para SAD, o melhor Kappa é XGBoost + SMOTE (0.256), inferior
+ao obtido para GAD (0.319). O Undersampling novamente lidera em
+sensitivity (68%) e F1-Score (40.9%). Os ICs são amplos,
+especialmente em Sensitivity, indicando instabilidade.
+
+4.2 SVM - SAD
+--------------------------------------------------------------------------------
+Técnica             Acc             Sens            Spec            F1              Kappa
+--------------------------------------------------------------------------------
+Sem Balanceamento   83.3% ± 1.5%    0.0% ± 0.0%   99.2% ± 1.3%    0.0% ± 0.0%  -0.012 ± 0.018
+Class Weighting     74.9% ± 6.6%   52.5% ± 17.1%  79.3% ± 7.1%   39.7% ± 12.8%  0.255 ± 0.154
+SMOTE               74.2% ± 5.9%   28.5% ± 12.3%  83.0% ± 7.3%   25.8% ± 10.7%  0.112 ± 0.128
+Undersampling       66.6% ± 7.0%   59.5% ± 17.8%  68.1% ± 7.9%   35.8% ± 11.7%  0.181 ± 0.142
+--------------------------------------------------------------------------------
+
+Análise: O SVM sem balanceamento é novamente inútil para SAD (Sens=0%,
+Kappa negativo). Destaque para o SVM Class Weighting que para SAD
+obteve Sensitivity=52.5% e Kappa=0.255, desempenho melhor que
+para GAD. O SVM parece capturar melhor os padrões de SAD.
+
+4.3 MELHOR MODELO SAD
+--------------------------------------------------------------------------------
+Empate técnico:
+  - XGBoost + SMOTE: Kappa = 0.256 ± 0.172
+  - SVM + Class Weighting: Kappa = 0.255 ± 0.154 (mas com Sens=52.5%)
+
+Para screening (detectar o máximo possível):
+  - XGBoost + Undersampling: Sensitivity = 68.0% ± 14.1%
+
+
+================================================================================
+5. COMPARAÇÃO GAD vs SAD
+================================================================================
+
+5.1 DESEMPENHO GERAL
+--------------------------------------------------------------------------------
+                    Melhor Kappa (GAD)     Melhor Kappa (SAD)
+XGBoost             0.319 (CW)             0.256 (SMOTE)
+SVM                 0.210 (CW)             0.255 (CW)
+--------------------------------------------------------------------------------
+
+Observações:
+  - GAD foi ligeiramente mais fácil de predizer que SAD (Kappa melhor)
+  - XGBoost é superior para GAD; para SAD, SVM se aproxima do XGBoost
+  - Em ambos os casos, a concordância é apenas "razoável" (0.21-0.40)
+  - Nenhum modelo atingiu concordância moderada (> 0.40) para nenhum target
+
+5.2 SENSITIVITY (DETECÇÃO)
+--------------------------------------------------------------------------------
+                    Melhor Sens (GAD)      Melhor Sens (SAD)
+XGBoost             67.0% (Under)          68.0% (Under)
+SVM                 65.0% (Under)          59.5% (Under)
+--------------------------------------------------------------------------------
+
+Undersampling é consistentemente a melhor técnica para maximizar
+a detecção, em ambos os transtornos. Porém, com PPV de ~25-30%,
+gera muitos falsos positivos.
+
+
+================================================================================
+6. FEATURE IMPORTANCE - QUAIS VARIÁVEIS MAIS PESAM
+================================================================================
+
+Esta é uma das descobertas mais interessantes do trabalho:
+as variáveis que mais importam são DIFERENTES para GAD e SAD.
+
+6.1 TOP 5 FEATURES - GAD
+--------------------------------------------------------------------------------
+Rank  Feature                       Importância    ± IC 95%
+--------------------------------------------------------------------------------
+1     Number of Impairments          0.163         ± 0.046
+2     Race                           0.112         ± 0.024
+3     ODD                            0.083         ± 0.047
+4     Social Phobia                  0.080         ± 0.022
+5     ADHD                           0.078         ± 0.035
+--------------------------------------------------------------------------------
+
+Interpretação GAD:
+  - O número de deficiências/comprometimentos é o fator mais relevante
+  - Raça aparece como segundo fator (pode refletir desigualdades sociais)
+  - Comorbidades psiquiátricas (ODD, Fobia Social, ADHD) são importantes
+  - Esses achados fazem sentido clínico: crianças com mais comorbidades
+    e mais comprometimentos têm maior risco de ansiedade generalizada
+
+6.2 TOP 5 FEATURES - SAD
+--------------------------------------------------------------------------------
+Rank  Feature                        Importância    ± IC 95%
+--------------------------------------------------------------------------------
+1     Number of Sleep Disturbances    0.192         ± 0.041
+2     Number of Sensory Sensitivities 0.191         ± 0.074
+3     Social Phobia                   0.099         ± 0.039
+4     Family History - Psychiatric    0.063         ± 0.007
+5     CD                              0.049         ± 0.013
+--------------------------------------------------------------------------------
+
+Interpretação SAD:
+  - Distúrbios do sono são o fator mais relevante para SAD
+  - Sensibilidades sensoriais em segundo lugar (muito interessante!)
+  - Fobia social tem papel moderado (esperado, são condições relacionadas)
+  - Histórico familiar psiquiátrico é relevante (componente genético)
+  - Essas features são BEM DIFERENTES das do GAD
+
+6.3 COMPARAÇÃO DAS FEATURES GAD vs SAD
+--------------------------------------------------------------------------------
+O achado mais relevante para a dissertação:
+
+Para GAD: dominam fatores de comorbidade (Number of Impairments, ODD, ADHD)
+Para SAD: dominam fatores sensoriais/sono (Sleep Disturbances, Sensory)
+
+Isto sugere que:
+  1. GAD está mais associado a um perfil de múltiplas comorbidades
+  2. SAD está mais associado a um perfil sensorial/desregulação do sono
+  3. São perfis de risco DISTINTOS que requerem abordagens diferentes
+  4. Este é um achado clinicamente relevante e publicável
+
+
+================================================================================
+7. ANÁLISE CRÍTICA GERAL
+================================================================================
+
+7.1 INTERPRETAÇÃO DO KAPPA
+--------------------------------------------------------------------------------
+Escala de Landis & Koch (1977):
+  < 0.20  = Concordância leve
+  0.21-0.40 = Concordância razoável
+  0.41-0.60 = Concordância moderada
+  0.61-0.80 = Concordância substancial
+
+Melhores resultados:
+  GAD: Kappa = 0.319 (razoável - parte inferior)
+  SAD: Kappa = 0.256 (razoável - parte inferior)
+
+Nenhum modelo atingiu concordância moderada.
+
+7.2 POR QUE OS RESULTADOS SÃO MODESTOS
+--------------------------------------------------------------------------------
+  1. DATASET PEQUENO: 287 amostras, apenas 44-46 positivos
+     → ~4-5 amostras positivas por fold de teste
+     → Qualquer acerto/erro a mais muda drasticamente a sensitivity
+
+  2. DESBALANCEAMENTO 84/16: mesmo com técnicas de balanceamento,
+     a quantidade de informação da classe positiva é muito limitada
+
+  3. FEATURES LIMITADAS: 17 variáveis podem não capturar toda a
+     complexidade dos transtornos de ansiedade em crianças
+
+  4. HIPERPARÂMETROS NÃO OTIMIZADOS: GridSearch poderia melhorar
+
+7.3 ACCURACY É ENGANOSA
+--------------------------------------------------------------------------------
+Modelos sem balanceamento mostram Acc de 83-86%, mas são inúteis:
+  - SVM sem balanceamento: Acc=84.7%, Sens=0% (classifica TUDO como negativo)
+  - XGBoost sem balanceamento: Acc=85.7%, Sens=24% (ignora 76% dos casos)
+
+Se alguém simplesmente dissesse "nenhuma criança tem GAD", acertaria 84.7%.
+Por isso o Kappa é a métrica mais importante - mede concordância ALÉM do acaso.
+
+
+================================================================================
+8. O QUE DEFENDER NA BANCA
+================================================================================
+
+PONTOS FORTES:
+  - Metodologia rigorosa: SMOTE dentro do fold, sem data leakage
+  - Comparação sistemática de 2 algoritmos x 4 técnicas de balanceamento
+  - IC 95% em todas as métricas (rigor estatístico)
+  - Análise para dois transtornos distintos (GAD e SAD)
+  - Feature Importance revela perfis de risco diferentes para GAD e SAD
+
+COMO APRESENTAR OS RESULTADOS:
+  - "Os modelos obtiveram concordância razoável (Kappa ~0.25-0.32)"
+  - "O XGBoost superou o SVM, especialmente para GAD"
+  - "As features mais importantes diferem entre GAD e SAD, sugerindo
+     perfis de risco distintos"
+  - "A principal limitação é o tamanho amostral reduzido (n=287)"
+  - "Os modelos servem como ferramenta auxiliar de triagem, não
+     como substituto de avaliação clínica"
+
+PERGUNTAS POSSÍVEIS DA BANCA E RESPOSTAS:
+  Q: "Por que a accuracy é alta mas o Kappa é baixo?"
+  R: "Devido ao desbalanceamento. Accuracy é inflada pela classe
+      majoritária. O Kappa corrige isso medindo concordância além
+      do acaso."
+
+  Q: "Por que não usou redes neurais?"
+  R: "Dataset muito pequeno (n=287). Redes neurais requerem mais
+      dados para generalizar. XGBoost é mais adequado para amostras
+      pequenas."
+
+  Q: "Como melhorar esses resultados?"
+  R: "Aumentar o dataset, otimizar hiperparâmetros via GridSearch,
+      e explorar feature selection para reduzir ruído."
+
+
+================================================================================
+9. RANKING FINAL DOS MODELOS
+================================================================================
+
+GAD:
+  1. XGBoost + Class Weighting  (Kappa=0.319, F1=41.1%)  ← MELHOR
+  2. XGBoost + SMOTE            (Kappa=0.307, F1=37.5%)
+  3. XGBoost + Sem Balanceamento (Kappa=0.270, F1=33.5%)
+  4. SVM + Class Weighting      (Kappa=0.210, F1=33.9%)
+  5. XGBoost + Undersampling    (Kappa=0.195, F1=37.4%)
+  6. SVM + Undersampling        (Kappa=0.189, F1=36.3%)
+  7. SVM + SMOTE                (Kappa=0.084, F1=22.5%)
+  8. SVM + Sem Balanceamento    (Kappa=0.000, F1=0.0%)   ← INÚTIL
+
+SAD:
+  1. XGBoost + SMOTE            (Kappa=0.256, F1=34.7%)  ← MELHOR
+  2. SVM + Class Weighting      (Kappa=0.255, F1=39.7%)
+  3. XGBoost + Class Weighting  (Kappa=0.250, F1=36.2%)
+  4. XGBoost + Undersampling    (Kappa=0.239, F1=40.9%)
+  5. XGBoost + Sem Balanceamento (Kappa=0.213, F1=29.4%)
+  6. SVM + Undersampling        (Kappa=0.181, F1=35.8%)
+  7. SVM + SMOTE                (Kappa=0.112, F1=25.8%)
+  8. SVM + Sem Balanceamento    (Kappa=-0.012, F1=0.0%)  ← INÚTIL
+
+
+================================================================================
+FIM DA ANÁLISE
+================================================================================

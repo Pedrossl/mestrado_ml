@@ -1,0 +1,31 @@
+COMPARATIVO XGBoost - SAD (com IC 95%)
+===============================================================================================
+
+Sem Balanceamento
+  Accuracy:    82.93% ± 4.27%
+  Sensitivity: 22.00% ± 9.72%
+  Specificity: 94.60% ± 3.73%
+  F1-Score:    29.40% ± 13.07%
+  Kappa:       0.2126 ± 0.1498
+
+Class Weighting
+  Accuracy:    80.09% ± 6.22%
+  Sensitivity: 35.00% ± 16.61%
+  Specificity: 88.80% ± 5.62%
+  F1-Score:    36.25% ± 16.90%
+  Kappa:       0.2497 ± 0.2015
+
+SMOTE
+  Accuracy:    82.56% ± 3.90%
+  Sensitivity: 30.50% ± 14.05%
+  Specificity: 92.57% ± 3.57%
+  F1-Score:    34.71% ± 15.52%
+  Kappa:       0.2558 ± 0.1722
+
+Undersampling
+  Accuracy:    66.88% ± 8.91%
+  Sensitivity: 68.00% ± 14.13%
+  Specificity: 66.88% ± 9.69%
+  F1-Score:    40.88% ± 9.29%
+  Kappa:       0.2388 ± 0.1251
+

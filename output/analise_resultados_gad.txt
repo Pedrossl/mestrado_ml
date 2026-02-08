@@ -1,0 +1,300 @@
+================================================================================
+      ANÁLISE COMPLETA DOS RESULTADOS - PREDIÇÃO DE GAD EM CRIANÇAS
+      Dissertação de Mestrado
+================================================================================
+
+Data da análise: Fevereiro 2026
+Dataset: 287 amostras | 17 features | Target: GAD (binário)
+Distribuição: Classe 0 (sem GAD) = 243 (84.7%) | Classe 1 (com GAD) = 44 (15.3%)
+Validação: 10-fold Stratified Cross-Validation
+Algoritmos: ADTree (Weka), XGBoost, SVM (RBF kernel)
+Técnicas de balanceamento: Sem balanceamento, Class Weighting, SMOTE, Undersampling
+Nota: SMOTE e Undersampling aplicados DENTRO de cada fold (sem data leakage)
+
+
+================================================================================
+1. RESUMO DOS RESULTADOS POR ALGORITMO
+================================================================================
+
+1.1 ADTREE
+--------------------------------------------------------------------------------
+Técnica              Acc      Sens     Spec     PPV      F1       Kappa
+--------------------------------------------------------------------------------
+Sem Balanceamento    82.25%   11.50%   95.03%   20.83%   13.80%   0.0814
+Class Weighting      64.11%   59.00%   64.97%   23.91%   33.87%   0.1533
+SMOTE                32.75%   84.09%   23.46%   16.59%   27.72%   0.0283
+Undersampling        65.85%   56.82%   67.49%   24.04%   33.78%   0.1560
+--------------------------------------------------------------------------------
+
+1.2 XGBOOST
+--------------------------------------------------------------------------------
+Técnica              Acc      Sens     Spec     PPV      F1       Kappa
+--------------------------------------------------------------------------------
+Sem Balanceamento    85.71%   25.00%   96.71%   57.89%   34.92%   0.2829
+Class Weighting      83.62%   38.64%   91.77%   45.95%   41.98%   0.3252
+SMOTE                85.02%   34.09%   94.24%   51.72%   41.10%   0.3293
+Undersampling        64.81%   65.91%   64.61%   25.22%   36.48%   0.1838
+--------------------------------------------------------------------------------
+
+1.3 SVM (RBF)
+--------------------------------------------------------------------------------
+Técnica              Acc      Sens     Spec     PPV      F1       Kappa
+--------------------------------------------------------------------------------
+Sem Balanceamento    84.67%    0.00%  100.00%    0.00%    0.00%   0.0000
+Class Weighting      77.00%   38.64%   83.95%   30.36%   34.00%   0.2032
+SMOTE                75.61%   22.73%   85.19%   21.74%   22.22%   0.0777
+Undersampling        66.55%   63.64%   67.08%   25.93%   36.84%   0.1925
+--------------------------------------------------------------------------------
+
+1.4 COMPARATIVO ENTRE ALGORITMOS (SMOTE, com IC 95%)
+--------------------------------------------------------------------------------
+Algoritmo     Acc             Sens            Spec            Kappa
+--------------------------------------------------------------------------------
+XGBoost       85.0% ± 2.4%   34.5% ± 16.5%  94.3% ± 3.7%   0.307 ± 0.151
+SVM           75.7% ± 4.1%   22.5% ± 11.0%  85.3% ± 3.8%   0.084 ± 0.127
+--------------------------------------------------------------------------------
+(ADTree não disponível no comparativo por limitação do Weka nesta execução)
+
+
+================================================================================
+2. ANÁLISE CRÍTICA DOS RESULTADOS
+================================================================================
+
+2.1 O PROBLEMA FUNDAMENTAL: DESBALANCEAMENTO SEVERO
+--------------------------------------------------------------------------------
+O dataset tem uma proporção de 84.7% vs 15.3%. Isso significa que um modelo
+que SEMPRE diga "não tem GAD" acertaria 84.7% das vezes. Isso explica por
+que modelos sem balanceamento têm accuracy alta mas são clinicamente inúteis.
+
+Exemplo claro: SVM sem balanceamento tem Accuracy = 84.67%, mas
+Sensitivity = 0.00%. Ele classificou TODAS as 287 amostras como "sem GAD".
+Não identificou NENHUMA criança com GAD. Esse modelo é completamente inútil
+apesar da accuracy "alta".
+
+LIÇÃO: Accuracy sozinha é uma métrica ENGANOSA em datasets desbalanceados.
+       Nunca apresente accuracy como métrica principal na dissertação.
+
+
+2.2 INTERPRETAÇÃO DO KAPPA (CONCORDÂNCIA)
+--------------------------------------------------------------------------------
+Escala de Landis & Koch (1977):
+  < 0.00  = Sem concordância
+  0.00-0.20 = Concordância leve (slight)
+  0.21-0.40 = Concordância razoável (fair)
+  0.41-0.60 = Concordância moderada (moderate)
+  0.61-0.80 = Concordância substancial (substantial)
+  0.81-1.00 = Concordância quase perfeita
+
+Melhores resultados obtidos:
+  - XGBoost + SMOTE:          Kappa = 0.3293 → RAZOÁVEL
+  - XGBoost + Class Weighting: Kappa = 0.3252 → RAZOÁVEL
+  - XGBoost + Sem Balanc.:    Kappa = 0.2829 → RAZOÁVEL
+  - SVM + Class Weighting:    Kappa = 0.2032 → RAZOÁVEL (baixo)
+  - ADTree + Undersampling:   Kappa = 0.1560 → LEVE
+  - SVM + Undersampling:      Kappa = 0.1925 → LEVE
+  - ADTree + SMOTE:           Kappa = 0.0283 → SEM CONCORDÂNCIA
+
+Nenhum modelo atingiu concordância moderada (> 0.40).
+O melhor Kappa foi 0.33, que está na faixa inferior de "razoável".
+
+
+2.3 O TRADE-OFF SENSITIVITY vs SPECIFICITY
+--------------------------------------------------------------------------------
+Este é o dilema central do seu trabalho:
+
+SENSITIVITY (detectar crianças COM GAD):
+  - Sem balanceamento: muito baixa (0-25%) - modelo ignora a classe minoritária
+  - Com balanceamento: sobe (34-84%) - mas custa em specificity
+
+SPECIFICITY (identificar corretamente crianças SEM GAD):
+  - Sem balanceamento: altíssima (95-100%) - modelo "chuta" tudo como classe 0
+  - Com balanceamento: cai (23-85%) - muitos falsos positivos
+
+Em contexto clínico de screening:
+  - Alta sensitivity é MAIS importante (não queremos perder casos reais)
+  - Mas PPV muito baixo (16-26%) significa muitos alarmes falsos
+
+O ADTree com SMOTE tem Sens=84% mas PPV=16.6%. Isso significa:
+de cada 6 crianças que o modelo diz "tem GAD", apenas 1 realmente tem.
+Isso não é aceitável para diagnóstico, mas pode servir para triagem inicial
+(encaminhar para avaliação mais detalhada).
+
+
+2.4 ANÁLISE POR ALGORITMO
+--------------------------------------------------------------------------------
+
+XGBOOST (MELHOR GERAL):
+  Melhor equilíbrio entre as métricas. O XGBoost com SMOTE ou Class Weighting
+  apresentou os melhores resultados gerais:
+  - Kappa ~0.33 (melhor entre todos)
+  - F1 ~41% (melhor entre todos)
+  - PPV ~52% com SMOTE (o mais alto obtido)
+  - Sensitivity de 34% com SMOTE (ainda baixa, mas com o melhor PPV)
+
+  O XGBoost com Undersampling é interessante: Sens=65.91% (boa para screening)
+  mas PPV cai para 25.22% e Kappa cai para 0.18.
+
+  Ponto forte: melhor Kappa e melhor equilíbrio geral.
+  Ponto fraco: sensitivity ainda não é ideal para screening clínico.
+
+ADTREE:
+  Desempenho inferior ao XGBoost em todas as configurações.
+  - Sem balanceamento: Sens=11.5%, praticamente não detecta GAD
+  - SMOTE: Sens=84% é alta, mas Acc=32.75% e Kappa=0.03 (péssimo)
+    O modelo gera tantos falsos positivos que é quase aleatório.
+  - Undersampling: resultado mais equilibrado (Kappa=0.156), mas fraco.
+
+  O ADTree parece não ter capacidade suficiente para este problema.
+  A árvore gerada mostra que usa: Number of Impairments, Age,
+  Frequency Temper Tantrums, Poverty Status, Sex, Race,
+  Frequency Irritable Mood como variáveis de decisão.
+
+SVM (RBF):
+  Pior desempenho geral.
+  - Sem balanceamento: COMPLETAMENTE INÚTIL (Sens=0%, Kappa=0)
+  - Class Weighting: melhor configuração (Kappa=0.20), mas ainda fraco
+  - SMOTE: surpreendentemente ruim (Kappa=0.08)
+  - Undersampling: Sens=63.64% (boa) mas Kappa=0.19 (fraco)
+
+  O SVM com kernel RBF pode estar sofrendo com a dimensionalidade
+  e o tamanho pequeno do dataset. GridSearch de hiperparâmetros
+  (C, gamma) poderia melhorar esses resultados.
+
+
+2.5 INTERVALOS DE CONFIANÇA (IC 95%)
+--------------------------------------------------------------------------------
+Os ICs revelam alta variabilidade, especialmente na Sensitivity:
+
+XGBoost + SMOTE: Sensitivity = 34.5% ± 16.5%
+  → O IC vai de 18.0% a 51.0% - variação enorme
+  → Com 95% de confiança, a sensitivity real está nessa faixa
+
+XGBoost + SMOTE: Kappa = 0.307 ± 0.151
+  → O IC vai de 0.156 a 0.458
+  → No pior caso, o Kappa é apenas "leve" (0.156)
+  → No melhor caso, quase "moderado" (0.458)
+
+Essa alta variabilidade é causada por:
+  1. Dataset pequeno (287 amostras)
+  2. Poucas amostras positivas (44 com GAD)
+  3. Em cada fold de teste, há apenas ~4-5 amostras positivas
+  4. Um acerto ou erro a mais muda a sensitivity drasticamente
+
+
+================================================================================
+3. DIAGNÓSTICO DOS PROBLEMAS
+================================================================================
+
+3.1 DATASET PEQUENO
+  - 287 amostras é insuficiente para treinar modelos robustos
+  - Apenas 44 casos positivos (~4-5 por fold de teste)
+  - Qualquer técnica de ML vai sofrer com isso
+  - Aumentar o dataset é a melhoria que mais impactaria os resultados
+
+3.2 DESBALANCEAMENTO 85/15
+  - Todas as técnicas de balanceamento ajudam, mas nenhuma resolve
+  - SMOTE gera amostras sintéticas que podem não representar padrões reais
+  - Undersampling descarta dados da classe majoritária (perda de informação)
+  - Class Weighting é a abordagem mais elegante (não altera os dados)
+
+3.3 FEATURES POSSIVELMENTE INSUFICIENTES
+  - 17 features podem não capturar toda a complexidade do GAD
+  - Algumas features podem ser irrelevantes (ruído)
+  - Feature selection poderia ajudar a reduzir dimensionalidade
+
+3.4 HIPERPARÂMETROS NÃO OTIMIZADOS
+  - Todos os modelos usam parâmetros padrão
+  - GridSearch/RandomSearch poderia melhorar significativamente:
+    - XGBoost: n_estimators, max_depth, learning_rate, min_child_weight
+    - SVM: C, gamma, kernel
+    - ADTree: número de boosts, tipo de poda
+
+
+================================================================================
+4. MELHOR MODELO E RECOMENDAÇÃO
+================================================================================
+
+MELHOR MODELO GERAL: XGBoost com SMOTE
+  - Accuracy:    85.02% ± IC
+  - Sensitivity: 34.09% ± IC
+  - Specificity: 94.24% ± IC
+  - PPV:         51.72% ± IC
+  - F1-Score:    41.10% ± IC
+  - Kappa:       0.3293 ± IC
+
+MELHOR PARA SCREENING: XGBoost com Undersampling
+  - Sensitivity: 65.91% (detecta 2 em cada 3 casos)
+  - Mas PPV: 25.22% (3 em 4 alarmes são falsos)
+
+RANKING GERAL DE ALGORITMOS:
+  1. XGBoost  → Melhor em quase todas as métricas
+  2. SVM      → Segundo lugar, mas bem abaixo do XGBoost
+  3. ADTree   → Pior desempenho geral
+
+
+================================================================================
+5. O QUE FALAR NA DISSERTAÇÃO / BANCA
+================================================================================
+
+PONTOS FORTES DO TRABALHO:
+  - Metodologia correta: SMOTE/Undersampling dentro do fold (sem data leakage)
+  - Múltiplos algoritmos comparados sistematicamente
+  - Múltiplas técnicas de balanceamento avaliadas
+  - Intervalos de Confiança (rigor estatístico)
+  - Validação com 10-fold Stratified CV
+
+PONTOS A RECONHECER (honestidade científica):
+  - Kappa ~0.33 indica concordância apenas "razoável"
+  - Dataset pequeno limita a generalização
+  - Nenhum modelo atingiu desempenho clínico aceitável sozinho
+  - Sensitivity dos melhores modelos (~34-66%) não é suficiente para
+    diagnóstico, mas pode servir como ferramenta auxiliar de triagem
+
+COMO DEFENDER NA BANCA:
+  - "Os resultados mostram que o XGBoost com técnicas de balanceamento
+     de classes é o algoritmo mais promissor para esta tarefa"
+  - "O dataset reduzido (n=287, com apenas 44 casos positivos) é a
+     principal limitação, e trabalhos futuros com amostras maiores
+     poderiam melhorar significativamente o desempenho"
+  - "O modelo não se propõe a substituir avaliação clínica, mas sim
+     a servir como ferramenta auxiliar de triagem/screening"
+  - "A aplicação correta do SMOTE (dentro de cada fold) demonstra
+     rigor metodológico na prevenção de data leakage"
+
+
+================================================================================
+6. SUGESTÕES DE MELHORIA (TRABALHOS FUTUROS)
+================================================================================
+
+IMPACTO ALTO:
+  1. Aumentar o dataset (mais amostras, especialmente positivas)
+  2. GridSearch de hiperparâmetros (pode melhorar Kappa significativamente)
+  3. Feature Importance + Feature Selection (remover ruído)
+
+IMPACTO MÉDIO:
+  4. Testar outros algoritmos: Random Forest, LightGBM, Redes Neurais
+  5. Curvas ROC e AUC para comparação visual
+  6. Combinação de modelos (ensemble/stacking)
+
+IMPACTO BAIXO (mas bom para mostrar rigor):
+  7. Testes estatísticos entre modelos (ex: teste de McNemar)
+  8. Análise de curvas de aprendizado (learning curves)
+  9. Validação externa com outro dataset
+
+
+================================================================================
+7. NOTA IMPORTANTE SOBRE SAD
+================================================================================
+
+Os resultados acima são apenas para GAD. Os scripts já foram atualizados
+para rodar também para SAD. Os resultados para SAD serão gerados quando
+os scripts forem executados novamente.
+
+É esperado que os resultados para SAD sejam diferentes, pois:
+  - A distribuição de classes pode ser diferente
+  - As features podem ter importância diferente para cada transtorno
+  - A comparação GAD vs SAD enriquece muito a dissertação
+
+================================================================================
+FIM DA ANÁLISE
+================================================================================
