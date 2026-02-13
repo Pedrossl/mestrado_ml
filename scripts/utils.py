@@ -4,7 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from scipy import stats
 from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, roc_curve, auc
 
 from normalizacao import carregar_teste_normalizado
 
@@ -319,3 +319,210 @@ def plotar_comparativo_tabela(resultados, target_name, algoritmo_nome, plots_pat
     print(f"  Tabela salva em: {tabela_file}")
 
     return tabela_file
+
+
+def coletar_roc_folds(y_trues_folds, y_scores_folds):
+    """Calcula curva ROC média e desvio padrão a partir dos folds.
+
+    Para cada fold, interpola a curva ROC em 100 pontos de FPR comuns,
+    permitindo calcular a média e desvio padrão da TPR.
+
+    Args:
+        y_trues_folds: lista de arrays com y_true de cada fold
+        y_scores_folds: lista de arrays com scores/probabilidades de cada fold
+
+    Returns:
+        dict com mean_fpr, mean_tpr, std_tpr, tprs_upper, tprs_lower,
+        mean_auc, std_auc, aucs
+    """
+    mean_fpr = np.linspace(0, 1, 100)
+    tprs = []
+    aucs_lista = []
+
+    for y_true, y_score in zip(y_trues_folds, y_scores_folds):
+        fpr, tpr, _ = roc_curve(y_true, y_score)
+        tprs.append(np.interp(mean_fpr, fpr, tpr))
+        tprs[-1][0] = 0.0
+        aucs_lista.append(auc(fpr, tpr))
+
+    mean_tpr = np.mean(tprs, axis=0)
+    mean_tpr[-1] = 1.0
+    std_tpr = np.std(tprs, axis=0)
+
+    tprs_upper = np.minimum(mean_tpr + std_tpr, 1)
+    tprs_lower = np.maximum(mean_tpr - std_tpr, 0)
+
+    return {
+        'mean_fpr': mean_fpr,
+        'mean_tpr': mean_tpr,
+        'std_tpr': std_tpr,
+        'tprs_upper': tprs_upper,
+        'tprs_lower': tprs_lower,
+        'mean_auc': np.mean(aucs_lista),
+        'std_auc': np.std(aucs_lista),
+        'aucs': aucs_lista
+    }
+
+
+def plotar_curvas_roc(roc_dados_dict, target_name, titulo, output_file, cores=None):
+    """Plota curvas ROC para múltiplos modelos no mesmo gráfico.
+
+    Inclui banda de ± 1 desvio padrão e linha diagonal de referência.
+
+    Args:
+        roc_dados_dict: dict de {nome_modelo: roc_dados} (saída de coletar_roc_folds)
+        target_name: nome do alvo (GAD/SAD)
+        titulo: título do gráfico (ex: "XGBoost")
+        output_file: caminho completo para salvar o PNG
+        cores: lista de cores hexadecimais (opcional)
+    """
+    if cores is None:
+        cores = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6']
+
+    plt.style.use('seaborn-v0_8-whitegrid')
+    fig, ax = plt.subplots(figsize=(10, 8))
+
+    for i, (nome, dados) in enumerate(roc_dados_dict.items()):
+        cor = cores[i % len(cores)]
+        ax.plot(dados['mean_fpr'], dados['mean_tpr'], color=cor, lw=2,
+                label=f"{nome} (AUC = {dados['mean_auc']:.3f} \u00b1 {dados['std_auc']:.3f})")
+        ax.fill_between(dados['mean_fpr'], dados['tprs_lower'], dados['tprs_upper'],
+                        color=cor, alpha=0.1)
+
+    ax.plot([0, 1], [0, 1], 'k--', lw=1.5, alpha=0.5, label='Aleat\u00f3rio (AUC = 0.500)')
+
+    ax.set_xlim([-0.02, 1.02])
+    ax.set_ylim([-0.02, 1.02])
+    ax.set_xlabel('Taxa de Falsos Positivos (1 - Especificidade)', fontsize=12, fontweight='bold')
+    ax.set_ylabel('Taxa de Verdadeiros Positivos (Sensibilidade)', fontsize=12, fontweight='bold')
+    ax.set_title(f'Curva ROC - {titulo} ({target_name})\n10-Fold Stratified CV com \u00b1 1\u03c3',
+                 fontsize=14, fontweight='bold', pad=20)
+    ax.legend(loc='lower right', fontsize=10, framealpha=0.9)
+    ax.set_aspect('equal')
+
+    plt.tight_layout()
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    plt.savefig(output_file, dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close()
+    print(f"  Curva ROC salva em: {output_file}")
+
+
+def salvar_auc_metricas(roc_dados_dict, target_name, titulo, output_file):
+    """Salva métricas AUC em arquivo texto com IC 95%.
+
+    Args:
+        roc_dados_dict: dict de {nome_modelo: roc_dados}
+        target_name: nome do alvo (GAD/SAD)
+        titulo: título (ex: "XGBoost")
+        output_file: caminho completo para salvar o TXT
+    """
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    with open(output_file, 'w') as f:
+        f.write(f"AUC - {titulo} - {target_name}\n")
+        f.write("=" * 60 + "\n\n")
+
+        f.write(f"{'Modelo':<25} {'AUC M\u00e9dia':>12} {'Desvio':>10} {'IC 95%':>12}\n")
+        f.write("-" * 60 + "\n")
+
+        for nome, dados in roc_dados_dict.items():
+            media, desvio, ic = calcular_ic(dados['aucs'])
+            f.write(f"{nome:<25} {media:>12.4f} {desvio:>10.4f} {ic:>12.4f}\n")
+
+        f.write(f"\n\nAUC por fold:\n")
+        f.write("-" * 60 + "\n")
+        for nome, dados in roc_dados_dict.items():
+            f.write(f"\n{nome}:\n")
+            for i, auc_val in enumerate(dados['aucs']):
+                f.write(f"  Fold {i+1:2d}: {auc_val:.4f}\n")
+
+    print(f"  M\u00e9tricas AUC salvas em: {output_file}")
+
+
+def plotar_matriz_confusao_normalizada(cm_raw, target_name, titulo, ax=None, cmap='Blues'):
+    """Plota matriz de confusao normalizada por linha (true class).
+
+    Cada celula mostra a porcentagem e o valor absoluto entre parenteses.
+    Normalizado por linha: cada linha soma 100%.
+
+    Args:
+        cm_raw: array 2x2 [[VN, FP], [FN, VP]]
+        target_name: nome do alvo (GAD/SAD)
+        titulo: titulo do subplot
+        ax: eixo matplotlib (se None, cria figura nova)
+        cmap: colormap a usar
+    """
+    cm = np.array(cm_raw, dtype=float)
+    cm_norm = np.zeros_like(cm)
+    for i in range(cm.shape[0]):
+        row_sum = cm[i].sum()
+        if row_sum > 0:
+            cm_norm[i] = cm[i] / row_sum * 100
+
+    criar_fig = ax is None
+    if criar_fig:
+        fig, ax = plt.subplots(figsize=(6, 5))
+
+    im = ax.imshow(cm_norm, interpolation='nearest', cmap=cmap, vmin=0, vmax=100)
+
+    for i in range(2):
+        for j in range(2):
+            cor_texto = 'white' if cm_norm[i, j] > 60 else 'black'
+            ax.text(j, i, f'{cm_norm[i, j]:.1f}%\n({int(cm[i, j])})',
+                    ha='center', va='center', fontsize=12, fontweight='bold',
+                    color=cor_texto)
+
+    labels_true = [f'Sem {target_name}', f'Com {target_name}']
+    labels_pred = [f'Predito\nSem', f'Predito\nCom']
+
+    ax.set_xticks([0, 1])
+    ax.set_yticks([0, 1])
+    ax.set_xticklabels(labels_pred, fontsize=10)
+    ax.set_yticklabels(labels_true, fontsize=10)
+    ax.set_xlabel('Classe Predita', fontsize=11, fontweight='bold')
+    ax.set_ylabel('Classe Real', fontsize=11, fontweight='bold')
+    ax.set_title(titulo, fontsize=12, fontweight='bold', pad=10)
+
+    if criar_fig:
+        plt.colorbar(im, ax=ax, label='%', shrink=0.8)
+        plt.tight_layout()
+
+    return ax
+
+
+def plotar_grid_matrizes_confusao(cms_dict, target_name, titulo_principal, output_file,
+                                   cores_cmap='Blues'):
+    """Plota grid 2x2 de matrizes de confusao normalizadas.
+
+    Args:
+        cms_dict: dict de {nome_tecnica: [[VN,FP],[FN,VP]]}
+        target_name: nome do alvo (GAD/SAD)
+        titulo_principal: titulo da figura (ex: "XGBoost")
+        output_file: caminho para salvar PNG
+        cores_cmap: colormap a usar
+    """
+    nomes = list(cms_dict.keys())
+    n = len(nomes)
+    ncols = min(n, 2)
+    nrows = (n + ncols - 1) // ncols
+
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 5.5 * nrows))
+    if n == 1:
+        axes = np.array([axes])
+    axes = axes.flatten()
+
+    for i, (nome, cm) in enumerate(cms_dict.items()):
+        plotar_matriz_confusao_normalizada(cm, target_name, nome, ax=axes[i], cmap=cores_cmap)
+
+    for j in range(i + 1, len(axes)):
+        axes[j].set_visible(False)
+
+    fig.suptitle(f'Matrizes de Confus\u00e3o Normalizadas - {titulo_principal} ({target_name})\n'
+                 f'Normalizado por classe real (linhas somam 100%)',
+                 fontsize=14, fontweight='bold', y=1.02)
+    plt.tight_layout()
+
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    plt.savefig(output_file, dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close()
+    print(f"  Matrizes salvas em: {output_file}")

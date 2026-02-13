@@ -1,0 +1,116 @@
+======================================================================
+  ANÁLISE DETALHADA DE ERROS - SAD
+  XGBoost + SMOTE | 10-Fold Stratified CV
+======================================================================
+
+1. DISTRIBUIÇÃO DAS PREDIÇÕES
+--------------------------------------------------
+  Total de amostras: 287
+  Verdadeiros Positivos (VP):   14 (4.9%)
+  Verdadeiros Negativos (VN):  223 (77.7%)
+  Falsos Positivos (FP):        18 (6.3%)
+  Falsos Negativos (FN):         32 (11.1%)
+
+2. DISTRIBUIÇÃO DE PROBABILIDADES PREDITAS
+--------------------------------------------------
+  VP: média=0.745, mediana=0.741, min=0.535, max=0.940
+  VN: média=0.070, mediana=0.018, min=0.001, max=0.480
+  FP: média=0.689, mediana=0.648, min=0.501, max=0.986
+  FN: média=0.145, mediana=0.085, min=0.005, max=0.473
+
+3. PERFIL DEMOGRÁFICO POR TIPO DE CLASSIFICAÇÃO
+--------------------------------------------------
+
+  3.1 Distribuição por Sexo
+    VP (n=14): M=8 (57.1%), F=6 (42.9%)
+    VN (n=223): M=120 (53.8%), F=103 (46.2%)
+    FP (n=18): M=12 (66.7%), F=6 (33.3%)
+    FN (n=32): M=19 (59.4%), F=13 (40.6%)
+
+  3.2 Distribuição por Raça
+    VP (n=14): Race=0: 10 (71.4%), Race=1: 4 (28.6%)
+    VN (n=223): Race=1: 125 (56.1%), Race=0: 98 (43.9%)
+    FP (n=18): Race=0: 9 (50.0%), Race=1: 9 (50.0%)
+    FN (n=32): Race=1: 16 (50.0%), Race=0: 16 (50.0%)
+
+  3.3 Distribuição por Status de Pobreza
+    VP (n=14): Em pobreza=6 (42.9%), Não=8 (57.1%)
+    VN (n=223): Em pobreza=73 (32.7%), Não=150 (67.3%)
+    FP (n=18): Em pobreza=8 (44.4%), Não=10 (55.6%)
+    FN (n=32): Em pobreza=13 (40.6%), Não=19 (59.4%)
+
+  3.4 Distribuição por Idade
+    VP (n=14): média=3.3, mediana=3, min=2, max=5
+    VN (n=223): média=3.4, mediana=3, min=2, max=6
+    FP (n=18): média=3.2, mediana=3, min=2, max=6
+    FN (n=32): média=3.4, mediana=3, min=2, max=5
+
+4. COMORBIDADES
+--------------------------------------------------
+  Prevalência de outros diagnósticos por grupo:
+
+  Comorbidade                VP       VN       FP       FN
+  ----------------------------------------------------
+  GAD                     64.3%     9.0%    22.2%    34.4%
+  Social Phobia           50.0%     2.2%    22.2%    15.6%
+  ADHD                     0.0%     7.6%    11.1%     9.4%
+  CD                      28.6%     4.9%    11.1%    15.6%
+  ODD                     35.7%     9.4%    11.1%    18.8%
+
+5. VARIÁVEIS CLÍNICAS (médias por grupo)
+--------------------------------------------------
+
+  Variável                                       VP       VN       FP       FN
+  ------------------------------------------------------------------------
+  Number of Impairments                        4.21     0.92     2.33     1.53
+  Number of Type B Stressors                   2.93     0.83     1.50     1.34
+  Frequency Temper Tantrums                  154.50    77.30    56.06    74.91
+  Frequency Irritable Mood                   312.07   121.96    82.72   258.38
+  Number of Sleep Disturbances                 7.21     3.32     6.17     5.28
+  Number of Sensory Sensitivities              1.00     0.13     0.56     0.31
+  Family History - Psychiatric Diagnosis       0.50     0.30     0.39     0.31
+
+6. TESTES ESTATÍSTICOS
+--------------------------------------------------
+
+  6.1 FN vs VP (crianças COM SAD: o que diferencia acertos de erros?)
+      Teste Mann-Whitney U (bicaudal, α=0.05)
+
+  Variável                                   Média FN   Média VP    p-valor  Sig.
+  ------------------------------------------------------------------------------
+  Number of Impairments                          1.53       4.21     0.0023     *
+  Number of Sleep Disturbances                   5.28       7.21     0.0057     *
+  Number of Sensory Sensitivities                0.31       1.00     0.0078     *
+  Frequency Temper Tantrums                     74.91     154.50     0.0205     *
+  Number of Type B Stressors                     1.34       2.93     0.0258     *
+  Frequency Irritable Mood                     258.38     312.07     0.0306     *
+  Family History - Psychiatric Diagnosis         0.31       0.50     0.2361      
+  Age                                            3.38       3.29     0.8718      
+
+  6.2 FP vs VN (crianças SEM SAD: o que diferencia erros de acertos?)
+      Teste Mann-Whitney U (bicaudal, α=0.05)
+
+  Variável                                   Média FP   Média VN    p-valor  Sig.
+  ------------------------------------------------------------------------------
+  Number of Sleep Disturbances                   6.17       3.32     0.0000     *
+  Number of Sensory Sensitivities                0.56       0.13     0.0000     *
+  Number of Impairments                          2.33       0.92     0.0001     *
+  Number of Type B Stressors                     1.50       0.83     0.0027     *
+  Frequency Temper Tantrums                     56.06      77.30     0.4355      
+  Family History - Psychiatric Diagnosis         0.39       0.30     0.4615      
+  Frequency Irritable Mood                      82.72     121.96     0.4887      
+  Age                                            3.22       3.35     0.6466      
+
+7. RESUMO INTERPRETATIVO
+--------------------------------------------------
+
+  Falsos Negativos (FN = 32 crianças COM SAD classificadas como SEM):
+  → Crianças que TÊM o transtorno mas o modelo não detecta.
+  → Erro clinicamente mais grave (paciente não recebe tratamento).
+  → Probabilidade média predita: 0.145 (limiar=0.5, portanto próximas do limiar)
+
+  Falsos Positivos (FP = 18 crianças SEM SAD classificadas como COM):
+  → Crianças que NÃO TÊM o transtorno mas o modelo indica que têm.
+  → Erro menos grave (encaminhamento desnecessário, mas sem dano direto).
+  → Probabilidade média predita: 0.689
+

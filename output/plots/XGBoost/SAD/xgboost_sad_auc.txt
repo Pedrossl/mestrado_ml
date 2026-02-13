@@ -1,0 +1,61 @@
+AUC - XGBoost - SAD
+============================================================
+
+Modelo                       AUC Média     Desvio       IC 95%
+------------------------------------------------------------
+Sem Balanceamento               0.7527     0.1422       0.1017
+Class Weighting                 0.7403     0.1598       0.1143
+SMOTE                           0.7769     0.1330       0.0951
+Undersampling                   0.7233     0.1628       0.1165
+
+
+AUC por fold:
+------------------------------------------------------------
+
+Sem Balanceamento:
+  Fold  1: 0.9000
+  Fold  2: 0.7750
+  Fold  3: 0.8250
+  Fold  4: 0.7833
+  Fold  5: 0.8417
+  Fold  6: 0.8167
+  Fold  7: 0.6167
+  Fold  8: 0.8438
+  Fold  9: 0.4167
+  Fold 10: 0.7083
+
+Class Weighting:
+  Fold  1: 0.9200
+  Fold  2: 0.8083
+  Fold  3: 0.8417
+  Fold  4: 0.6917
+  Fold  5: 0.8000
+  Fold  6: 0.8917
+  Fold  7: 0.5750
+  Fold  8: 0.8021
+  Fold  9: 0.3958
+  Fold 10: 0.6771
+
+SMOTE:
+  Fold  1: 0.8400
+  Fold  2: 0.8000
+  Fold  3: 0.7750
+  Fold  4: 0.6917
+  Fold  5: 0.9250
+  Fold  6: 0.8583
+  Fold  7: 0.6500
+  Fold  8: 0.9375
+  Fold  9: 0.5000
+  Fold 10: 0.7917
+
+Undersampling:
+  Fold  1: 0.7000
+  Fold  2: 0.7583
+  Fold  3: 0.7833
+  Fold  4: 0.7083
+  Fold  5: 0.9417
+  Fold  6: 0.6333
+  Fold  7: 0.5000
+  Fold  8: 0.9688
+  Fold  9: 0.4688
+  Fold 10: 0.7708

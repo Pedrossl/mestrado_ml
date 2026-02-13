@@ -1,0 +1,61 @@
+AUC - SVM - SAD
+============================================================
+
+Modelo                       AUC Média     Desvio       IC 95%
+------------------------------------------------------------
+Sem Balanceamento               0.7363     0.1152       0.0824
+Class Weighting                 0.7634     0.1048       0.0749
+SMOTE                           0.7608     0.1134       0.0811
+Undersampling                   0.7589     0.1053       0.0753
+
+
+AUC por fold:
+------------------------------------------------------------
+
+Sem Balanceamento:
+  Fold  1: 0.8000
+  Fold  2: 0.8333
+  Fold  3: 0.8333
+  Fold  4: 0.5917
+  Fold  5: 0.8583
+  Fold  6: 0.7167
+  Fold  7: 0.5417
+  Fold  8: 0.8438
+  Fold  9: 0.6354
+  Fold 10: 0.7083
+
+Class Weighting:
+  Fold  1: 0.7300
+  Fold  2: 0.7917
+  Fold  3: 0.8917
+  Fold  4: 0.7333
+  Fold  5: 0.8917
+  Fold  6: 0.7417
+  Fold  7: 0.7083
+  Fold  8: 0.8854
+  Fold  9: 0.5625
+  Fold 10: 0.6979
+
+SMOTE:
+  Fold  1: 0.7500
+  Fold  2: 0.8083
+  Fold  3: 0.8917
+  Fold  4: 0.7417
+  Fold  5: 0.8833
+  Fold  6: 0.7000
+  Fold  7: 0.7500
+  Fold  8: 0.8854
+  Fold  9: 0.5312
+  Fold 10: 0.6667
+
+Undersampling:
+  Fold  1: 0.7700
+  Fold  2: 0.8250
+  Fold  3: 0.9250
+  Fold  4: 0.6583
+  Fold  5: 0.8750
+  Fold  6: 0.6750
+  Fold  7: 0.6833
+  Fold  8: 0.8229
+  Fold  9: 0.5938
+  Fold 10: 0.7604
