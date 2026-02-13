@@ -1,0 +1,20 @@
+Learning Curve - SVM Sem Balanceamento - GAD
+============================================================
+
+ Tam. Treino    F1 Treino    F1 Valid.        Gap
+--------------------------------------------------
+          25       0.4413       0.0000     0.4413
+          51       0.7484       0.0000     0.7484
+          77       0.8175       0.0250     0.7925
+         103       0.7450       0.0508     0.6942
+         129       0.6993       0.0000     0.6993
+         154       0.6466       0.0000     0.6466
+         180       0.6228       0.0000     0.6228
+         206       0.6550       0.0619     0.5931
+         232       0.5903       0.0000     0.5903
+         258       0.5800       0.0000     0.5800
+
+Diagnostico:
+  OVERFITTING: Gap treino-validacao alto (0.580)
+  Sugestao: Mais dados, regularizacao ou modelo mais simples
+  PLATEAU: Curva estabilizou (melhoria=-0.062)

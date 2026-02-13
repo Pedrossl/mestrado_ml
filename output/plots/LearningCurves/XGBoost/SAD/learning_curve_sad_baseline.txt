@@ -1,0 +1,20 @@
+Learning Curve - XGBoost Sem Balanceamento - SAD
+============================================================
+
+ Tam. Treino    F1 Treino    F1 Valid.        Gap
+--------------------------------------------------
+          25       0.9661       0.2150     0.7511
+          51       0.9941       0.2036     0.7905
+          77       0.9905       0.1583     0.8321
+         103       1.0000       0.2895     0.7105
+         129       1.0000       0.3006     0.6994
+         154       1.0000       0.3110     0.6890
+         180       0.9925       0.3221     0.6703
+         206       0.9983       0.2174     0.7809
+         232       0.9985       0.3400     0.6585
+         258       0.9988       0.2976     0.7012
+
+Diagnostico:
+  OVERFITTING: Gap treino-validacao alto (0.701)
+  Sugestao: Mais dados, regularizacao ou modelo mais simples
+  MAIS DADOS PODEM AJUDAR: Curva ainda subindo (+0.080)

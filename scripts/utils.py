@@ -439,6 +439,92 @@ def salvar_auc_metricas(roc_dados_dict, target_name, titulo, output_file):
     print(f"  M\u00e9tricas AUC salvas em: {output_file}")
 
 
+def plotar_learning_curve(train_sizes, train_scores, val_scores, titulo, output_file):
+    """Plota curvas de aprendizado (training vs validation score por tamanho de dados).
+
+    Args:
+        train_sizes: array com tamanhos de treino usados
+        train_scores: array (n_sizes, n_folds) com scores de treino
+        val_scores: array (n_sizes, n_folds) com scores de validacao
+        titulo: titulo do grafico
+        output_file: caminho para salvar PNG
+    """
+    train_mean = np.mean(train_scores, axis=1)
+    train_std = np.std(train_scores, axis=1)
+    val_mean = np.mean(val_scores, axis=1)
+    val_std = np.std(val_scores, axis=1)
+
+    plt.style.use('seaborn-v0_8-whitegrid')
+    fig, ax = plt.subplots(figsize=(10, 7))
+
+    ax.fill_between(train_sizes, train_mean - train_std, train_mean + train_std, alpha=0.15, color='#3498db')
+    ax.fill_between(train_sizes, val_mean - val_std, val_mean + val_std, alpha=0.15, color='#e74c3c')
+    ax.plot(train_sizes, train_mean, 'o-', color='#3498db', lw=2, label='Treino')
+    ax.plot(train_sizes, val_mean, 'o-', color='#e74c3c', lw=2, label='Validacao')
+
+    ax.set_xlabel('Tamanho do Conjunto de Treino', fontsize=12, fontweight='bold')
+    ax.set_ylabel('F1-Score', fontsize=12, fontweight='bold')
+    ax.set_title(titulo, fontsize=14, fontweight='bold', pad=20)
+    ax.legend(loc='lower right', fontsize=11)
+    ax.set_ylim(0, 1.05)
+    ax.yaxis.grid(True, linestyle='--', alpha=0.7)
+
+    plt.tight_layout()
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    plt.savefig(output_file, dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close()
+    print(f"  Learning curve salva em: {output_file}")
+
+
+def plotar_gridsearch_heatmap(resultados_cv, param_x, param_y, titulo, output_file):
+    """Plota heatmap de resultados do GridSearch para dois hiperparametros.
+
+    Args:
+        resultados_cv: dict com 'params' e 'mean_test_score' do GridSearchCV.cv_results_
+        param_x: nome do parametro para eixo X (ex: 'clf__C')
+        param_y: nome do parametro para eixo Y (ex: 'clf__gamma')
+        titulo: titulo do grafico
+        output_file: caminho para salvar PNG
+    """
+    import pandas as pd
+
+    df = pd.DataFrame(resultados_cv['params'])
+    df['score'] = resultados_cv['mean_test_score']
+
+    # Extrair nomes curtos dos parametros
+    param_x_short = param_x.split('__')[-1]
+    param_y_short = param_y.split('__')[-1]
+
+    pivot = df.pivot_table(index=param_y, columns=param_x, values='score', aggfunc='max')
+
+    plt.style.use('seaborn-v0_8-whitegrid')
+    fig, ax = plt.subplots(figsize=(10, 7))
+
+    im = ax.imshow(pivot.values, cmap='YlOrRd', aspect='auto')
+
+    ax.set_xticks(range(len(pivot.columns)))
+    ax.set_yticks(range(len(pivot.index)))
+    ax.set_xticklabels([str(v) for v in pivot.columns], fontsize=10)
+    ax.set_yticklabels([str(v) for v in pivot.index], fontsize=10)
+    ax.set_xlabel(param_x_short, fontsize=12, fontweight='bold')
+    ax.set_ylabel(param_y_short, fontsize=12, fontweight='bold')
+    ax.set_title(titulo, fontsize=14, fontweight='bold', pad=20)
+
+    for i in range(len(pivot.index)):
+        for j in range(len(pivot.columns)):
+            val = pivot.values[i, j]
+            cor = 'white' if val > pivot.values.mean() else 'black'
+            ax.text(j, i, f'{val:.3f}', ha='center', va='center', fontsize=10, fontweight='bold', color=cor)
+
+    plt.colorbar(im, ax=ax, label='F1-Score', shrink=0.8)
+    plt.tight_layout()
+
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    plt.savefig(output_file, dpi=150, bbox_inches='tight', facecolor='white')
+    plt.close()
+    print(f"  Heatmap salvo em: {output_file}")
+
+
 def plotar_matriz_confusao_normalizada(cm_raw, target_name, titulo, ax=None, cmap='Blues'):
     """Plota matriz de confusao normalizada por linha (true class).
 

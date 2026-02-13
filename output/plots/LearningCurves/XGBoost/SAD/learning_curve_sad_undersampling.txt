@@ -1,0 +1,20 @@
+Learning Curve - XGBoost Undersampling - SAD
+============================================================
+
+ Tam. Treino    F1 Treino    F1 Valid.        Gap
+--------------------------------------------------
+          25       0.6057       0.2769     0.3288
+          51       0.6458       0.4062     0.2397
+          77       0.6129       0.3882     0.2247
+         103       0.5863       0.3908     0.1955
+         129       0.5972       0.4046     0.1925
+         154       0.6472       0.3450     0.3023
+         180       0.6225       0.4114     0.2111
+         206       0.5802       0.4078     0.1723
+         232       0.6110       0.4000     0.2109
+         258       0.5965       0.3900     0.2064
+
+Diagnostico:
+  OVERFITTING: Gap treino-validacao alto (0.206)
+  Sugestao: Mais dados, regularizacao ou modelo mais simples
+  PLATEAU: Curva estabilizou (melhoria=-0.018)

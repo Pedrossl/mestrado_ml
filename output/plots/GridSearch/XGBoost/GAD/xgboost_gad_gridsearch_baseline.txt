@@ -1,0 +1,34 @@
+GridSearch Nested CV - XGBoost Sem Balanceamento - GAD
+============================================================
+
+Melhores hiperparametros (consenso dos 10 folds):
+  clf__learning_rate: 0.2
+  clf__max_depth: 3
+  clf__n_estimators: 50
+  clf__subsample: 0.8
+
+Parametros por fold:
+  Fold 1: {'clf__learning_rate': 0.2, 'clf__max_depth': 7, 'clf__n_estimators': 50, 'clf__subsample': 0.8}
+  Fold 2: {'clf__learning_rate': 0.2, 'clf__max_depth': 7, 'clf__n_estimators': 200, 'clf__subsample': 1.0}
+  Fold 3: {'clf__learning_rate': 0.2, 'clf__max_depth': 3, 'clf__n_estimators': 50, 'clf__subsample': 0.8}
+  Fold 4: {'clf__learning_rate': 0.1, 'clf__max_depth': 3, 'clf__n_estimators': 100, 'clf__subsample': 0.8}
+  Fold 5: {'clf__learning_rate': 0.1, 'clf__max_depth': 3, 'clf__n_estimators': 200, 'clf__subsample': 0.8}
+  Fold 6: {'clf__learning_rate': 0.2, 'clf__max_depth': 5, 'clf__n_estimators': 50, 'clf__subsample': 0.8}
+  Fold 7: {'clf__learning_rate': 0.1, 'clf__max_depth': 3, 'clf__n_estimators': 50, 'clf__subsample': 1.0}
+  Fold 8: {'clf__learning_rate': 0.2, 'clf__max_depth': 5, 'clf__n_estimators': 100, 'clf__subsample': 1.0}
+  Fold 9: {'clf__learning_rate': 0.2, 'clf__max_depth': 7, 'clf__n_estimators': 100, 'clf__subsample': 0.8}
+  Fold 10: {'clf__learning_rate': 0.1, 'clf__max_depth': 5, 'clf__n_estimators': 100, 'clf__subsample': 1.0}
+
+METRICAS (media +/- IC 95%)
+--------------------------------------------------
+Accuracy:    86.74% +/- 2.35%
+Sensitivity: 33.50% +/- 12.74%
+Specificity: 96.30% +/- 2.16%
+PPV:         58.33% +/- 21.22%
+NPV:         89.02% +/- 1.82%
+F1-Score:    41.26% +/- 14.52%
+Kappa:       0.3520 +/- 0.1415
+
+Matriz de Confusao Agregada:
+VN=234 | FP=9
+FN=29 | VP=15

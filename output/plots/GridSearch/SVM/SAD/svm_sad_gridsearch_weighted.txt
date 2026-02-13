@@ -1,0 +1,32 @@
+GridSearch Nested CV - SVM Class Weighting - SAD
+============================================================
+
+Melhores hiperparametros (consenso dos 10 folds):
+  clf__C: 1
+  clf__gamma: 0.01
+
+Parametros por fold:
+  Fold 1: {'clf__C': 10, 'clf__gamma': 0.001}
+  Fold 2: {'clf__C': 0.1, 'clf__gamma': 'scale'}
+  Fold 3: {'clf__C': 0.1, 'clf__gamma': 'scale'}
+  Fold 4: {'clf__C': 1, 'clf__gamma': 0.01}
+  Fold 5: {'clf__C': 0.1, 'clf__gamma': 'scale'}
+  Fold 6: {'clf__C': 1, 'clf__gamma': 0.01}
+  Fold 7: {'clf__C': 1, 'clf__gamma': 0.01}
+  Fold 8: {'clf__C': 10, 'clf__gamma': 0.001}
+  Fold 9: {'clf__C': 1, 'clf__gamma': 0.01}
+  Fold 10: {'clf__C': 10, 'clf__gamma': 0.01}
+
+METRICAS (media +/- IC 95%)
+--------------------------------------------------
+Accuracy:    73.13% +/- 6.50%
+Sensitivity: 67.00% +/- 18.18%
+Specificity: 74.33% +/- 7.74%
+PPV:         34.16% +/- 8.84%
+NPV:         92.63% +/- 3.96%
+F1-Score:    44.21% +/- 10.77%
+Kappa:       0.2965 +/- 0.1305
+
+Matriz de Confusao Agregada:
+VN=179 | FP=62
+FN=15 | VP=31

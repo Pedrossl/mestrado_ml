@@ -1,0 +1,20 @@
+Learning Curve - SVM Undersampling - SAD
+============================================================
+
+ Tam. Treino    F1 Treino    F1 Valid.        Gap
+--------------------------------------------------
+          25       0.7255       0.2688     0.4568
+          51       0.6461       0.3806     0.2655
+          77       0.5160       0.4299     0.0861
+         103       0.5052       0.3852     0.1199
+         129       0.4916       0.4056     0.0860
+         154       0.5470       0.4294     0.1176
+         180       0.5119       0.3872     0.1247
+         206       0.5180       0.4092     0.1088
+         232       0.5292       0.4371     0.0921
+         258       0.5393       0.3863     0.1529
+
+Diagnostico:
+  OVERFITTING: Gap treino-validacao alto (0.153)
+  Sugestao: Mais dados, regularizacao ou modelo mais simples
+  PLATEAU: Curva estabilizou (melhoria=-0.023)
