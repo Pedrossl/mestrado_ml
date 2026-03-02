@@ -1,0 +1,20 @@
+MÉTODO: BorderlineSMOTE
+Código: M03_BorderlineSMOTE
+Referência: Han et al. (2005). Borderline-SMOTE: A new over-sampling method. Advances in Intelligent Computing, 878-887.
+Descrição: Aplica SMOTE apenas nas amostras minoritárias "perigosas" (na fronteira), ignorando amostras seguras, gerando sintéticos mais informativos.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     85.36% ± 3.06%
+Sensitivity:  41.00% ± 12.82%
+Specificity:  93.42% ± 2.81%
+PPV:          56.67% ± 15.71%
+NPV:          89.78% ± 2.27%
+F1-Score:     45.19% ± 10.57%
+Kappa:        0.3720 ± 0.1191
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 227  FP=  16
+  FN=  26  VP=  18

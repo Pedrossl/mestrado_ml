@@ -1,0 +1,24 @@
+MÉTODO: Stacking (KNN+Ada+XGB) + MetaLR + F2
+Código: M21_Stacking
+Referência: Wolpert (1992). Stacked generalization. Neural networks, 5(2), 241-259.
+Descrição: Stacking heterogêneo combinando modelos base (KNN, AdaBoost, XGBoost) e um meta-modelo (Regressão Logística balanceada) para maximizar recall inter-modelos.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     79.79% ± 4.86%
+Sensitivity:  50.00% ± 12.84%
+Specificity:  85.23% ± 6.17%
+PPV:          40.87% ± 11.00%
+NPV:          90.50% ± 2.18%
+F1-Score:     43.12% ± 9.34%
+Kappa:        0.3168 ± 0.1117
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 207  FP=  36
+  FN=  22  VP=  22
+
+THRESHOLD (determinado no treino de cada fold)
+  Média: 0.296 | Mín: 0.210 | Máx: 0.390
+  Por fold: ['0.27', '0.21', '0.25', '0.39', '0.29', '0.25', '0.29', '0.37', '0.27', '0.37']

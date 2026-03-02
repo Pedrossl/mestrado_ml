@@ -72,9 +72,10 @@
 
 ### Analise Exploratoria de Dados (EDA)
 
-- [ ] **Graficos de distribuicao das features** (~3h) - Visualizar distribuicao das 17 features, identificar outliers e padroes
-- [ ] **Analise de multicolinearidade** (~1h) - Matriz de correlacao ja existe (`correlation.py`). Falta: VIF (Variance Inflation Factor) e interpretacao de features redundantes
-- [ ] **Boxplots GAD vs nao-GAD** (~2h) - Comparar distribuicoes das features importantes entre classes
+- [x] **Graficos de distribuicao das features** - Histogramas para features continuas (com KDE e estatisticas), barplots para binarias e ordinais. **Implementado em `scripts/eda.py`**. Outputs em `output/plots/EDA/{Target}/distribuicoes/`
+- [x] **Analise de multicolinearidade (VIF)** - Variance Inflation Factor para todas as 17 features. **Implementado em `scripts/eda.py`**. Resultados: Age (VIF=7.33), Sleep Disturbances (5.33) e Bio Parents (5.21) com multicolinearidade moderada. Nenhuma feature com VIF > 10. Outputs em `output/plots/EDA/{Target}/vif/`
+- [x] **Boxplots GAD vs nao-GAD** - Boxplots comparativos por classe para features ordinais/continuas, barplots de proporcao para binarias. **Implementado em `scripts/eda.py`**. Outputs em `output/plots/EDA/{Target}/boxplots/`
+- [x] **Matriz de correlacao + correlacao com target** - Heatmap triangular inferior com Pearson, barplot de correlacao com GAD/SAD ordenado por |r|. **Implementado em `scripts/eda.py`**. Outputs em `output/plots/EDA/{Target}/correlacao/`
 - [ ] **Analise das amostras SMOTE** (~2h) - Validar se amostras sinteticas sao realistas e plausíveis
 
 ### Fairness e Vies

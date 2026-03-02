@@ -1,0 +1,20 @@
+MÉTODO: GridSearch Nested CV (scoring=recall)
+Código: M18_GridSearch_Recall
+Referência: Bergstra & Bengio (2012). Random Search for Hyper-Parameter Optimization. JMLR 13, 281-305. + Nested CV: Varma & Simon (2006). Bias in error estimation. BMC Bioinformatics 7, 91.
+Descrição: GridSearch com nested CV (outer 10-fold, inner 5-fold) que otimiza hiperparâmetros do XGBoost+SMOTE diretamente para maximizar recall (sensibilidade).
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     65.17% ± 9.51%
+Sensitivity:  68.50% ± 11.06%
+Specificity:  64.60% ± 11.12%
+PPV:          28.22% ± 6.74%
+NPV:          91.52% ± 3.04%
+F1-Score:     39.06% ± 7.43%
+Kappa:        0.2182 ± 0.1066
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 157  FP=  86
+  FN=  14  VP=  30

@@ -1,0 +1,24 @@
+MÉTODO: Calibrated XGBoost + Threshold F2
+Código: M19_Calibrated_XGB
+Referência: Zadrozny & Elkan (2002). Transforming classifier scores into accurate multiclass probability estimates. KDD. E Platt (1999).
+Descrição: Calibra as probabilidades geradas pelo XGBoost (distorcidas pelo SMOTE) usando regressão isotônica antes de otimizar o limiar de decisão F2.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     83.93% ± 3.27%
+Sensitivity:  37.00% ± 12.64%
+Specificity:  92.57% ± 3.66%
+PPV:          53.50% ± 19.13%
+NPV:          89.02% ± 2.35%
+F1-Score:     40.54% ± 10.21%
+Kappa:        0.3193 ± 0.1168
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 225  FP=  18
+  FN=  28  VP=  16
+
+THRESHOLD (determinado no treino de cada fold)
+  Média: 0.282 | Mín: 0.160 | Máx: 0.380
+  Por fold: ['0.22', '0.38', '0.27', '0.38', '0.29', '0.29', '0.26', '0.30', '0.27', '0.16']

@@ -1,0 +1,24 @@
+MÉTODO: SMOTE + Threshold F2-score (β=2)
+Código: M09_Threshold_F2
+Referência: Van Rijsbergen (1979). Information Retrieval. Sokolova & Lapalme (2009). Information Processing & Management 45(4), 427-437.
+Descrição: Threshold que maximiza F-beta com β=2: penaliza falsos negativos 4× mais que falsos positivos, priorizando sensibilidade sobre precisão.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     81.21% ± 4.20%
+Sensitivity:  47.50% ± 11.22%
+Specificity:  87.23% ± 4.10%
+PPV:          41.67% ± 10.30%
+NPV:          90.19% ± 2.12%
+F1-Score:     43.68% ± 9.67%
+Kappa:        0.3262 ± 0.1160
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 212  FP=  31
+  FN=  23  VP=  21
+
+THRESHOLD (determinado no treino de cada fold)
+  Média: 0.260 | Mín: 0.210 | Máx: 0.300
+  Por fold: ['0.23', '0.21', '0.22', '0.21', '0.30', '0.28', '0.30', '0.29', '0.26', '0.30']

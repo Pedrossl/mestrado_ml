@@ -2,6 +2,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import confusion_matrix
 from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
@@ -338,6 +339,98 @@ def analisar_importancia_features(target='GAD'):
     return resultados_features
 
 
+def treinar_xgboost_threshold_otimizado(target='GAD', spec_minima=50.0):
+    """Treina XGBoost com SMOTE + threshold otimizado para maximizar sensibilidade.
+
+    O threshold é determinado NO FOLD DE TREINO (sem data leakage), buscando
+    o valor que maximiza a sensibilidade mantendo a especificidade >= spec_minima.
+    Isso simula triagem clínica: priorizamos não perder casos reais de GAD.
+    """
+    output_path = f'output/plots/XGBoost/{target.upper()}'
+    os.makedirs(output_path, exist_ok=True)
+
+    df, target_name = preparar_dados(target)
+
+    print("\n" + "=" * 70)
+    print("     MODELO XGBoost - SMOTE + THRESHOLD OTIMIZADO (max. Sensibilidade)")
+    print("=" * 70)
+    print(f"\n  Estratégia: maximizar sensibilidade com especificidade >= {spec_minima:.0f}%")
+    print("  Threshold determinado nos dados de TREINO de cada fold (sem data leakage)")
+
+    print("\n[DATASET]")
+    print(f"  Amostras: {df.shape[0]} | Features: {df.shape[1] - 1} | Target: {target_name}")
+    dist = df[target_name].value_counts()
+    print(f"  Classe 0: {dist[0]} ({dist[0]/len(df)*100:.1f}%) | Classe 1: {dist[1]} ({dist[1]/len(df)*100:.1f}%)")
+
+    X = df.drop(columns=[target_name]).values
+    y = df[target_name].values
+
+    n_folds = 10
+    skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
+    metricas_por_fold = []
+    thresholds_usados = []
+
+    print(f"\n[TREINAMENTO]")
+    print(f"  Executando {n_folds}-fold CV com threshold otimizado...", end=" ")
+
+    for train_idx, test_idx in skf.split(X, y):
+        X_train, X_test = X[train_idx], X[test_idx]
+        y_train, y_test = y[train_idx], y[test_idx]
+
+        smote = SMOTE(random_state=42)
+        X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+
+        model = XGBClassifier(
+            n_estimators=100, max_depth=5, learning_rate=0.1,
+            random_state=42, use_label_encoder=False,
+            eval_metric='logloss', verbosity=0
+        )
+        model.fit(X_train_res, y_train_res)
+
+        # Buscar threshold ótimo nos dados de TREINO (após SMOTE)
+        y_proba_train = model.predict_proba(X_train_res)[:, 1]
+        melhor_threshold = 0.5
+        melhor_sens = 0.0
+        for t in np.arange(0.1, 0.9, 0.01):
+            y_pred_t = (y_proba_train >= t).astype(int)
+            cm_t = confusion_matrix(y_train_res, y_pred_t)
+            vn_t, fp_t = int(cm_t[0][0]), int(cm_t[0][1])
+            fn_t, vp_t = int(cm_t[1][0]), int(cm_t[1][1])
+            spec_t = vn_t / (vn_t + fp_t) * 100 if (vn_t + fp_t) > 0 else 0
+            sens_t = vp_t / (vp_t + fn_t) * 100 if (vp_t + fn_t) > 0 else 0
+            if spec_t >= spec_minima and sens_t > melhor_sens:
+                melhor_sens = sens_t
+                melhor_threshold = t
+
+        thresholds_usados.append(melhor_threshold)
+
+        # Aplicar threshold ótimo no conjunto de TESTE
+        y_proba_test = model.predict_proba(X_test)[:, 1]
+        y_pred = (y_proba_test >= melhor_threshold).astype(int)
+
+        metricas_por_fold.append(calcular_metricas_fold(y_test, y_pred))
+
+    print("OK")
+
+    threshold_medio = np.mean(thresholds_usados)
+    print(f"\n  Threshold médio usado: {threshold_medio:.3f} (variação: {min(thresholds_usados):.2f} - {max(thresholds_usados):.2f})")
+
+    metricas = agregar_metricas_com_ic(metricas_por_fold)
+    output_file = f'{output_path}/xgboost_{target.lower()}_threshold_metricas.txt'
+    exibir_resultados(metricas, target_name, f"XGBoost (SMOTE + Threshold={threshold_medio:.2f})", output_file)
+
+    # Adicionar threshold ao arquivo de saída
+    with open(output_file, 'a') as f:
+        f.write(f"\nTHRESHOLD\n")
+        f.write("-" * 50 + "\n")
+        f.write(f"Threshold médio: {threshold_medio:.3f}\n")
+        f.write(f"Mínimo: {min(thresholds_usados):.3f} | Máximo: {max(thresholds_usados):.3f}\n")
+        f.write(f"Especificidade mínima exigida: {spec_minima:.0f}%\n")
+        f.write(f"Thresholds por fold: {[f'{t:.2f}' for t in thresholds_usados]}\n")
+
+    return metricas
+
+
 if __name__ == "__main__":
     for target in ['GAD', 'SAD']:
         print("\n" + "#" * 60)
@@ -368,6 +461,11 @@ if __name__ == "__main__":
 
         m4 = treinar_xgboost_undersampling(target)
         resultados_dict['Undersampling'] = m4
+
+        print("\n" + "@" * 70 + "\n")
+
+        m5 = treinar_xgboost_threshold_otimizado(target)
+        resultados_dict['SMOTE+Threshold'] = m5
 
         print("\n" + "@" * 70 + "\n")
 

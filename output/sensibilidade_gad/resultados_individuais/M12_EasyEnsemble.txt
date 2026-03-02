@@ -1,0 +1,20 @@
+MÉTODO: EasyEnsemble
+Código: M12_EasyEnsemble
+Referência: Liu, Wu & Zhou (2009). Exploratory undersampling for class-imbalance learning. IEEE TSMC 39(2), 539-550.
+Descrição: Múltiplos AdaBoosts treinados em subconjuntos balanceados via undersampling aleatório, agregados por votação — reduz variância do undersampling simples.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     66.23% ± 6.92%
+Sensitivity:  68.50% ± 12.96%
+Specificity:  65.88% ± 7.38%
+PPV:          27.60% ± 6.48%
+NPV:          91.86% ± 3.48%
+F1-Score:     38.90% ± 8.02%
+Kappa:        0.2170 ± 0.1077
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 160  FP=  83
+  FN=  14  VP=  30

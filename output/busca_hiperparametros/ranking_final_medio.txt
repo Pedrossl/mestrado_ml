@@ -1,0 +1,248 @@
+===========================================================================
+RANKING FINAL — Busca de Hiperparâmetros para GAD
+Modo: medio | n_iter=200 por experimento
+===========================================================================
+
+Rank Experimento                             Sensitivity             F1       Spec    Kappa
+──────────────────────────────────────────────────────────────────────────────────────────
+1    BorderlineSMOTE_recall                   100.0±0.0%      26.5±1.8%       0.0%    0.000
+2    SMOTEENN_recall                          100.0±0.0%      27.8±2.4%       5.8%    0.020
+3    SMOTETomek_recall                        100.0±0.0%      27.0±1.7%       2.0%    0.006
+4    SMOTE_recall                              97.5±5.7%      26.4±2.0%       2.4%   -0.001
+5    ADASYN_recall                             97.5±5.7%      27.1±3.2%       4.9%    0.011
+6    BorderlineSMOTE_f2                       83.5±11.8%      41.2±5.9%      57.3%    0.236
+7    SMOTEENN_f2                              74.5±18.6%      35.0±7.9%      53.2%    0.154
+8    SMOTE_f2                                 73.5±13.8%      37.6±5.6%      60.1%    0.193
+9    ADASYN_f2                                73.5±17.9%      37.4±7.7%      59.2%    0.191
+10   SMOTETomek_f2                            72.5±18.3%      36.4±6.3%      60.1%    0.180
+
+
+===========================================================================
+DETALHAMENTO — MELHORES PARÂMETROS POR EXPERIMENTO
+===========================================================================
+
+[1] BorderlineSMOTE_recall
+  Sensitivity:  100.00% ± 0.00%
+  F1-Score:     26.54% ± 1.78%
+  Specificity:  0.00%
+  Kappa:        0.0000
+  Duração:      6.1 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.4338
+    colsample_bytree         : 0.8332
+    gamma                    : 1.0883
+    learning_rate            : 0.0010
+    max_depth                : 5.0000
+    min_child_weight         : 5.0000
+    n_estimators             : 210.0000
+    reg_alpha                : 0.0020
+    reg_lambda               : 1.1208
+    scale_pos_weight         : 5.4183
+    subsample                : 0.6456
+    sampler.k_neighbors      : 4.0000
+    sampler.m_neighbors      : 19.0000
+
+[2] SMOTEENN_recall
+  Sensitivity:  100.00% ± 0.00%
+  F1-Score:     27.81% ± 2.38%
+  Specificity:  5.75%
+  Kappa:        0.0200
+  Duração:      8.1 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.6263
+    colsample_bytree         : 0.6969
+    gamma                    : 0.4075
+    learning_rate            : 0.0034
+    max_depth                : 3.0000
+    min_child_weight         : 11.5000
+    n_estimators             : 240.5000
+    reg_alpha                : 0.0077
+    reg_lambda               : 1.7573
+    scale_pos_weight         : 16.9241
+    subsample                : 0.6370
+
+[3] SMOTETomek_recall
+  Sensitivity:  100.00% ± 0.00%
+  F1-Score:     26.97% ± 1.73%
+  Specificity:  2.00%
+  Kappa:        0.0065
+  Duração:      8.5 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.7794
+    colsample_bytree         : 0.7801
+    gamma                    : 0.0202
+    learning_rate            : 0.0017
+    max_depth                : 2.0000
+    min_child_weight         : 9.0000
+    n_estimators             : 173.0000
+    reg_alpha                : 0.0153
+    reg_lambda               : 2.4639
+    scale_pos_weight         : 28.7294
+    subsample                : 0.6630
+
+[4] SMOTE_recall
+  Sensitivity:  97.50% ± 5.66%
+  F1-Score:     26.41% ± 2.02%
+  Specificity:  2.40%
+  Kappa:        -0.0006
+  Duração:      5.2 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.9369
+    colsample_bytree         : 0.7587
+    gamma                    : 0.9226
+    learning_rate            : 0.0017
+    max_depth                : 8.0000
+    min_child_weight         : 12.0000
+    n_estimators             : 345.0000
+    reg_alpha                : 0.4289
+    reg_lambda               : 3.1235
+    scale_pos_weight         : 8.2589
+    subsample                : 0.7934
+    sampler.k_neighbors      : 2.0000
+
+[5] ADASYN_recall
+  Sensitivity:  97.50% ± 5.66%
+  F1-Score:     27.11% ± 3.25%
+  Specificity:  4.93%
+  Kappa:        0.0109
+  Duração:      6.2 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.9369
+    colsample_bytree         : 0.7587
+    gamma                    : 0.9226
+    learning_rate            : 0.0017
+    max_depth                : 8.0000
+    min_child_weight         : 12.0000
+    n_estimators             : 345.0000
+    reg_alpha                : 0.4289
+    reg_lambda               : 3.1235
+    scale_pos_weight         : 8.2589
+    subsample                : 0.7934
+    sampler.n_neighbors      : 2.0000
+
+[6] BorderlineSMOTE_f2
+  Sensitivity:  83.50% ± 11.81%
+  F1-Score:     41.19% ± 5.93%
+  Specificity:  57.27%
+  Kappa:        0.2362
+  Duração:      12.1 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.6581
+    colsample_bytree         : 0.5490
+    gamma                    : 0.0040
+    learning_rate            : 0.0184
+    max_depth                : 5.5000
+    min_child_weight         : 8.0000
+    n_estimators             : 339.5000
+    reg_alpha                : 0.0103
+    reg_lambda               : 2.3825
+    scale_pos_weight         : 24.8260
+    subsample                : 0.6830
+    sampler.k_neighbors      : 4.0000
+    sampler.m_neighbors      : 12.0000
+
+[7] SMOTEENN_f2
+  Sensitivity:  74.50% ± 18.58%
+  F1-Score:     35.04% ± 7.93%
+  Specificity:  53.17%
+  Kappa:        0.1541
+  Duração:      7.0 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.4832
+    colsample_bytree         : 0.7952
+    gamma                    : 0.0554
+    learning_rate            : 0.0951
+    max_depth                : 5.0000
+    min_child_weight         : 8.0000
+    n_estimators             : 244.0000
+    reg_alpha                : 0.0276
+    reg_lambda               : 1.7590
+    scale_pos_weight         : 13.5241
+    subsample                : 0.7318
+
+[8] SMOTE_f2
+  Sensitivity:  73.50% ± 13.81%
+  F1-Score:     37.63% ± 5.58%
+  Specificity:  60.10%
+  Kappa:        0.1929
+  Duração:      5.0 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.4817
+    colsample_bytree         : 0.6452
+    gamma                    : 0.0011
+    learning_rate            : 0.0094
+    max_depth                : 5.0000
+    min_child_weight         : 7.5000
+    n_estimators             : 280.5000
+    reg_alpha                : 0.0217
+    reg_lambda               : 1.3448
+    scale_pos_weight         : 6.6844
+    subsample                : 0.7929
+    sampler.k_neighbors      : 5.0000
+
+[9] ADASYN_f2
+  Sensitivity:  73.50% ± 17.93%
+  F1-Score:     37.43% ± 7.65%
+  Specificity:  59.20%
+  Kappa:        0.1913
+  Duração:      5.2 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5512
+    colsample_bytree         : 0.7192
+    gamma                    : 0.6488
+    learning_rate            : 0.0056
+    max_depth                : 6.0000
+    min_child_weight         : 6.0000
+    n_estimators             : 441.5000
+    reg_alpha                : 0.0150
+    reg_lambda               : 3.4409
+    scale_pos_weight         : 8.5132
+    subsample                : 0.6905
+    sampler.n_neighbors      : 4.0000
+
+[10] SMOTETomek_f2
+  Sensitivity:  72.50% ± 18.26%
+  F1-Score:     36.37% ± 6.35%
+  Specificity:  60.05%
+  Kappa:        0.1801
+  Duração:      60.5 min
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5470
+    colsample_bytree         : 0.6347
+    gamma                    : 0.0043
+    learning_rate            : 0.0453
+    max_depth                : 4.0000
+    min_child_weight         : 9.0000
+    n_estimators             : 156.5000
+    reg_alpha                : 0.1060
+    reg_lambda               : 0.5679
+    scale_pos_weight         : 25.0396
+    subsample                : 0.8389
+
+===========================================================================
+COMO USAR O MELHOR MODELO ENCONTRADO: BorderlineSMOTE_recall
+===========================================================================
+
+Sensibilidade atingida: 100.0% ± 0.0%
+F1-Score:               26.5% ± 1.8%
+
+Código Python para replicar:
+
+from xgboost import XGBClassifier
+from imblearn.over_sampling import BorderlineSMOTE  # ou combine/
+
+model = XGBClassifier(
+    colsample_bylevel=0.4338,
+    colsample_bytree=0.8332,
+    gamma=1.0883,
+    learning_rate=0.0010,
+    max_depth=5.0000,
+    min_child_weight=5.0000,
+    n_estimators=210.0000,
+    reg_alpha=0.0020,
+    reg_lambda=1.1208,
+    scale_pos_weight=5.4183,
+    subsample=0.6456,
+    random_state=42, use_label_encoder=False,
+    eval_metric='logloss', verbosity=0,
+)

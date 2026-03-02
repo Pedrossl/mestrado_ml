@@ -1,0 +1,24 @@
+MÉTODO: SMOTEENN + scale_pos_weight + Threshold F2 (combo)
+Código: M15_SMOTEENN_SPW_F2
+Referência: Combinação de Batista 2004 (SMOTEENN) + Chen 2016 (XGBoost SPW) + Van Rijsbergen 1979 (F-beta).
+Descrição: Combina as três abordagens: resampling híbrido (SMOTEENN), custo assimétrico no treino (SPW), e limiar de decisão otimizado para sensibilidade (F2).
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     64.20% ± 8.32%
+Sensitivity:  71.50% ± 19.59%
+Specificity:  63.02% ± 8.33%
+PPV:          27.22% ± 8.54%
+NPV:          92.29% ± 5.55%
+F1-Score:     38.73% ± 10.61%
+Kappa:        0.2093 ± 0.1439
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 153  FP=  90
+  FN=  13  VP=  31
+
+THRESHOLD (determinado no treino de cada fold)
+  Média: 0.247 | Mín: 0.170 | Máx: 0.300
+  Por fold: ['0.27', '0.25', '0.28', '0.30', '0.27', '0.20', '0.23', '0.26', '0.24', '0.17']

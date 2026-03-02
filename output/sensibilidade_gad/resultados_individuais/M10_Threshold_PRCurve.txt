@@ -1,0 +1,24 @@
+MÉTODO: SMOTE + Threshold PR-Curve (max F1)
+Código: M10_Threshold_PRCurve
+Referência: Davis & Goadrich (2006). The relationship between Precision-Recall and ROC curves. ICML, 233-240.
+Descrição: Threshold no ponto de máximo F1 da curva Precision-Recall (mais informativa que ROC em datasets desbalanceados por ignorar os TN abundantes).
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     86.05% ± 2.08%
+Sensitivity:  36.50% ± 14.61%
+Specificity:  95.10% ± 2.99%
+PPV:          55.00% ± 21.34%
+NPV:          89.32% ± 2.22%
+F1-Score:     41.59% ± 13.90%
+Kappa:        0.3501 ± 0.1335
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 231  FP=  12
+  FN=  28  VP=  16
+
+THRESHOLD (determinado no treino de cada fold)
+  Média: 0.521 | Mín: 0.482 | Máx: 0.596
+  Por fold: ['0.60', '0.48', '0.54', '0.51', '0.52', '0.48', '0.51', '0.51', '0.53', '0.53']

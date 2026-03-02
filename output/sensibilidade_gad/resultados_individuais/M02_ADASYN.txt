@@ -1,0 +1,20 @@
+MÉTODO: ADASYN
+Código: M02_ADASYN
+Referência: He et al. (2008). ADASYN: Adaptive Synthetic Sampling. IEEE IJCNN, 1322-1328.
+Descrição: Gera mais sintéticos onde o classificador erra mais (regiões de fronteira de alta densidade negativa), adaptando a distribuição.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     85.69% ± 3.65%
+Sensitivity:  38.00% ± 16.45%
+Specificity:  94.23% ± 2.08%
+PPV:          51.67% ± 17.28%
+NPV:          89.49% ± 2.60%
+F1-Score:     43.06% ± 16.53%
+Kappa:        0.3537 ± 0.1805
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 229  FP=  14
+  FN=  27  VP=  17

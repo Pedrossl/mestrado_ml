@@ -1,0 +1,20 @@
+MÉTODO: Focal Loss (SMOTE + XGBoost)
+Código: M16_FocalLoss
+Referência: Lin, Goyal, Girshick, He & Dollar (2017). Focal Loss for Dense Object Detection. IEEE ICCV, 2980-2988. [>20.000 citações]
+Descrição: Modifica a cross-entropy com fator (1-p)^γ que reduz a contribuição de exemplos fáceis (bem classificados), focando o treino nos casos difíceis da classe positiva.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     77.02% ± 4.94%
+Sensitivity:  49.00% ± 13.57%
+Specificity:  81.93% ± 4.36%
+PPV:          33.87% ± 10.93%
+NPV:          90.03% ± 2.57%
+F1-Score:     39.66% ± 11.81%
+Kappa:        0.2631 ± 0.1424
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 199  FP=  44
+  FN=  22  VP=  22

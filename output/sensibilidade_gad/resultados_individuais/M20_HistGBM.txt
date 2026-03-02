@@ -1,0 +1,24 @@
+MÉTODO: HistGradientBoosting + Threshold F2
+Código: M20_HistGBM
+Referência: Ke et al. (2017). LightGBM: A Highly Efficient Gradient Boosting Decision Tree. NIPS (Inspiração do Sklearn HistGBM).
+Descrição: Usa HistGradientBoosting (equivalente nativo do Sklearn ao LightGBM) que agrupa features em bins, suportando class_weight e otimizando F2.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     84.32% ± 2.92%
+Sensitivity:  45.50% ± 10.86%
+Specificity:  91.37% ± 3.23%
+PPV:          50.50% ± 10.49%
+NPV:          90.29% ± 1.91%
+F1-Score:     46.54% ± 8.68%
+Kappa:        0.3760 ± 0.0989
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 222  FP=  21
+  FN=  24  VP=  20
+
+THRESHOLD (determinado no treino de cada fold)
+  Média: 0.234 | Mín: 0.190 | Máx: 0.290
+  Por fold: ['0.28', '0.19', '0.23', '0.23', '0.29', '0.23', '0.21', '0.23', '0.26', '0.19']

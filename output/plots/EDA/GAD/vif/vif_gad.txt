@@ -1,0 +1,36 @@
+Variance Inflation Factor (VIF) - GAD
+============================================================
+
+VIF mede o quanto a variancia de um coeficiente de regressao
+e inflada pela correlacao com outras features.
+
+  VIF = 1: sem multicolinearidade
+  VIF > 5: multicolinearidade moderada
+  VIF > 10: multicolinearidade alta
+
+Feature                                            VIF          Status
+----------------------------------------------------------------------
+Age                                               7.33        MODERADO
+Number of Sleep Disturbances                      5.33        MODERADO
+Number of Bio. Parents                            5.21        MODERADO
+Number of Siblings                                4.07              OK
+Number of Impairments                             2.96              OK
+ODD                                               2.83              OK
+Race                                              2.52              OK
+Frequency Irritable Mood                          2.37              OK
+Number of Type B Stressors                        2.08              OK
+Poverty Status                                    1.95              OK
+Frequency Temper Tantrums                         1.95              OK
+Sex                                               1.87              OK
+Social Phobia                                     1.69              OK
+Family History - Psychiatric Diagnosis            1.64              OK
+CD                                                1.61              OK
+Number of Sensory Sensitivities                   1.45              OK
+ADHD                                              1.39              OK
+
+ATENCAO: 3 feature(s) com VIF > 5:
+  - Age (VIF=7.33)
+  - Number of Sleep Disturbances (VIF=5.33)
+  - Number of Bio. Parents (VIF=5.21)
+
+Considerar remover ou combinar features com VIF alto.

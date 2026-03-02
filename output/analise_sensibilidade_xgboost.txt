@@ -1,0 +1,157 @@
+================================================================================
+    ANÁLISE DE SENSIBILIDADE - XGBoost para GAD e SAD
+    Dissertação de Mestrado
+================================================================================
+
+Data da análise: Fevereiro 2026
+Motivação: Dados de saúde mental exigem máxima sensibilidade — é preferível
+           encaminhar para avaliação um falso positivo do que deixar escapar
+           uma criança com GAD/SAD real (falso negativo).
+
+O QUE É SENSIBILIDADE?
+--------------------------------------------------------------------------------
+  Sensibilidade = VP / (VP + FN)
+
+  VP  = Verdadeiro Positivo: criança COM GAD que o modelo identificou CORRETAMENTE
+  FN  = Falso Negativo:      criança COM GAD que o modelo classificou como "sem GAD"
+
+  Sensibilidade de 34% significa: de cada 100 crianças com GAD real,
+  o modelo detecta apenas 34 e DEIXA ESCAPAR 66.
+
+  Em triagem clínica de saúde mental:
+    - Falso Negativo (FN): criança com GAD passa despercebida → sem tratamento → GRAVE
+    - Falso Positivo (FP): criança sem GAD é encaminhada para avaliação → leve inconveniência
+  Logo: maximizar sensibilidade é prioridade, mesmo que a especificidade caia.
+
+LIMIAR DO QUE É ACEITÁVEL CLINICAMENTE:
+  - Sensibilidade < 50%: inaceitável para triagem — mais da metade dos casos escapam
+  - Sensibilidade 50-70%: aceitável como ferramenta auxiliar de triagem
+  - Sensibilidade > 70%: bom para triagem clínica (combinado com avaliação profissional)
+  - Sensibilidade > 85%: ideal para screening inicial
+
+
+================================================================================
+1. RESULTADOS GAD — COMPARATIVO DE SENSIBILIDADE
+================================================================================
+
+Técnica               Sensitivity    Specificity    PPV      Kappa     Nota
+------------------------------------------------------------------------------
+Sem Balanceamento     24.0% ±10.5%   96.7% ± 2.3%  58.3%   0.270   INACEITÁVEL
+Class Weighting       38.0% ±12.4%   91.8% ± 3.4%  47.5%   0.319   INSUFICIENTE
+SMOTE                 34.5% ±16.5%   94.3% ± 3.7%  48.0%   0.307   INSUFICIENTE
+Undersampling         67.0% ±18.9%   64.6% ± 8.9%  26.6%   0.195   ACEITÁVEL (alta variação)
+SMOTE+Threshold       52.0% ±11.7%   74.9% ± 4.8%  27.8%   0.199   ACEITÁVEL (mais estável)
+
+Melhor sensibilidade absoluta:       Undersampling      → 67.0%
+Melhor sensibilidade com estabilidade: SMOTE+Threshold  → 52.0% ± 11.7% (IC menor)
+
+GANHO COM THRESHOLD OTIMIZADO em relação ao SMOTE padrão:
+  Sensibilidade:   +17.5 pontos percentuais (34.5% → 52.0%)
+  Especificidade:  -19.4 pontos percentuais (94.3% → 74.9%) — trade-off esperado
+  Kappa:           -0.108 (pequena piora no equilíbrio geral)
+  IC da Sens:      Reduziu de ±16.5% para ±11.7% — MAIS ESTÁVEL
+
+
+================================================================================
+2. ENTENDENDO O THRESHOLD OTIMIZADO
+================================================================================
+
+  THRESHOLD PADRÃO (0.50):
+    - O modelo só diz "tem GAD" se a probabilidade calculada for > 50%
+    - Com dados tão desbalanceados (85%/15%), raramente chega a 50%
+    - Resultado: detecta poucos casos reais → sensibilidade baixa
+
+  THRESHOLD OTIMIZADO (0.10 — encontrado automaticamente):
+    - O modelo diz "tem GAD" se a probabilidade for > 10%
+    - Muito mais crianças são sinalizadas para avaliação
+    - O threshold 0.10 foi o MÍNIMO testado, o que indica que o modelo
+      beneficiaria ainda de um threshold ainda mais agressivo
+    - Recomendação: testar spec_minima=40% para permitir threshold < 0.10
+
+  INTERPRETAÇÃO DO THRESHOLD = 0.10 PARA A DISSERTAÇÃO:
+    "O modelo atribui uma probabilidade baixa à classe positiva devido ao
+     severo desbalanceamento do dataset (85%/15%). A otimização do threshold
+     de decisão é uma estratégia clinicamente fundamentada: em triagem de
+     saúde mental, o custo de um falso negativo (criança com GAD não detectada)
+     supera o custo de um falso positivo (criança encaminhada para avaliação
+     desnecessária). O threshold de 0.10 maximizou a sensibilidade mantendo
+     a especificidade acima de 50%."
+
+
+================================================================================
+3. MATRIZ DE CONFUSÃO — SMOTE+THRESHOLD vs SMOTE PADRÃO (GAD)
+================================================================================
+
+                    SMOTE PADRÃO              SMOTE+THRESHOLD
+                    (threshold=0.50)          (threshold≈0.10)
+                 ┌──────────┬─────────┐    ┌──────────┬─────────┐
+  Sem GAD  real  │  VN: 229 │  FP: 14 │    │  VN: 182 │  FP: 61 │
+                 ├──────────┼─────────┤    ├──────────┼─────────┤
+  Com GAD  real  │  FN:  29 │  VP: 15 │    │  FN:  21 │  VP: 23 │
+                 └──────────┴─────────┘    └──────────┴─────────┘
+
+  Crianças com GAD detectadas:    15/44 (34%)  →  23/44 (52%)  ← +8 crianças detectadas
+  Crianças sem GAD com alarme:    14/243 (6%)  →  61/243 (25%) ← +47 falsos positivos
+
+  Balanço clínico:
+    + 8 crianças com GAD REAL que agora recebem encaminhamento (ganho crítico)
+    + 47 crianças sem GAD que são encaminhadas desnecessariamente (custo aceitável)
+    Para triagem inicial, esse trade-off É JUSTIFICÁVEL.
+
+
+================================================================================
+4. QUAL MODELO APRESENTAR NA DISSERTAÇÃO?
+================================================================================
+
+  RECOMENDAÇÃO: apresentar DOIS modelos como principais
+
+  MODELO A — Melhor equilíbrio geral:
+    XGBoost + Class Weighting
+    Sensitivity: 38.0% | Specificity: 91.8% | Kappa: 0.319
+    Justificativa: melhor Kappa, sem alterar os dados, metodologicamente mais simples
+
+  MODELO B — Melhor para triagem clínica (foco em sensibilidade):
+    XGBoost + SMOTE + Threshold Otimizado
+    Sensitivity: 52.0% | Specificity: 74.9% | Kappa: 0.199
+    Justificativa: maior sensibilidade, menor variabilidade, apropriado para screening
+
+  TEXTO SUGERIDO PARA A DISSERTAÇÃO:
+    "Para aplicações de triagem (screening), onde o objetivo primário é maximizar
+     a detecção de casos positivos, adotou-se a estratégia de otimização do limiar
+     de decisão (decision threshold). O limiar foi determinado para cada fold de
+     treinamento, buscando maximizar a sensibilidade sob a restrição de especificidade
+     mínima de 50%, sem utilizar os dados de teste neste processo (ausência de
+     vazamento de dados). Com esta abordagem, o modelo XGBoost com SMOTE atingiu
+     sensibilidade de 52.0% (±11.7%), representando um ganho de 17.5 pontos
+     percentuais em relação ao threshold padrão de 0.50."
+
+
+================================================================================
+5. PRÓXIMOS PASSOS PARA AUMENTAR AINDA MAIS A SENSIBILIDADE
+================================================================================
+
+  PRIORIDADE ALTA:
+  [ ] Testar spec_minima=40% no threshold otimizado
+      → Pode elevar sensibilidade para 60-70%
+      → Threshold provavelmente ainda em 0.10 — investigar reduzir mínimo para 0.05
+
+  [ ] GridSearch com scoring='recall' (sensibilidade)
+      → Otimizar n_estimators, max_depth, min_child_weight focando em recall
+      → Arquivo: scripts/gridsearch.py (adaptar scoring para recall)
+
+  [ ] Testar scale_pos_weight mais alto (ex: 10x, 15x, 20x)
+      → Atualmente usa ratio natural ~5.5x
+      → Penalizar mais fortemente os falsos negativos
+
+  PRIORIDADE MÉDIA:
+  [ ] Combinar SMOTE + Class Weighting + Threshold
+      → SMOTE equilibra os dados, weighting penaliza FN, threshold abaixa o corte
+      → Triple approach pode elevar sensibilidade significativamente
+
+  [ ] Curva ROC + ponto de operação clínico
+      → Plotar a curva ROC e marcar o ponto de operação escolhido
+      → Justificar visualmente a escolha do threshold na dissertação
+
+================================================================================
+FIM DA ANÁLISE DE SENSIBILIDADE
+================================================================================

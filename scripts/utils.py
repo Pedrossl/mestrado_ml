@@ -222,8 +222,11 @@ def plotar_comparativo_grafico(resultados, target_name, algoritmo_nome, plots_pa
     modelos = [r['Modelo'] for r in resultados]
     metricas_grafico = ['Accuracy', 'Sensitivity', 'Specificity', 'PPV', 'F1-Score']
 
+    paleta = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12', '#1abc9c', '#e67e22', '#c0392b']
     if cores is None:
-        cores = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6']
+        cores = paleta
+    while len(cores) < len(resultados):
+        cores = cores + paleta
 
     plt.style.use('seaborn-v0_8-whitegrid')
     fig, ax = plt.subplots(figsize=(14, 8))
@@ -270,10 +273,15 @@ def plotar_comparativo_grafico(resultados, target_name, algoritmo_nome, plots_pa
 
 def plotar_comparativo_tabela(resultados, target_name, algoritmo_nome, plots_path, cores=None):
     """Gera tabela comparativa como imagem."""
+    paleta = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6', '#f39c12', '#1abc9c', '#e67e22', '#c0392b']
     if cores is None:
-        cores = ['#3498db', '#e74c3c', '#2ecc71', '#9b59b6']
+        cores = paleta
+    # Garante cores suficientes para qualquer número de modelos
+    while len(cores) < len(resultados):
+        cores = cores + paleta
 
-    fig, ax = plt.subplots(figsize=(14, 5))
+    n_modelos = len(resultados)
+    fig, ax = plt.subplots(figsize=(14, max(4, 1.2 * n_modelos)))
     ax.axis('off')
 
     metricas_tabela = ['Accuracy', 'Sensitivity', 'Specificity', 'PPV', 'F1-Score', 'Kappa']

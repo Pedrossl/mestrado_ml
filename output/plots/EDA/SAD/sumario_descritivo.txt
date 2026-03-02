@@ -1,0 +1,40 @@
+Sumario Descritivo do Dataset - SAD
+======================================================================
+
+Amostras: 287
+Features: 17
+Target: SAD
+  Classe 0 (sem SAD): 241 (84.0%)
+  Classe 1 (com SAD): 46 (16.0%)
+  Razao desbalanceamento: 5.2:1
+
+FEATURES BINARIAS
+----------------------------------------------------------------------
+Feature                                         N(1)     %(1)
+----------------------------------------------------------------------
+Sex                                              128    44.6%
+Race                                             154    53.7%
+Number of Siblings                               208    72.5%
+Poverty Status                                   100    34.8%
+Social Phobia                                     21     7.3%
+ADHD                                              22     7.7%
+CD                                                22     7.7%
+ODD                                               34    11.8%
+Family History - Psychiatric Diagnosis            92    32.1%
+
+FEATURES ORDINAIS/COUNT
+----------------------------------------------------------------------
+Feature                               Min   Max    Media  Mediana       DP
+----------------------------------------------------------------------
+Age                                     2     6     3.34      3.0     1.15
+Number of Bio. Parents                  0     2     1.43      2.0     0.64
+Number of Impairments                   0    10     1.24      0.0     2.10
+Number of Type B Stressors              0     8     1.03      1.0     1.20
+Number of Sleep Disturbances            1    12     3.91      4.0     1.99
+Number of Sensory Sensitivities         0     4     0.22      0.0     0.57
+Frequency Temper Tantrums               0  1110    79.46     24.0   144.89
+Frequency Irritable Mood                0  2430   143.99     12.0   320.13
+
+DADOS FALTANTES
+----------------------------------------------------------------------
+Nenhum dado faltante (apos dropna na preparacao).

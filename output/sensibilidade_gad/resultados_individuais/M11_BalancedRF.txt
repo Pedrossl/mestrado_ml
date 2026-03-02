@@ -1,0 +1,20 @@
+MÉTODO: Balanced Random Forest
+Código: M11_BalancedRF
+Referência: Chen, Liaw & Breiman (2004). Using Random Forest to Learn Imbalanced Data. UCB Technical Report 666.
+Descrição: Modifica o Random Forest para realizar undersampling balanceado em cada árvore individualmente, preservando diversidade sem descartar dados globalmente.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     66.97% ± 7.20%
+Sensitivity:  59.50% ± 16.30%
+Specificity:  68.35% ± 6.71%
+PPV:          26.41% ± 7.58%
+NPV:          90.07% ± 4.31%
+F1-Score:     36.21% ± 9.78%
+Kappa:        0.1874 ± 0.1307
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 166  FP=  77
+  FN=  18  VP=  26

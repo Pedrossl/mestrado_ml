@@ -1,0 +1,201 @@
+BUSCA DE HIPERPARÂMETROS — GAD | Modo: medio | n_iter=200
+===========================================================================
+
+
+[SMOTE_recall] (5.2 min)
+  Sensitivity: 97.50% ± 5.66%
+  F1-Score:    26.41% ± 2.02%
+  Specificity: 2.40%
+  Kappa:       -0.0006
+  Matriz: VN=6 FP=237 FN=1 VP=43
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.9369
+    clf__colsample_bytree: 0.7587
+    clf__gamma: 0.9226
+    clf__learning_rate: 0.0017
+    clf__max_depth: 8.0000
+    clf__min_child_weight: 12.0000
+    clf__n_estimators: 345.0000
+    clf__reg_alpha: 0.4289
+    clf__reg_lambda: 3.1235
+    clf__scale_pos_weight: 8.2589
+    clf__subsample: 0.7934
+    sampler__k_neighbors: 2.0000
+
+[SMOTE_f2] (5.0 min)
+  Sensitivity: 73.50% ± 13.81%
+  F1-Score:    37.63% ± 5.58%
+  Specificity: 60.10%
+  Kappa:       0.1929
+  Matriz: VN=146 FP=97 FN=12 VP=32
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.4817
+    clf__colsample_bytree: 0.6452
+    clf__gamma: 0.0011
+    clf__learning_rate: 0.0094
+    clf__max_depth: 5.0000
+    clf__min_child_weight: 7.5000
+    clf__n_estimators: 280.5000
+    clf__reg_alpha: 0.0217
+    clf__reg_lambda: 1.3448
+    clf__scale_pos_weight: 6.6844
+    clf__subsample: 0.7929
+    sampler__k_neighbors: 5.0000
+
+[ADASYN_recall] (6.2 min)
+  Sensitivity: 97.50% ± 5.66%
+  F1-Score:    27.11% ± 3.25%
+  Specificity: 4.93%
+  Kappa:       0.0109
+  Matriz: VN=12 FP=231 FN=1 VP=43
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.9369
+    clf__colsample_bytree: 0.7587
+    clf__gamma: 0.9226
+    clf__learning_rate: 0.0017
+    clf__max_depth: 8.0000
+    clf__min_child_weight: 12.0000
+    clf__n_estimators: 345.0000
+    clf__reg_alpha: 0.4289
+    clf__reg_lambda: 3.1235
+    clf__scale_pos_weight: 8.2589
+    clf__subsample: 0.7934
+    sampler__n_neighbors: 2.0000
+
+[ADASYN_f2] (5.2 min)
+  Sensitivity: 73.50% ± 17.93%
+  F1-Score:    37.43% ± 7.65%
+  Specificity: 59.20%
+  Kappa:       0.1913
+  Matriz: VN=144 FP=99 FN=11 VP=33
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.5512
+    clf__colsample_bytree: 0.7192
+    clf__gamma: 0.6488
+    clf__learning_rate: 0.0056
+    clf__max_depth: 6.0000
+    clf__min_child_weight: 6.0000
+    clf__n_estimators: 441.5000
+    clf__reg_alpha: 0.0150
+    clf__reg_lambda: 3.4409
+    clf__scale_pos_weight: 8.5132
+    clf__subsample: 0.6905
+    sampler__n_neighbors: 4.0000
+
+[BorderlineSMOTE_recall] (6.1 min)
+  Sensitivity: 100.00% ± 0.00%
+  F1-Score:    26.54% ± 1.78%
+  Specificity: 0.00%
+  Kappa:       0.0000
+  Matriz: VN=0 FP=243 FN=0 VP=44
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.4338
+    clf__colsample_bytree: 0.8332
+    clf__gamma: 1.0883
+    clf__learning_rate: 0.0010
+    clf__max_depth: 5.0000
+    clf__min_child_weight: 5.0000
+    clf__n_estimators: 210.0000
+    clf__reg_alpha: 0.0020
+    clf__reg_lambda: 1.1208
+    clf__scale_pos_weight: 5.4183
+    clf__subsample: 0.6456
+    sampler__k_neighbors: 4.0000
+    sampler__m_neighbors: 19.0000
+
+[BorderlineSMOTE_f2] (12.1 min)
+  Sensitivity: 83.50% ± 11.81%
+  F1-Score:    41.19% ± 5.93%
+  Specificity: 57.27%
+  Kappa:       0.2362
+  Matriz: VN=139 FP=104 FN=7 VP=37
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.6581
+    clf__colsample_bytree: 0.5490
+    clf__gamma: 0.0040
+    clf__learning_rate: 0.0184
+    clf__max_depth: 5.5000
+    clf__min_child_weight: 8.0000
+    clf__n_estimators: 339.5000
+    clf__reg_alpha: 0.0103
+    clf__reg_lambda: 2.3825
+    clf__scale_pos_weight: 24.8260
+    clf__subsample: 0.6830
+    sampler__k_neighbors: 4.0000
+    sampler__m_neighbors: 12.0000
+
+[SMOTEENN_recall] (8.1 min)
+  Sensitivity: 100.00% ± 0.00%
+  F1-Score:    27.81% ± 2.38%
+  Specificity: 5.75%
+  Kappa:       0.0200
+  Matriz: VN=14 FP=229 FN=0 VP=44
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.6263
+    clf__colsample_bytree: 0.6969
+    clf__gamma: 0.4075
+    clf__learning_rate: 0.0034
+    clf__max_depth: 3.0000
+    clf__min_child_weight: 11.5000
+    clf__n_estimators: 240.5000
+    clf__reg_alpha: 0.0077
+    clf__reg_lambda: 1.7573
+    clf__scale_pos_weight: 16.9241
+    clf__subsample: 0.6370
+
+[SMOTEENN_f2] (7.0 min)
+  Sensitivity: 74.50% ± 18.58%
+  F1-Score:    35.04% ± 7.93%
+  Specificity: 53.17%
+  Kappa:       0.1541
+  Matriz: VN=129 FP=114 FN=11 VP=33
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.4832
+    clf__colsample_bytree: 0.7952
+    clf__gamma: 0.0554
+    clf__learning_rate: 0.0951
+    clf__max_depth: 5.0000
+    clf__min_child_weight: 8.0000
+    clf__n_estimators: 244.0000
+    clf__reg_alpha: 0.0276
+    clf__reg_lambda: 1.7590
+    clf__scale_pos_weight: 13.5241
+    clf__subsample: 0.7318
+
+[SMOTETomek_recall] (8.5 min)
+  Sensitivity: 100.00% ± 0.00%
+  F1-Score:    26.97% ± 1.73%
+  Specificity: 2.00%
+  Kappa:       0.0065
+  Matriz: VN=5 FP=238 FN=0 VP=44
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.7794
+    clf__colsample_bytree: 0.7801
+    clf__gamma: 0.0202
+    clf__learning_rate: 0.0017
+    clf__max_depth: 2.0000
+    clf__min_child_weight: 9.0000
+    clf__n_estimators: 173.0000
+    clf__reg_alpha: 0.0153
+    clf__reg_lambda: 2.4639
+    clf__scale_pos_weight: 28.7294
+    clf__subsample: 0.6630
+
+[SMOTETomek_f2] (60.5 min)
+  Sensitivity: 72.50% ± 18.26%
+  F1-Score:    36.37% ± 6.35%
+  Specificity: 60.05%
+  Kappa:       0.1801
+  Matriz: VN=146 FP=97 FN=12 VP=32
+  Parâmetros (consenso dos 10 folds):
+    clf__colsample_bylevel: 0.5470
+    clf__colsample_bytree: 0.6347
+    clf__gamma: 0.0043
+    clf__learning_rate: 0.0453
+    clf__max_depth: 4.0000
+    clf__min_child_weight: 9.0000
+    clf__n_estimators: 156.5000
+    clf__reg_alpha: 0.1060
+    clf__reg_lambda: 0.5679
+    clf__scale_pos_weight: 25.0396
+    clf__subsample: 0.8389

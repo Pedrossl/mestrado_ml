@@ -1,0 +1,277 @@
+====================================================================================================
+  COMPARATIVO DE MÉTODOS PARA MAXIMIZAR SENSIBILIDADE — XGBoost para GAD
+  Dissertação de Mestrado | Fevereiro 2026
+  10-fold Stratified CV | Ordenado por Sensibilidade (decrescente)
+====================================================================================================
+
+Rank  Código                            Sensitivity         F1-Score    Specificity        PPV      Kappa
+----------------------------------------------------------------------------------------------------
+1     M15_SMOTEENN_SPW_F2 [t≈0.25]       71.5±19.6%       38.7±10.6%          63.0%      27.2%      0.209
+2     M12_EasyEnsemble                   68.5±13.0%        38.9±8.0%          65.9%      27.6%      0.217
+3     M18_GridSearch_Recall              68.5±11.1%        39.1±7.4%          64.6%      28.2%      0.218
+4     M11_BalancedRF                     59.5±16.3%        36.2±9.8%          68.4%      26.4%      0.187
+5     M17_TunedThresholdCV [t≈0.15]       55.0±17.7%       38.1±10.1%          75.1%      32.7%      0.234
+6     M04_SMOTEENN                       52.5±17.7%       39.1±13.0%          77.8%      31.8%      0.243
+7     M14_BalancedBagging                50.0±15.4%        37.7±9.6%          79.0%      31.5%      0.233
+8     M21_Stacking [t≈0.30]              50.0±12.8%        43.1±9.3%          85.2%      40.9%      0.317
+9     M16_FocalLoss                      49.0±13.6%       39.7±11.8%          81.9%      33.9%      0.263
+10    M09_Threshold_F2 [t≈0.26]          47.5±11.2%        43.7±9.7%          87.2%      41.7%      0.326
+11    M13_RUSBoost                       47.5±17.0%       39.1±12.8%          82.3%      39.6%      0.263
+12    M07_SPW_Extremo                    45.5±10.9%       44.4±10.6%          88.9%      44.7%      0.340
+13    M20_HistGBM [t≈0.23]               45.5±10.9%        46.5±8.7%          91.4%      50.5%      0.376
+14    M03_BorderlineSMOTE                41.0±12.8%       45.2±10.6%          93.4%      56.7%      0.372
+15    M06_SPW_Alto                       40.5±17.1%       39.6±16.0%          89.7%      40.5%      0.297
+16    M05_SMOTETomek                     38.5±15.5%       43.2±16.1%          93.8%      54.8%      0.354
+17    M02_ADASYN                         38.0±16.5%       43.1±16.5%          94.2%      51.7%      0.354
+18    M19_Calibrated_XGB [t≈0.28]        37.0±12.6%       40.5±10.2%          92.6%      53.5%      0.319
+19    M08_Threshold_YoudenJ [t≈0.52]       36.5±14.6%       41.6±13.9%          95.1%      55.0%      0.350
+20    M10_Threshold_PRCurve [t≈0.52]       36.5±14.6%       41.6±13.9%          95.1%      55.0%      0.350
+21    M01_SMOTE                          34.5±16.5%       37.5±15.9%          94.3%      48.0%      0.307
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+  DETALHAMENTO POR MÉTODO
+====================================================================================================
+
+[1] M15_SMOTEENN_SPW_F2: SMOTEENN + scale_pos_weight + Threshold F2 (combo)
+     Ref: Combinação de Batista 2004 (SMOTEENN) + Chen 2016 (XGBoost SPW) + Van Rijsbergen 1979 (F-beta).
+     O que faz: Combina as três abordagens: resampling híbrido (SMOTEENN), custo assimétrico no treino (SPW), e limiar de decisão otimizado para sensibilidade (F2).
+     Sensitivity:  71.50% ± 19.59%
+     F1-Score:     38.73% ± 10.61%
+     Specificity:  63.02% ± 8.33%
+     PPV:          27.22% ± 8.54%
+     Kappa:        0.2093 ± 0.1439
+     Matriz:  VN=153  FP=90  FN=13  VP=31
+     Threshold: média=0.247 (min=0.170, max=0.300)
+
+[2] M12_EasyEnsemble: EasyEnsemble
+     Ref: Liu, Wu & Zhou (2009). Exploratory undersampling for class-imbalance learning. IEEE TSMC 39(2), 539-550.
+     O que faz: Múltiplos AdaBoosts treinados em subconjuntos balanceados via undersampling aleatório, agregados por votação — reduz variância do undersampling simples.
+     Sensitivity:  68.50% ± 12.96%
+     F1-Score:     38.90% ± 8.02%
+     Specificity:  65.88% ± 7.38%
+     PPV:          27.60% ± 6.48%
+     Kappa:        0.2170 ± 0.1077
+     Matriz:  VN=160  FP=83  FN=14  VP=30
+
+[3] M18_GridSearch_Recall: GridSearch Nested CV (scoring=recall)
+     Ref: Bergstra & Bengio (2012). Random Search for Hyper-Parameter Optimization. JMLR 13, 281-305. + Nested CV: Varma & Simon (2006). Bias in error estimation. BMC Bioinformatics 7, 91.
+     O que faz: GridSearch com nested CV (outer 10-fold, inner 5-fold) que otimiza hiperparâmetros do XGBoost+SMOTE diretamente para maximizar recall (sensibilidade).
+     Sensitivity:  68.50% ± 11.06%
+     F1-Score:     39.06% ± 7.43%
+     Specificity:  64.60% ± 11.12%
+     PPV:          28.22% ± 6.74%
+     Kappa:        0.2182 ± 0.1066
+     Matriz:  VN=157  FP=86  FN=14  VP=30
+
+[4] M11_BalancedRF: Balanced Random Forest
+     Ref: Chen, Liaw & Breiman (2004). Using Random Forest to Learn Imbalanced Data. UCB Technical Report 666.
+     O que faz: Modifica o Random Forest para realizar undersampling balanceado em cada árvore individualmente, preservando diversidade sem descartar dados globalmente.
+     Sensitivity:  59.50% ± 16.30%
+     F1-Score:     36.21% ± 9.78%
+     Specificity:  68.35% ± 6.71%
+     PPV:          26.41% ± 7.58%
+     Kappa:        0.1874 ± 0.1307
+     Matriz:  VN=166  FP=77  FN=18  VP=26
+
+[5] M17_TunedThresholdCV: TunedThresholdClassifierCV (F2, sklearn 1.5)
+     Ref: scikit-learn >= 1.5 (2024). TunedThresholdClassifierCV. Documentação oficial sklearn. Baseado em Provost & Fawcett (1997). Analysis and Visualization of Classifier Performance.
+     O que faz: Wrapper sklearn que re-calibra automaticamente o threshold de decisão via cross-validation interna (5-fold), otimizando F2-score sem alterar o modelo base.
+     Sensitivity:  55.00% ± 17.68%
+     F1-Score:     38.13% ± 10.14%
+     Specificity:  75.07% ± 10.23%
+     PPV:          32.69% ± 11.46%
+     Kappa:        0.2340 ± 0.1306
+     Matriz:  VN=182  FP=61  FN=20  VP=24
+     Threshold: média=0.150 (min=0.042, max=0.434)
+
+[6] M04_SMOTEENN: SMOTEENN
+     Ref: Batista et al. (2004). A study of several methods for balancing ML training data. ACM SIGKDD Explorations 6(1), 20-29.
+     O que faz: SMOTE para oversample + ENN (Edited Nearest Neighbours) para limpar amostras ambíguas de ambas as classes, resultando em fronteira mais limpa.
+     Sensitivity:  52.50% ± 17.70%
+     F1-Score:     39.10% ± 12.96%
+     Specificity:  77.75% ± 7.47%
+     PPV:          31.80% ± 11.00%
+     Kappa:        0.2426 ± 0.1684
+     Matriz:  VN=189  FP=54  FN=21  VP=23
+
+[7] M14_BalancedBagging: Balanced Bagging
+     Ref: Wallace et al. (2011). Class imbalance, redux. IEEE ICDM. Implementação: imblearn docs.
+     O que faz: Bagging clássico com resampling balanceado em cada bootstrap, permitindo que qualquer classificador base se beneficie do ensemble com dados balanceados.
+     Sensitivity:  50.00% ± 15.36%
+     F1-Score:     37.68% ± 9.58%
+     Specificity:  79.05% ± 6.25%
+     PPV:          31.54% ± 8.43%
+     Kappa:        0.2328 ± 0.1211
+     Matriz:  VN=192  FP=51  FN=22  VP=22
+
+[8] M21_Stacking: Stacking (KNN+Ada+XGB) + MetaLR + F2
+     Ref: Wolpert (1992). Stacked generalization. Neural networks, 5(2), 241-259.
+     O que faz: Stacking heterogêneo combinando modelos base (KNN, AdaBoost, XGBoost) e um meta-modelo (Regressão Logística balanceada) para maximizar recall inter-modelos.
+     Sensitivity:  50.00% ± 12.84%
+     F1-Score:     43.12% ± 9.34%
+     Specificity:  85.23% ± 6.17%
+     PPV:          40.87% ± 11.00%
+     Kappa:        0.3168 ± 0.1117
+     Matriz:  VN=207  FP=36  FN=22  VP=22
+     Threshold: média=0.296 (min=0.210, max=0.390)
+
+[9] M16_FocalLoss: Focal Loss (SMOTE + XGBoost)
+     Ref: Lin, Goyal, Girshick, He & Dollar (2017). Focal Loss for Dense Object Detection. IEEE ICCV, 2980-2988. [>20.000 citações]
+     O que faz: Modifica a cross-entropy com fator (1-p)^γ que reduz a contribuição de exemplos fáceis (bem classificados), focando o treino nos casos difíceis da classe positiva.
+     Sensitivity:  49.00% ± 13.57%
+     F1-Score:     39.66% ± 11.81%
+     Specificity:  81.93% ± 4.36%
+     PPV:          33.87% ± 10.93%
+     Kappa:        0.2631 ± 0.1424
+     Matriz:  VN=199  FP=44  FN=22  VP=22
+
+[10] M09_Threshold_F2: SMOTE + Threshold F2-score (β=2)
+     Ref: Van Rijsbergen (1979). Information Retrieval. Sokolova & Lapalme (2009). Information Processing & Management 45(4), 427-437.
+     O que faz: Threshold que maximiza F-beta com β=2: penaliza falsos negativos 4× mais que falsos positivos, priorizando sensibilidade sobre precisão.
+     Sensitivity:  47.50% ± 11.22%
+     F1-Score:     43.68% ± 9.67%
+     Specificity:  87.23% ± 4.10%
+     PPV:          41.67% ± 10.30%
+     Kappa:        0.3262 ± 0.1160
+     Matriz:  VN=212  FP=31  FN=23  VP=21
+     Threshold: média=0.260 (min=0.210, max=0.300)
+
+[11] M13_RUSBoost: RUSBoost
+     Ref: Seiffert et al. (2010). RUSBoost: A Hybrid Approach to Alleviating Class Imbalance. IEEE TSMC 40(1), 185-197.
+     O que faz: Undersampling aleatório integrado diretamente no loop de boosting do AdaBoost: em cada iteração, re-balanceia antes de treinar o classificador fraco.
+     Sensitivity:  47.50% ± 16.97%
+     F1-Score:     39.13% ± 12.75%
+     Specificity:  82.32% ± 7.81%
+     PPV:          39.63% ± 18.69%
+     Kappa:        0.2633 ± 0.1573
+     Matriz:  VN=200  FP=43  FN=23  VP=21
+
+[12] M07_SPW_Extremo: scale_pos_weight=20 (extremo)
+     Ref: Elkan (2001). The foundations of cost-sensitive learning. IJCAI 17(1), 973-978.
+     O que faz: Penaliza falsos negativos 20x mais que falsos positivos na função de perda do XGBoost, forçando atenção máxima à classe positiva.
+     Sensitivity:  45.50% ± 10.86%
+     F1-Score:     44.41% ± 10.63%
+     Specificity:  88.90% ± 3.71%
+     PPV:          44.67% ± 12.69%
+     Kappa:        0.3399 ± 0.1297
+     Matriz:  VN=216  FP=27  FN=24  VP=20
+
+[13] M20_HistGBM: HistGradientBoosting + Threshold F2
+     Ref: Ke et al. (2017). LightGBM: A Highly Efficient Gradient Boosting Decision Tree. NIPS (Inspiração do Sklearn HistGBM).
+     O que faz: Usa HistGradientBoosting (equivalente nativo do Sklearn ao LightGBM) que agrupa features em bins, suportando class_weight e otimizando F2.
+     Sensitivity:  45.50% ± 10.86%
+     F1-Score:     46.54% ± 8.68%
+     Specificity:  91.37% ± 3.23%
+     PPV:          50.50% ± 10.49%
+     Kappa:        0.3760 ± 0.0989
+     Matriz:  VN=222  FP=21  FN=24  VP=20
+     Threshold: média=0.234 (min=0.190, max=0.290)
+
+[14] M03_BorderlineSMOTE: BorderlineSMOTE
+     Ref: Han et al. (2005). Borderline-SMOTE: A new over-sampling method. Advances in Intelligent Computing, 878-887.
+     O que faz: Aplica SMOTE apenas nas amostras minoritárias "perigosas" (na fronteira), ignorando amostras seguras, gerando sintéticos mais informativos.
+     Sensitivity:  41.00% ± 12.82%
+     F1-Score:     45.19% ± 10.57%
+     Specificity:  93.42% ± 2.81%
+     PPV:          56.67% ± 15.71%
+     Kappa:        0.3720 ± 0.1191
+     Matriz:  VN=227  FP=16  FN=26  VP=18
+
+[15] M06_SPW_Alto: scale_pos_weight 2× natural
+     Ref: Chen & Guestrin (2016). XGBoost: A Scalable Tree Boosting System. ACM SIGKDD, 785-794.
+     O que faz: scale_pos_weight = 2× a razão natural neg/pos (~11x), penalizando ainda mais erros na classe positiva durante o boosting.
+     Sensitivity:  40.50% ± 17.07%
+     F1-Score:     39.64% ± 16.04%
+     Specificity:  89.70% ± 4.24%
+     PPV:          40.50% ± 16.54%
+     Kappa:        0.2973 ± 0.1751
+     Matriz:  VN=218  FP=25  FN=26  VP=18
+
+[16] M05_SMOTETomek: SMOTETomek
+     Ref: Batista et al. (2004). Idem acima. SMOTETomek: SMOTE + remoção de Tomek Links.
+     O que faz: SMOTE para oversample + remove Tomek Links (pares inter-classe que são vizinhos mais próximos), limpando a fronteira de decisão.
+     Sensitivity:  38.50% ± 15.55%
+     F1-Score:     43.25% ± 16.07%
+     Specificity:  93.85% ± 2.83%
+     PPV:          54.83% ± 22.40%
+     Kappa:        0.3540 ± 0.1767
+     Matriz:  VN=228  FP=15  FN=27  VP=17
+
+[17] M02_ADASYN: ADASYN
+     Ref: He et al. (2008). ADASYN: Adaptive Synthetic Sampling. IEEE IJCNN, 1322-1328.
+     O que faz: Gera mais sintéticos onde o classificador erra mais (regiões de fronteira de alta densidade negativa), adaptando a distribuição.
+     Sensitivity:  38.00% ± 16.45%
+     F1-Score:     43.06% ± 16.53%
+     Specificity:  94.23% ± 2.08%
+     PPV:          51.67% ± 17.28%
+     Kappa:        0.3537 ± 0.1805
+     Matriz:  VN=229  FP=14  FN=27  VP=17
+
+[18] M19_Calibrated_XGB: Calibrated XGBoost + Threshold F2
+     Ref: Zadrozny & Elkan (2002). Transforming classifier scores into accurate multiclass probability estimates. KDD. E Platt (1999).
+     O que faz: Calibra as probabilidades geradas pelo XGBoost (distorcidas pelo SMOTE) usando regressão isotônica antes de otimizar o limiar de decisão F2.
+     Sensitivity:  37.00% ± 12.64%
+     F1-Score:     40.54% ± 10.21%
+     Specificity:  92.57% ± 3.66%
+     PPV:          53.50% ± 19.13%
+     Kappa:        0.3193 ± 0.1168
+     Matriz:  VN=225  FP=18  FN=28  VP=16
+     Threshold: média=0.282 (min=0.160, max=0.380)
+
+[19] M08_Threshold_YoudenJ: SMOTE + Threshold Youden's J
+     Ref: Youden (1950). Index for rating diagnostic tests. Cancer 3(1), 32-35. Survey: Fluss et al. (2005). Biometrical Journal 47(4), 458-472.
+     O que faz: Threshold t* que maximiza Sensitivity + Specificity - 1 (ponto mais alto da curva ROC acima da diagonal), determinado nos dados de treino de cada fold.
+     Sensitivity:  36.50% ± 14.61%
+     F1-Score:     41.59% ± 13.90%
+     Specificity:  95.10% ± 2.99%
+     PPV:          55.00% ± 21.34%
+     Kappa:        0.3501 ± 0.1335
+     Matriz:  VN=231  FP=12  FN=28  VP=16
+     Threshold: média=0.521 (min=0.482, max=0.596)
+
+[20] M10_Threshold_PRCurve: SMOTE + Threshold PR-Curve (max F1)
+     Ref: Davis & Goadrich (2006). The relationship between Precision-Recall and ROC curves. ICML, 233-240.
+     O que faz: Threshold no ponto de máximo F1 da curva Precision-Recall (mais informativa que ROC em datasets desbalanceados por ignorar os TN abundantes).
+     Sensitivity:  36.50% ± 14.61%
+     F1-Score:     41.59% ± 13.90%
+     Specificity:  95.10% ± 2.99%
+     PPV:          55.00% ± 21.34%
+     Kappa:        0.3501 ± 0.1335
+     Matriz:  VN=231  FP=12  FN=28  VP=16
+     Threshold: média=0.521 (min=0.482, max=0.596)
+
+[21] M01_SMOTE: SMOTE (baseline)
+     Ref: Chawla et al. (2002). SMOTE: Synthetic Minority Over-sampling Technique. JAIR 16, 321-357.
+     O que faz: Gera amostras sintéticas da classe minoritária interpolando linearmente entre um ponto real e k vizinhos mais próximos.
+     Sensitivity:  34.50% ± 16.47%
+     F1-Score:     37.51% ± 15.89%
+     Specificity:  94.28% ± 3.68%
+     PPV:          48.00% ± 24.68%
+     Kappa:        0.3070 ± 0.1513
+     Matriz:  VN=229  FP=14  FN=29  VP=15
+
+====================================================================================================
+  ANÁLISE DE TRADE-OFF: SENSIBILIDADE × ESPECIFICIDADE × F1
+====================================================================================================
+
+  Top 5 por Sensibilidade:
+    1. SMOTEENN + scale_pos_weight + Threshold F2 (combo)  Sens=71.5%  Spec=63.0%  F1=38.7%
+    2. EasyEnsemble                              Sens=68.5%  Spec=65.9%  F1=38.9%
+    3. GridSearch Nested CV (scoring=recall)     Sens=68.5%  Spec=64.6%  F1=39.1%
+    4. Balanced Random Forest                    Sens=59.5%  Spec=68.4%  F1=36.2%
+    5. TunedThresholdClassifierCV (F2, sklearn 1.5)  Sens=55.0%  Spec=75.1%  F1=38.1%
+
+  Top 5 por F1-Score:
+    1. HistGradientBoosting + Threshold F2       F1=46.5%  Sens=45.5%  Spec=91.4%
+    2. BorderlineSMOTE                           F1=45.2%  Sens=41.0%  Spec=93.4%
+    3. scale_pos_weight=20 (extremo)             F1=44.4%  Sens=45.5%  Spec=88.9%
+    4. SMOTE + Threshold F2-score (β=2)          F1=43.7%  Sens=47.5%  Spec=87.2%
+    5. SMOTETomek                                F1=43.2%  Sens=38.5%  Spec=93.8%
+
+  Top 5 por Kappa:
+    1. HistGradientBoosting + Threshold F2       Kappa=0.376  Sens=45.5%  F1=46.5%
+    2. BorderlineSMOTE                           Kappa=0.372  Sens=41.0%  F1=45.2%
+    3. SMOTETomek                                Kappa=0.354  Sens=38.5%  F1=43.2%
+    4. ADASYN                                    Kappa=0.354  Sens=38.0%  F1=43.1%
+    5. SMOTE + Threshold Youden's J              Kappa=0.350  Sens=36.5%  F1=41.6%

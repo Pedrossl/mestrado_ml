@@ -1,0 +1,20 @@
+MÉTODO: SMOTE (baseline)
+Código: M01_SMOTE
+Referência: Chawla et al. (2002). SMOTE: Synthetic Minority Over-sampling Technique. JAIR 16, 321-357.
+Descrição: Gera amostras sintéticas da classe minoritária interpolando linearmente entre um ponto real e k vizinhos mais próximos.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     85.00% ± 2.41%
+Sensitivity:  34.50% ± 16.47%
+Specificity:  94.28% ± 3.68%
+PPV:          48.00% ± 24.68%
+NPV:          88.96% ± 2.57%
+F1-Score:     37.51% ± 15.89%
+Kappa:        0.3070 ± 0.1513
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 229  FP=  14
+  FN=  29  VP=  15
