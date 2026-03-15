@@ -1,0 +1,447 @@
+===============================================================================================
+RANKING FINAL v2 — Busca de Hiperparâmetros para GAD
+Modo: rapido | n_iter=50 | Score Composto = √(Sens × F1)
+Scorers: gmean=G-Mean | clinic=Clínico | f2_pen=F2-Penalizado | f2=F2-Original
+Threshold otimizado via F2 no treino de cada fold (sem data leakage)
+===============================================================================================
+
+─── Ranking por Score Composto √(Sens × F1) ───
+
+Rank  Experimento                        Composto        Sensitivity               F1       Spec    Kappa   Threshold
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+1     SMOTEENN_gmean                       0.4847         63.5±16.1%       37.0±10.6%      65.2%    0.194     t≈0.49
+2     SMOTE_gmean                          0.4787         56.5±18.4%       40.6±11.9%      78.5%    0.265     t≈0.64
+3     BorderlineSMOTE_clinic               0.4772         58.0±18.3%       39.3±10.6%      74.8%    0.242     t≈0.65
+4     BorderlineSMOTE_gmean                0.4736         54.5±17.5%       41.1±10.7%      79.7%    0.277     t≈0.68
+5     SMOTE_clinic                         0.4734         57.0±18.0%       39.3±12.0%      75.6%    0.243     t≈0.64
+6     SMOTE_f2                             0.4655         57.0±18.0%        38.0±9.1%      74.5%    0.231     t≈0.63
+7     SMOTE_f2_pen                         0.4603         57.0±18.0%        37.2±9.8%      73.3%    0.216     t≈0.63
+8     SMOTEENN_f2_pen                      0.4583         61.5±18.9%        34.2±8.9%      65.5%    0.161     t≈0.57
+9     BorderlineSMOTE_f2_pen               0.4548         54.0±17.8%       38.3±10.9%      76.9%    0.234     t≈0.68
+10    BorderlineSMOTE_f2                   0.4548         54.0±17.8%       38.3±10.9%      76.9%    0.234     t≈0.68
+11    SMOTETomek_f2_pen                    0.4463         54.0±16.5%        36.9±7.2%      74.9%    0.216     t≈0.70
+12    SMOTEENN_clinic                      0.4282         56.5±20.2%        32.5±8.5%      67.6%    0.147     t≈0.61
+13    SMOTETomek_gmean                     0.4269         51.5±21.4%       35.4±10.4%      77.7%    0.216     t≈0.67
+14    ADASYN_gmean                         0.4238         51.5±19.0%        34.9±6.5%      75.7%    0.198     t≈0.67
+
+
+─── Ranking por Sensibilidade (referência) ───
+
+Rank  Experimento                             Sensitivity               F1       Spec    Kappa   Threshold
+────────────────────────────────────────────────────────────────────────────────────────────────────
+1     SMOTEENN_gmean                           63.5±16.1%       37.0±10.6%      65.2%    0.194     t≈0.49
+2     SMOTEENN_f2_pen                          61.5±18.9%        34.2±8.9%      65.5%    0.161     t≈0.57
+3     BorderlineSMOTE_clinic                   58.0±18.3%       39.3±10.6%      74.8%    0.242     t≈0.65
+4     SMOTE_clinic                             57.0±18.0%       39.3±12.0%      75.6%    0.243     t≈0.64
+5     SMOTE_f2_pen                             57.0±18.0%        37.2±9.8%      73.3%    0.216     t≈0.63
+6     SMOTE_f2                                 57.0±18.0%        38.0±9.1%      74.5%    0.231     t≈0.63
+7     SMOTE_gmean                              56.5±18.4%       40.6±11.9%      78.5%    0.265     t≈0.64
+8     SMOTEENN_clinic                          56.5±20.2%        32.5±8.5%      67.6%    0.147     t≈0.61
+9     BorderlineSMOTE_gmean                    54.5±17.5%       41.1±10.7%      79.7%    0.277     t≈0.68
+10    BorderlineSMOTE_f2_pen                   54.0±17.8%       38.3±10.9%      76.9%    0.234     t≈0.68
+11    SMOTETomek_f2_pen                        54.0±16.5%        36.9±7.2%      74.9%    0.216     t≈0.70
+12    BorderlineSMOTE_f2                       54.0±17.8%       38.3±10.9%      76.9%    0.234     t≈0.68
+13    ADASYN_gmean                             51.5±19.0%        34.9±6.5%      75.7%    0.198     t≈0.67
+14    SMOTETomek_gmean                         51.5±21.4%       35.4±10.4%      77.7%    0.216     t≈0.67
+
+
+===============================================================================================
+DETALHAMENTO — MELHORES PARÂMETROS POR EXPERIMENTO
+===============================================================================================
+
+[1] SMOTEENN_gmean
+  Score Composto: 0.4847
+  Sensitivity:    63.50% ± 16.09%
+  F1-Score:       36.99% ± 10.65%
+  Specificity:    65.15%
+  PPV:            27.31%
+  Kappa:          0.1941
+  Matriz:  VN=158  FP=85  FN=16  VP=28
+  Duração:        1.2 min
+  Threshold (F2 no treino):
+    Média=0.491  Min=0.130  Max=0.810
+    Por fold: ['0.64', '0.40', '0.59', '0.52', '0.24', '0.13', '0.65', '0.48', '0.81', '0.45']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.6152
+    colsample_bytree         : 0.6364
+    gamma                    : 0.0387
+    learning_rate            : 0.0785
+    max_depth                : 7.0000
+    min_child_weight         : 7.0000
+    n_estimators             : 397.0000
+    reg_alpha                : 0.0056
+    reg_lambda               : 0.8776
+    scale_pos_weight         : 2.0621
+    subsample                : 0.7288
+
+[2] SMOTE_gmean
+  Score Composto: 0.4787
+  Sensitivity:    56.50% ± 18.40%
+  F1-Score:       40.56% ± 11.93%
+  Specificity:    78.55%
+  PPV:            32.44%
+  Kappa:          0.2655
+  Matriz:  VN=191  FP=52  FN=19  VP=25
+  Duração:        2.0 min
+  Threshold (F2 no treino):
+    Média=0.637  Min=0.380  Max=0.810
+    Por fold: ['0.74', '0.81', '0.75', '0.60', '0.66', '0.58', '0.47', '0.38', '0.71', '0.67']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.4635
+    colsample_bytree         : 0.5820
+    gamma                    : 0.0838
+    learning_rate            : 0.0370
+    max_depth                : 7.5000
+    min_child_weight         : 12.0000
+    n_estimators             : 267.5000
+    reg_alpha                : 0.3450
+    reg_lambda               : 0.8017
+    scale_pos_weight         : 8.7939
+    subsample                : 0.8067
+    sampler.k_neighbors      : 3.0000
+
+[3] BorderlineSMOTE_clinic
+  Score Composto: 0.4772
+  Sensitivity:    58.00% ± 18.33%
+  F1-Score:       39.26% ± 10.63%
+  Specificity:    74.77%
+  PPV:            30.84%
+  Kappa:          0.2420
+  Matriz:  VN=182  FP=61  FN=18  VP=26
+  Duração:        1.9 min
+  Threshold (F2 no treino):
+    Média=0.651  Min=0.430  Max=0.790
+    Por fold: ['0.66', '0.43', '0.63', '0.67', '0.79', '0.73', '0.75', '0.57', '0.59', '0.69']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5954
+    colsample_bytree         : 0.5637
+    gamma                    : 0.1294
+    learning_rate            : 0.0127
+    max_depth                : 4.0000
+    min_child_weight         : 10.0000
+    n_estimators             : 498.0000
+    reg_alpha                : 0.0143
+    reg_lambda               : 0.8266
+    scale_pos_weight         : 8.0916
+    subsample                : 0.8421
+    sampler.k_neighbors      : 7.0000
+    sampler.m_neighbors      : 11.0000
+
+[4] BorderlineSMOTE_gmean
+  Score Composto: 0.4736
+  Sensitivity:    54.50% ± 17.48%
+  F1-Score:       41.15% ± 10.75%
+  Specificity:    79.72%
+  PPV:            35.77%
+  Kappa:          0.2772
+  Matriz:  VN=194  FP=49  FN=20  VP=24
+  Duração:        2.2 min
+  Threshold (F2 no treino):
+    Média=0.680  Min=0.360  Max=0.850
+    Por fold: ['0.66', '0.71', '0.76', '0.56', '0.79', '0.73', '0.85', '0.36', '0.59', '0.79']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.6444
+    colsample_bytree         : 0.5043
+    gamma                    : 0.0178
+    learning_rate            : 0.0477
+    max_depth                : 4.0000
+    min_child_weight         : 9.5000
+    n_estimators             : 290.0000
+    reg_alpha                : 0.0006
+    reg_lambda               : 0.3857
+    scale_pos_weight         : 11.2162
+    subsample                : 0.7008
+    sampler.k_neighbors      : 4.0000
+    sampler.m_neighbors      : 10.0000
+
+[5] SMOTE_clinic
+  Score Composto: 0.4734
+  Sensitivity:    57.00% ± 18.02%
+  F1-Score:       39.31% ± 11.97%
+  Specificity:    75.65%
+  PPV:            31.34%
+  Kappa:          0.2435
+  Matriz:  VN=184  FP=59  FN=19  VP=25
+  Duração:        2.5 min
+  Threshold (F2 no treino):
+    Média=0.639  Min=0.380  Max=0.810
+    Por fold: ['0.81', '0.72', '0.65', '0.64', '0.66', '0.65', '0.47', '0.38', '0.73', '0.68']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.4452
+    colsample_bytree         : 0.5851
+    gamma                    : 0.3285
+    learning_rate            : 0.0050
+    max_depth                : 4.0000
+    min_child_weight         : 10.0000
+    n_estimators             : 431.5000
+    reg_alpha                : 0.0213
+    reg_lambda               : 1.0419
+    scale_pos_weight         : 7.0358
+    subsample                : 0.8073
+    sampler.k_neighbors      : 8.0000
+
+[6] SMOTE_f2
+  Score Composto: 0.4655
+  Sensitivity:    57.00% ± 18.02%
+  F1-Score:       38.02% ± 9.14%
+  Specificity:    74.52%
+  PPV:            31.16%
+  Kappa:          0.2311
+  Matriz:  VN=181  FP=62  FN=19  VP=25
+  Duração:        1.7 min
+  Threshold (F2 no treino):
+    Média=0.625  Min=0.380  Max=0.810
+    Por fold: ['0.81', '0.72', '0.65', '0.76', '0.57', '0.65', '0.47', '0.38', '0.59', '0.65']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.7239
+    colsample_bytree         : 0.5851
+    gamma                    : 0.0018
+    learning_rate            : 0.0070
+    max_depth                : 7.0000
+    min_child_weight         : 9.5000
+    n_estimators             : 300.5000
+    reg_alpha                : 0.0137
+    reg_lambda               : 0.7829
+    scale_pos_weight         : 6.1721
+    subsample                : 0.6366
+    sampler.k_neighbors      : 8.0000
+
+[7] SMOTE_f2_pen
+  Score Composto: 0.4603
+  Sensitivity:    57.00% ± 18.02%
+  F1-Score:       37.16% ± 9.83%
+  Specificity:    73.27%
+  PPV:            29.49%
+  Kappa:          0.2159
+  Matriz:  VN=178  FP=65  FN=19  VP=25
+  Duração:        1.8 min
+  Threshold (F2 no treino):
+    Média=0.628  Min=0.380  Max=0.810
+    Por fold: ['0.81', '0.72', '0.65', '0.76', '0.57', '0.65', '0.47', '0.38', '0.59', '0.68']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5902
+    colsample_bytree         : 0.5851
+    gamma                    : 0.3264
+    learning_rate            : 0.0070
+    max_depth                : 5.5000
+    min_child_weight         : 10.0000
+    n_estimators             : 300.5000
+    reg_alpha                : 0.0143
+    reg_lambda               : 0.7829
+    scale_pos_weight         : 6.2419
+    subsample                : 0.6622
+    sampler.k_neighbors      : 8.0000
+
+[8] SMOTEENN_f2_pen
+  Score Composto: 0.4583
+  Sensitivity:    61.50% ± 18.93%
+  F1-Score:       34.15% ± 8.91%
+  Specificity:    65.50%
+  PPV:            24.12%
+  Kappa:          0.1605
+  Matriz:  VN=159  FP=84  FN=17  VP=27
+  Duração:        1.3 min
+  Threshold (F2 no treino):
+    Média=0.566  Min=0.130  Max=0.800
+    Por fold: ['0.64', '0.77', '0.59', '0.52', '0.64', '0.13', '0.65', '0.53', '0.80', '0.39']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.6997
+    colsample_bytree         : 0.6390
+    gamma                    : 0.0387
+    learning_rate            : 0.1282
+    max_depth                : 7.5000
+    min_child_weight         : 7.5000
+    n_estimators             : 358.5000
+    reg_alpha                : 0.0206
+    reg_lambda               : 0.9415
+    scale_pos_weight         : 3.5136
+    subsample                : 0.6031
+
+[9] BorderlineSMOTE_f2_pen
+  Score Composto: 0.4548
+  Sensitivity:    54.00% ± 17.83%
+  F1-Score:       38.31% ± 10.90%
+  Specificity:    76.85%
+  PPV:            30.56%
+  Kappa:          0.2342
+  Matriz:  VN=187  FP=56  FN=20  VP=24
+  Duração:        2.1 min
+  Threshold (F2 no treino):
+    Média=0.679  Min=0.570  Max=0.790
+    Por fold: ['0.66', '0.71', '0.63', '0.67', '0.79', '0.73', '0.75', '0.57', '0.59', '0.69']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5954
+    colsample_bytree         : 0.5308
+    gamma                    : 0.0435
+    learning_rate            : 0.0128
+    max_depth                : 3.0000
+    min_child_weight         : 10.0000
+    n_estimators             : 498.0000
+    reg_alpha                : 0.0081
+    reg_lambda               : 0.8266
+    scale_pos_weight         : 8.4232
+    subsample                : 0.8421
+    sampler.k_neighbors      : 7.0000
+    sampler.m_neighbors      : 11.0000
+
+[10] BorderlineSMOTE_f2
+  Score Composto: 0.4548
+  Sensitivity:    54.00% ± 17.83%
+  F1-Score:       38.31% ± 10.90%
+  Specificity:    76.85%
+  PPV:            30.56%
+  Kappa:          0.2342
+  Matriz:  VN=187  FP=56  FN=20  VP=24
+  Duração:        1.7 min
+  Threshold (F2 no treino):
+    Média=0.679  Min=0.570  Max=0.790
+    Por fold: ['0.66', '0.71', '0.63', '0.67', '0.79', '0.73', '0.75', '0.57', '0.59', '0.69']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5954
+    colsample_bytree         : 0.5308
+    gamma                    : 0.0435
+    learning_rate            : 0.0128
+    max_depth                : 3.0000
+    min_child_weight         : 10.0000
+    n_estimators             : 498.0000
+    reg_alpha                : 0.0081
+    reg_lambda               : 0.8266
+    scale_pos_weight         : 8.4232
+    subsample                : 0.8421
+    sampler.k_neighbors      : 7.0000
+    sampler.m_neighbors      : 11.0000
+
+[11] SMOTETomek_f2_pen
+  Score Composto: 0.4463
+  Sensitivity:    54.00% ± 16.50%
+  F1-Score:       36.89% ± 7.19%
+  Specificity:    74.88%
+  PPV:            31.09%
+  Kappa:          0.2164
+  Matriz:  VN=182  FP=61  FN=20  VP=24
+  Duração:        1.9 min
+  Threshold (F2 no treino):
+    Média=0.695  Min=0.570  Max=0.780
+    Por fold: ['0.74', '0.57', '0.62', '0.60', '0.68', '0.70', '0.78', '0.75', '0.73', '0.78']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.6044
+    colsample_bytree         : 0.5564
+    gamma                    : 0.0136
+    learning_rate            : 0.0214
+    max_depth                : 5.0000
+    min_child_weight         : 12.0000
+    n_estimators             : 228.0000
+    reg_alpha                : 0.3538
+    reg_lambda               : 2.3285
+    scale_pos_weight         : 8.0693
+    subsample                : 0.6410
+
+[12] SMOTEENN_clinic
+  Score Composto: 0.4282
+  Sensitivity:    56.50% ± 20.24%
+  F1-Score:       32.45% ± 8.47%
+  Specificity:    67.57%
+  PPV:            23.79%
+  Kappa:          0.1475
+  Matriz:  VN=164  FP=79  FN=19  VP=25
+  Duração:        1.1 min
+  Threshold (F2 no treino):
+    Média=0.606  Min=0.130  Max=0.840
+    Por fold: ['0.64', '0.77', '0.59', '0.52', '0.64', '0.13', '0.60', '0.53', '0.80', '0.84']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5321
+    colsample_bytree         : 0.6203
+    gamma                    : 0.2153
+    learning_rate            : 0.1002
+    max_depth                : 8.0000
+    min_child_weight         : 8.0000
+    n_estimators             : 358.5000
+    reg_alpha                : 0.0403
+    reg_lambda               : 0.5936
+    scale_pos_weight         : 3.5136
+    subsample                : 0.6222
+
+[13] SMOTETomek_gmean
+  Score Composto: 0.4269
+  Sensitivity:    51.50% ± 21.40%
+  F1-Score:       35.38% ± 10.35%
+  Specificity:    77.73%
+  PPV:            31.39%
+  Kappa:          0.2155
+  Matriz:  VN=189  FP=54  FN=21  VP=23
+  Duração:        1.8 min
+  Threshold (F2 no treino):
+    Média=0.668  Min=0.440  Max=0.850
+    Por fold: ['0.61', '0.50', '0.59', '0.70', '0.68', '0.44', '0.85', '0.75', '0.78', '0.78']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5993
+    colsample_bytree         : 0.7995
+    gamma                    : 0.1271
+    learning_rate            : 0.0172
+    max_depth                : 7.0000
+    min_child_weight         : 7.0000
+    n_estimators             : 442.0000
+    reg_alpha                : 0.0691
+    reg_lambda               : 0.4506
+    scale_pos_weight         : 10.2693
+    subsample                : 0.6794
+
+[14] ADASYN_gmean
+  Score Composto: 0.4238
+  Sensitivity:    51.50% ± 19.01%
+  F1-Score:       34.87% ± 6.49%
+  Specificity:    75.70%
+  PPV:            29.69%
+  Kappa:          0.1977
+  Matriz:  VN=184  FP=59  FN=21  VP=23
+  Duração:        2.1 min
+  Threshold (F2 no treino):
+    Média=0.674  Min=0.500  Max=0.830
+    Por fold: ['0.70', '0.78', '0.50', '0.72', '0.52', '0.66', '0.75', '0.67', '0.61', '0.83']
+  Parâmetros ótimos (mediana dos 10 folds):
+    colsample_bylevel        : 0.5162
+    colsample_bytree         : 0.4457
+    gamma                    : 0.9661
+    learning_rate            : 0.0121
+    max_depth                : 6.0000
+    min_child_weight         : 7.0000
+    n_estimators             : 494.5000
+    reg_alpha                : 0.0106
+    reg_lambda               : 3.9961
+    scale_pos_weight         : 7.1282
+    subsample                : 0.8162
+    sampler.n_neighbors      : 4.0000
+
+===============================================================================================
+COMO USAR O MELHOR MODELO (Score Composto): SMOTEENN_gmean
+===============================================================================================
+
+Score Composto √(Sens×F1): 0.4847
+Sensibilidade:  63.5% ± 16.1%
+F1-Score:       37.0% ± 10.6%
+Especificidade: 65.2%
+Threshold (F2 otimizado): 0.491
+
+Código Python para replicar:
+
+from imblearn.combine import SMOTEENN
+from xgboost import XGBClassifier
+
+model = XGBClassifier(
+    colsample_bylevel=0.6152,
+    colsample_bytree=0.6364,
+    gamma=0.0387,
+    learning_rate=0.0785,
+    max_depth=7.0000,
+    min_child_weight=7.0000,
+    n_estimators=397.0000,
+    reg_alpha=0.0056,
+    reg_lambda=0.8776,
+    scale_pos_weight=2.0621,
+    subsample=0.7288,
+    random_state=42, use_label_encoder=False,
+    eval_metric='logloss', verbosity=0,
+)
+
+# Após treinar com o sampler, usar threshold otimizado:
+# y_pred = (model.predict_proba(X_test)[:, 1] >= 0.491).astype(int)
