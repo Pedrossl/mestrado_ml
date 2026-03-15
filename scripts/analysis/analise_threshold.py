@@ -20,7 +20,7 @@ from sklearn.metrics import roc_curve
 from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 
-from utils import preparar_dados, calcular_metricas_fold, calcular_ic
+from scripts.utils import preparar_dados, calcular_metricas_fold, calcular_ic
 
 
 OUTPUT_PATH = 'output/plots/AnaliseThreshold'

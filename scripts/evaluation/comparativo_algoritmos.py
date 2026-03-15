@@ -15,7 +15,7 @@ from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 
-from utils import (
+from scripts.utils import (
     preparar_dados, calcular_metricas_fold, calcular_metricas_fold_cm,
     agregar_metricas_com_ic, plotar_comparativo_grafico, plotar_comparativo_tabela
 )

@@ -6,7 +6,7 @@ from scipy import stats
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix, roc_curve, auc
 
-from normalizacao import carregar_teste_normalizado
+from scripts.preprocessing.normalizacao import carregar_teste_normalizado
 
 
 def preparar_dados(target='GAD'):

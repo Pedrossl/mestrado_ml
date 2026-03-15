@@ -17,7 +17,7 @@ from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 
-from utils import preparar_dados, plotar_learning_curve
+from scripts.utils import preparar_dados, plotar_learning_curve
 
 
 def gerar_learning_curves(algoritmo, target='GAD'):

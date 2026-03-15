@@ -17,8 +17,8 @@ from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from scipy import stats
 
-from utils import preparar_dados
-from normalizacao import carregar_teste_normalizado
+from scripts.utils import preparar_dados
+from scripts.preprocessing.normalizacao import carregar_teste_normalizado
 
 
 OUTPUT_PATH = 'output/plots/AnaliseErros'

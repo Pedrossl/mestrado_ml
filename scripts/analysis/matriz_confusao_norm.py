@@ -21,7 +21,7 @@ from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 
-from utils import (
+from scripts.utils import (
     preparar_dados, plotar_grid_matrizes_confusao, plotar_matriz_confusao_normalizada
 )
 

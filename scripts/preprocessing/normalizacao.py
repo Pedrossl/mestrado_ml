@@ -1,4 +1,10 @@
 import pandas as pd
+from scripts.preprocessing.minmax import (
+    normalizar_minmax_treino,
+    normalizar_minmax_teste,
+    carregar_treino_normalizado,
+    COLUNAS_NUMERICAS,
+)
 
 
 def normalizar_teste(df):

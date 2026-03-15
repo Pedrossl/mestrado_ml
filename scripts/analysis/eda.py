@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-from utils import preparar_dados
+from scripts.utils import preparar_dados
 
 
 # Classificacao das features por tipo

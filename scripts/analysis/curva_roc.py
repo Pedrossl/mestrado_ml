@@ -20,7 +20,7 @@ from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 
-from utils import (
+from scripts.utils import (
     preparar_dados, coletar_roc_folds,
     plotar_curvas_roc, salvar_auc_metricas
 )

@@ -25,7 +25,7 @@ from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 
-from utils import preparar_dados, calcular_metricas_fold
+from scripts.utils import preparar_dados, calcular_metricas_fold
 
 
 # ============================================================

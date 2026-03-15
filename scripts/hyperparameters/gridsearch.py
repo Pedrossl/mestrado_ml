@@ -22,7 +22,7 @@ from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 
-from utils import (
+from scripts.utils import (
     preparar_dados, calcular_metricas_fold, agregar_metricas_com_ic,
     exibir_resultados, comparativo_modelos,
     plotar_comparativo_grafico, plotar_comparativo_tabela,
