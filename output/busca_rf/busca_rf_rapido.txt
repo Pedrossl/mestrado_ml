@@ -1,0 +1,252 @@
+BUSCA DE HIPERPARÂMETROS — Random Forest | GAD
+Modo: rapido | n_iter=50
+================================================================================
+
+
+[RF_SMOTEENN_gmean] (2.9 min)
+  Scorer:       gmean
+  Sensitivity:  66.00% ± 17.99%
+  Specificity:  66.32%
+  F1-Score:     36.49% ± 5.16%
+  PPV:          26.22%
+  Kappa:        0.1929
+  Threshold:    0.406
+  Composto:     0.4907
+  Matriz: VN=161 FP=82 FN=15 VP=29
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : entropy
+    max_depth                   : 15
+    max_features                : sqrt
+    max_samples                 : 0.6832
+    min_samples_leaf            : 12.0000
+    min_samples_split           : 14.5000
+    n_estimators                : 582.0000
+
+[RF_BorderlineSMOTE_gmean] (2.8 min)
+  Scorer:       gmean
+  Sensitivity:  63.50% ± 18.16%
+  Specificity:  69.87%
+  F1-Score:     38.97% ± 10.44%
+  PPV:          29.11%
+  Kappa:        0.2266
+  Threshold:    0.359
+  Composto:     0.4975
+  Matriz: VN=170 FP=73 FN=16 VP=28
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 15.0000
+    max_features                : 0.7000
+    max_samples                 : 0.5428
+    min_samples_leaf            : 13.0000
+    min_samples_split           : 15.0000
+    n_estimators                : 603.0000
+    sampler.k_neighbors         : 7.0000
+    sampler.m_neighbors         : 14.0000
+
+[RF_SMOTE_gmean] (2.4 min)
+  Scorer:       gmean
+  Sensitivity:  64.00% ± 18.91%
+  Specificity:  73.27%
+  F1-Score:     41.27% ± 10.82%
+  PPV:          31.94%
+  Kappa:        0.2623
+  Threshold:    0.381
+  Composto:     0.5139
+  Matriz: VN=178 FP=65 FN=16 VP=28
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced_subsample
+    criterion                   : entropy
+    max_depth                   : None
+    max_features                : 0.5000
+    max_samples                 : 0.6921
+    min_samples_leaf            : 8.5000
+    min_samples_split           : 16.0000
+    n_estimators                : 509.5000
+    sampler.k_neighbors         : 6.0000
+
+[RF_NearMiss_gmean] (2.2 min)
+  Scorer:       gmean
+  Sensitivity:  68.50% ± 15.46%
+  Specificity:  60.12%
+  F1-Score:     36.16% ± 7.24%
+  PPV:          26.34%
+  Kappa:        0.1815
+  Threshold:    0.501
+  Composto:     0.4977
+  Matriz: VN=146 FP=97 FN=14 VP=30
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 30
+    max_features                : 0.3000
+    max_samples                 : 0.7203
+    min_samples_leaf            : 9.5000
+    min_samples_split           : 9.0000
+    n_estimators                : 473.5000
+    sampler.n_neighbors         : 3.5000
+
+[RF_RUS_gmean] (2.7 min)
+  Scorer:       gmean
+  Sensitivity:  74.00% ± 18.14%
+  Specificity:  65.30%
+  F1-Score:     41.29% ± 9.77%
+  PPV:          29.46%
+  Kappa:        0.2447
+  Threshold:    0.454
+  Composto:     0.5527
+  Matriz: VN=159 FP=84 FN=12 VP=32
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 15
+    max_features                : 0.3000
+    max_samples                 : 0.7579
+    min_samples_leaf            : 6.0000
+    min_samples_split           : 5.0000
+    n_estimators                : 572.0000
+    sampler.sampling_strategy   : 0.7554
+
+[RF_IHT_gmean] (4.6 min)
+  Scorer:       gmean
+  Sensitivity:  78.00% ± 16.01%
+  Specificity:  53.17%
+  F1-Score:     35.41% ± 5.24%
+  PPV:          23.37%
+  Kappa:        0.1568
+  Threshold:    0.530
+  Composto:     0.5255
+  Matriz: VN=129 FP=114 FN=10 VP=34
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : entropy
+    max_depth                   : 5
+    max_features                : 0.5000
+    max_samples                 : 0.6769
+    min_samples_leaf            : 8.0000
+    min_samples_split           : 17.0000
+    n_estimators                : 662.5000
+
+[RF_SMOTEENN_clinic] (3.0 min)
+  Scorer:       clinic
+  Sensitivity:  64.00% ± 17.67%
+  Specificity:  63.08%
+  F1-Score:     34.01% ± 4.92%
+  PPV:          24.23%
+  Kappa:        0.1581
+  Threshold:    0.397
+  Composto:     0.4665
+  Matriz: VN=153 FP=90 FN=16 VP=28
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : entropy
+    max_depth                   : 15
+    max_features                : 0.5000
+    max_samples                 : 0.6832
+    min_samples_leaf            : 12.0000
+    min_samples_split           : 15.0000
+    n_estimators                : 662.0000
+
+[RF_BorderlineSMOTE_clinic] (3.1 min)
+  Scorer:       clinic
+  Sensitivity:  59.50% ± 18.35%
+  Specificity:  72.37%
+  F1-Score:     38.19% ± 10.69%
+  PPV:          28.98%
+  Kappa:        0.2216
+  Threshold:    0.373
+  Composto:     0.4767
+  Matriz: VN=176 FP=67 FN=18 VP=26
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 15.0000
+    max_features                : 0.7000
+    max_samples                 : 0.5428
+    min_samples_leaf            : 11.5000
+    min_samples_split           : 13.0000
+    n_estimators                : 603.0000
+    sampler.k_neighbors         : 6.0000
+    sampler.m_neighbors         : 16.0000
+
+[RF_SMOTE_clinic] (2.5 min)
+  Scorer:       clinic
+  Sensitivity:  64.00% ± 18.91%
+  Specificity:  72.45%
+  F1-Score:     40.55% ± 10.34%
+  PPV:          31.22%
+  Kappa:        0.2522
+  Threshold:    0.384
+  Composto:     0.5094
+  Matriz: VN=176 FP=67 FN=16 VP=28
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced_subsample
+    criterion                   : entropy
+    max_depth                   : None
+    max_features                : 0.5000
+    max_samples                 : 0.6467
+    min_samples_leaf            : 10.0000
+    min_samples_split           : 16.0000
+    n_estimators                : 512.5000
+    sampler.k_neighbors         : 5.0000
+
+[RF_NearMiss_clinic] (2.2 min)
+  Scorer:       clinic
+  Sensitivity:  68.50% ± 15.46%
+  Specificity:  60.53%
+  F1-Score:     37.08% ± 9.03%
+  PPV:          27.75%
+  Kappa:        0.1930
+  Threshold:    0.507
+  Composto:     0.5040
+  Matriz: VN=147 FP=96 FN=14 VP=30
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : gini
+    max_depth                   : 15
+    max_features                : log2
+    max_samples                 : 0.6541
+    min_samples_leaf            : 9.5000
+    min_samples_split           : 9.0000
+    n_estimators                : 504.0000
+    sampler.n_neighbors         : 3.5000
+
+[RF_RUS_clinic] (2.8 min)
+  Scorer:       clinic
+  Sensitivity:  76.00% ± 16.50%
+  Specificity:  62.80%
+  F1-Score:     41.39% ± 9.67%
+  PPV:          29.31%
+  Kappa:        0.2418
+  Threshold:    0.457
+  Composto:     0.5609
+  Matriz: VN=153 FP=90 FN=11 VP=33
+  Parâmetros (consenso dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 10
+    max_features                : 0.3000
+    max_samples                 : 0.7750
+    min_samples_leaf            : 6.0000
+    min_samples_split           : 12.0000
+    n_estimators                : 558.0000
+    sampler.sampling_strategy   : 0.9063
+
+[RF_IHT_clinic] (5.5 min)
+  Scorer:       clinic
+  Sensitivity:  73.50% ± 16.18%
+  Specificity:  54.40%
+  F1-Score:     34.45% ± 6.33%
+  PPV:          22.93%

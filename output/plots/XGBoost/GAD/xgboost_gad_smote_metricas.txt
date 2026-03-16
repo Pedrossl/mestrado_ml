@@ -3,23 +3,23 @@ XGBoost (com SMOTE) - GAD
 
 MÉTRICAS (média ± IC 95%)
 --------------------------------------------------
-Accuracy:    85.00% ± 2.41%
-Sensitivity: 34.50% ± 16.47%
-Specificity: 94.28% ± 3.68%
-PPV:         48.00% ± 24.68%
-NPV:         88.96% ± 2.57%
-F1-Score:    37.51% ± 15.89%
-Kappa:       0.3070 ± 0.1513
+Accuracy:    83.62% ± 3.90%
+Sensitivity: 36.00% ± 13.99%
+Specificity: 92.18% ± 4.52%
+PPV:         51.86% ± 22.09%
+NPV:         88.93% ± 2.17%
+F1-Score:    39.24% ± 12.41%
+Kappa:       0.3042 ± 0.1370
 
 DESVIO PADRÃO
 --------------------------------------------------
-Accuracy:    σ = 3.37%
-Sensitivity: σ = 23.03%
-Specificity: σ = 5.14%
-F1-Score:    σ = 22.21%
-Kappa:       σ = 0.2116
+Accuracy:    σ = 5.45%
+Sensitivity: σ = 19.55%
+Specificity: σ = 6.32%
+F1-Score:    σ = 17.34%
+Kappa:       σ = 0.1916
 
 MATRIZ DE CONFUSÃO AGREGADA
 --------------------------------------------------
-VN=229 | FP=14
-FN=29 | VP=15
+VN=224 | FP=19
+FN=28 | VP=16

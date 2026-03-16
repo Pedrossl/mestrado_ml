@@ -3,26 +3,26 @@ XGBoost (SMOTE + Threshold=0.10) - SAD
 
 MÉTRICAS (média ± IC 95%)
 --------------------------------------------------
-Accuracy:    72.44% ± 9.41%
-Sensitivity: 64.00% ± 16.50%
-Specificity: 74.28% ± 9.49%
-PPV:         34.36% ± 10.78%
-NPV:         91.06% ± 4.30%
-F1-Score:    44.02% ± 12.94%
-Kappa:       0.2910 ± 0.1685
+Accuracy:    71.03% ± 7.46%
+Sensitivity: 68.00% ± 15.01%
+Specificity: 71.78% ± 7.41%
+PPV:         32.59% ± 7.64%
+NPV:         91.86% ± 3.91%
+F1-Score:    43.58% ± 9.61%
+Kappa:       0.2794 ± 0.1260
 
 DESVIO PADRÃO
 --------------------------------------------------
-Accuracy:    σ = 13.15%
-Sensitivity: σ = 23.07%
-Specificity: σ = 13.27%
-F1-Score:    σ = 18.09%
-Kappa:       σ = 0.2355
+Accuracy:    σ = 10.42%
+Sensitivity: σ = 20.98%
+Specificity: σ = 10.35%
+F1-Score:    σ = 13.44%
+Kappa:       σ = 0.1762
 
 MATRIZ DE CONFUSÃO AGREGADA
 --------------------------------------------------
-VN=179 | FP=62
-FN=17 | VP=29
+VN=173 | FP=68
+FN=15 | VP=31
 
 THRESHOLD
 --------------------------------------------------

@@ -1,0 +1,184 @@
+================================================================================
+  INTERPRETAÇÃO DOS SCATTER PLOTS — GAD (Transtorno de Ansiedade Generalizada)
+  Análise de Separabilidade das Classes | Rótulos Verdadeiros
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RESUMO SIMPLES (para quem não é da área)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Imagine que cada paciente é um ponto num mapa. Os pontos VERMELHOS são
+  pacientes COM GAD e os pontos AZUIS são pacientes SEM GAD.
+
+  Se o computador conseguisse separar bem os dois grupos, você veria uma
+  "nuvem vermelha" de um lado e uma "nuvem azul" do outro, bem separadas.
+
+  O que os gráficos mostram é o CONTRÁRIO disso: os pontos vermelhos e azuis
+  estão MISTURADOS no mapa. Não existe uma linha clara dividindo os dois grupos.
+
+  Isso significa que, olhando apenas para os dados clínicos disponíveis, é
+  difícil distinguir quem tem GAD de quem não tem — os pacientes com GAD
+  se parecem muito com pacientes sem GAD na maioria das variáveis medidas.
+
+  POR QUE ISSO IMPORTA?
+  Essa mistura explica diretamente por que os modelos de machine learning
+  erram alguns casos: não é falha do algoritmo, é que os próprios dados
+  não separam bem os grupos. É um problema clínico conhecido — GAD tem
+  muita sobreposição de sintomas com outras condições.
+
+  O QUE AJUDA A SEPARAR (mesmo que pouco):
+  As variáveis que mais diferenciam quem TEM de quem NÃO TEM GAD são listadas
+  abaixo com seu "peso" (correlação), que vai de 0 a 1:
+    → 0.0 = variável inútil para distinguir os grupos
+    → 1.0 = variável separa perfeitamente os grupos
+
+  ┌─────────────────────────────────────────┬───────┬──────────────────────────┐
+  │ Variável                                │ Peso  │ O que significa          │
+  ├─────────────────────────────────────────┼───────┼──────────────────────────┤
+  │ Número de prejuízos funcionais          │ 0.317 │ Mais prejuízos → mais GAD│
+  │ TOD (Transtorno Opositivo Desafiador)   │ 0.293 │ Comorbidade comum no GAD │
+  │ Fobia Social                            │ 0.289 │ Comorbidade comum no GAD │
+  │ Número de distúrbios do sono            │ 0.264 │ Sintoma frequente no GAD │
+  │ TC (Transtorno de Conduta)              │ 0.241 │ Comorbidade associada    │
+  │ Número de estressores crônicos (tipo B) │ 0.224 │ Maior carga estressora   │
+  └─────────────────────────────────────────┴───────┴──────────────────────────┘
+
+  ATENÇÃO: mesmo o maior peso (0.317) é considerado FRACO-MODERADO na escala
+  estatística. Nenhuma variável sozinha consegue identificar o GAD com
+  segurança — o modelo precisa combinar todas elas ao mesmo tempo para
+  encontrar o padrão.
+
+  Mesmo com essas variáveis, a separação não é perfeita — daí a necessidade
+  de usar técnicas avançadas de machine learning para encontrar padrões
+  sutis que o olho humano não consegue ver nos gráficos.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dataset: 287 amostras | 17 features
+  GAD Positivo (casos): 44 amostras (15.3%)
+  GAD Negativo (controles): 243 amostras (84.7%)
+
+─────────────────────────────────────────────────────────────────────────────────
+1. PCA 2D — scatter_pca_gad.png
+─────────────────────────────────────────────────────────────────────────────────
+
+Variância explicada: PC1 = 19.8% | PC2 = 10.4% | Total = 30.2%
+
+O que se observa:
+  - Os casos GAD Positivo (vermelho) tendem a se deslocar para a DIREITA do eixo
+    PC1, indicando que a primeira componente principal captura parte do sinal
+    discriminativo da doença.
+  - Os casos GAD Negativo (azul) estão fortemente concentrados na região esquerda
+    (PC1 < 1), formando uma nuvem densa.
+  - Há sobreposição substancial entre as classes, especialmente na região central
+    (PC1 entre -1 e 2), onde muitos casos positivos se misturam com negativos.
+  - Alguns casos positivos aparecem como pontos isolados à direita (PC1 > 4),
+    sugerindo que uma parcela dos casos GAD+ apresenta perfil clínico mais extremo
+    e distinguível.
+
+Conclusão PCA:
+  As classes NÃO são linearmente separáveis. A PCA retém apenas 30.2% da
+  variância total em 2 dimensões, o que é baixo — indica que a informação
+  discriminativa está distribuída entre muitas features simultaneamente, não
+  concentrada em poucas componentes lineares. Isso justifica o uso de modelos
+  não-lineares como XGBoost e Random Forest.
+
+─────────────────────────────────────────────────────────────────────────────────
+2. t-SNE 2D — scatter_tsne_gad.png
+─────────────────────────────────────────────────────────────────────────────────
+
+O que se observa:
+  - O t-SNE, que preserva estrutura LOCAL dos dados (vizinhanças próximas),
+    mostra os casos GAD Positivo (vermelho) distribuídos por todo o espaço,
+    sem formação de um cluster distinto e isolado.
+  - Não há uma "ilha" clara de casos positivos separada dos negativos — os pontos
+    vermelhos aparecem mesclados com os azuis em todas as regiões do gráfico.
+  - Isso confirma que os casos GAD+ NÃO formam um grupo naturalmente coeso no
+    espaço de features: os pacientes com GAD são heterogêneos entre si.
+
+Conclusão t-SNE:
+  A ausência de clusters bem definidos para GAD Positivo revela que o problema
+  é intrinsecamente difícil do ponto de vista de separabilidade. Os casos
+  positivos se assemelham localmente a casos negativos, o que explica a
+  dificuldade dos modelos em atingir alta sensibilidade sem sacrificar
+  especificidade. Este achado corrobora a necessidade das técnicas de
+  balanceamento (SMOTE, NearMiss) e ajuste de threshold utilizadas no estudo.
+
+─────────────────────────────────────────────────────────────────────────────────
+3. Scatter 3D (PCA + t-SNE) — scatter_3d_gad.png
+─────────────────────────────────────────────────────────────────────────────────
+
+O que se observa:
+  - A projeção 3D do PCA confirma o padrão da versão 2D: casos positivos tendem
+    a valores mais altos em PC1, mas com grande sobreposição nas demais
+    componentes.
+  - O t-SNE 3D também não revela clusters isolados para GAD+, reforçando a
+    conclusão de baixa separabilidade mesmo em três dimensões.
+
+Conclusão 3D:
+  A adição de uma terceira dimensão não muda o diagnóstico geral: as classes
+  se misturam no espaço reduzido, independente do método de projeção.
+
+─────────────────────────────────────────────────────────────────────────────────
+4. Pairplot das Top 6 Features — scatter_features_gad.png
+─────────────────────────────────────────────────────────────────────────────────
+
+Features selecionadas por correlação ponto-bisserial com GAD:
+
+  Rank  Feature                          |r|     Interpretação
+  ────  ───────────────────────────────  ──────  ──────────────────────────────
+   1    Number of Impairments            0.317   Maior carga funcional → mais GAD
+   2    ODD (Transtorno Opositor)        0.293   Comorbidade psiquiátrica comum
+   3    Social Phobia                    0.289   Sobreposição clínica com GAD
+   4    Number of Sleep Disturbances     0.264   Sintoma frequente no GAD
+   5    CD (Transtorno de Conduta)       0.241   Outra comorbidade associada
+   6    Number of Type B Stressors       0.224   Estressores crônicos de baixa int.
+
+O que se observa nos histogramas (diagonal):
+  - "Number of Impairments": distribuição claramente deslocada para a direita
+    nos casos GAD+ — pacientes positivos tendem a apresentar mais prejuízos
+    funcionais do que os negativos.
+  - "ODD" e "Social Phobia": variáveis binárias/ordinais com proporção maior
+    de valor 1 nos casos GAD+.
+  - "Number of Sleep Disturbances": casos GAD+ concentram-se nos valores mais
+    altos, enquanto GAD- predominantemente tem valor zero.
+
+O que se observa nos scatter (fora da diagonal):
+  - As combinações entre features mostram sobreposição intensa, com casos
+    positivos e negativos ocupando as mesmas regiões.
+  - Nenhum par de features consegue separar linearmente as classes.
+  - Os dados são majoritariamente discretos/ordinais (pontos empilhados), o que
+    limita a separação visual mas não impede que modelos ensemble capturem
+    padrões combinados.
+
+─────────────────────────────────────────────────────────────────────────────────
+5. CONCLUSÃO GERAL
+─────────────────────────────────────────────────────────────────────────────────
+
+  (a) BAIXA SEPARABILIDADE LINEAR
+      Nenhuma combinação de features separa linearmente GAD+ de GAD−. Isso
+      justifica o uso de classificadores não-lineares (XGBoost, Random Forest,
+      HistGBM) em vez de regressão logística simples.
+
+  (b) HETEROGENEIDADE DOS CASOS POSITIVOS
+      Os casos GAD+ não formam um único cluster coeso — são clinicamente
+      heterogêneos. Parte dos positivos se assemelha muito aos negativos,
+      o que é o principal fator limitante da sensibilidade dos modelos.
+
+  (c) DESBALANCEAMENTO SEVERO
+      Com apenas 15.3% de casos positivos (44 de 287), o desbalanceamento
+      explica por que técnicas como SMOTE e NearMiss foram necessárias: sem
+      elas, o modelo tenderia a classificar todos como negativos, atingindo
+      84.7% de acurácia mas sensibilidade zero.
+
+  (d) FEATURES MAIS RELEVANTES
+      As variáveis com maior poder discriminativo são indicadores de carga
+      clínica global (número de prejuízos, distúrbios do sono, estressores)
+      e comorbidades psiquiátricas (ODD, Fobia Social, CD). Isso é coerente
+      com a literatura sobre GAD em populações pediátricas/adolescentes.
+
+  (e) IMPLICAÇÃO PARA O MODELO
+      A sobreposição observada nos scatter é consistente com os resultados
+      da busca de hiperparâmetros: os melhores modelos atingem ~61-68% de
+      sensibilidade com ~65-77% de especificidade — reflexo direto da
+      dificuldade intrínseca de separação no espaço de features.

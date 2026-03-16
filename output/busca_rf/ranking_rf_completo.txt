@@ -1,0 +1,442 @@
+===============================================================================================
+RANKING FINAL — Random Forest | GAD | Modo: completo | n_iter=500
+Score Composto = √(Sens × F1)
+===============================================================================================
+
+─── Ranking por Score Composto ───
+
+Rank  Experimento                               Composto        Sensitivity               F1       Spec    Kappa      T
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+1     RF_RUS_gmean                                0.5477         69.0±16.2%       43.5±12.0%      70.7%    0.278  0.49
+2     RF_SMOTEENN_f2_pen                          0.5327         73.5±10.9%        38.6±5.4%      61.9%    0.210  0.38
+3     RF_RUS_f2_pen                               0.5315         71.5±17.7%        39.5±9.6%      64.3%    0.223  0.49
+4     RF_SMOTEENN_gmean                           0.5249         71.0±12.1%        38.8±6.1%      63.9%    0.215  0.38
+5     RF_RUS_clinic                               0.5176         67.0±20.0%       40.0±11.4%      68.4%    0.237  0.50
+6     RF_IHT_clinic                               0.5147         75.5±15.0%        35.1±5.2%      54.4%    0.154  0.56
+7     RF_IHT_gmean                                0.5115         77.5±11.0%        33.8±3.8%      48.2%    0.130  0.50
+8     RF_BorderlineSMOTE_clinic                   0.5051         63.5±18.2%       40.2±11.4%      72.0%    0.246  0.37
+9     RF_NearMiss_gmean                           0.5002         69.5±15.6%        36.0±6.0%      62.2%    0.175  0.49
+10    RF_SMOTEENN_clinic                          0.4969         68.5±15.5%        36.0±6.3%      62.3%    0.182  0.40
+11    RF_IHT_f2_pen                               0.4935         71.5±15.5%        34.1±5.2%      56.1%    0.144  0.58
+12    RF_SMOTE_clinic                             0.4786         59.5±16.3%        38.5±7.3%      72.5%    0.231  0.39
+13    RF_SMOTE_gmean                              0.4737         59.5±16.3%        37.7±7.6%      71.2%    0.217  0.39
+14    RF_SMOTE_f2_pen                             0.4737         59.5±16.3%        37.7±7.6%      71.2%    0.217  0.39
+15    RF_BorderlineSMOTE_gmean                    0.4670         58.5±19.8%        37.3±9.2%      72.8%    0.219  0.39
+16    RF_BorderlineSMOTE_f2_pen                   0.4670         58.5±19.8%        37.3±9.2%      72.8%    0.219  0.39
+17    RF_NearMiss_clinic                          0.4515         61.5±15.5%        33.1±6.1%      63.0%    0.143  0.52
+18    RF_NearMiss_f2_pen                          0.4416         59.5±16.3%        32.8±6.3%      64.6%    0.141  0.52
+
+
+─── Ranking por Sensibilidade (referência) ───
+
+Rank  Experimento                               Composto        Sensitivity               F1       Spec    Kappa      T
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+1     RF_IHT_gmean                                0.5115         77.5±11.0%        33.8±3.8%      48.2%    0.130  0.50
+2     RF_IHT_clinic                               0.5147         75.5±15.0%        35.1±5.2%      54.4%    0.154  0.56
+3     RF_SMOTEENN_f2_pen                          0.5327         73.5±10.9%        38.6±5.4%      61.9%    0.210  0.38
+4     RF_RUS_f2_pen                               0.5315         71.5±17.7%        39.5±9.6%      64.3%    0.223  0.49
+5     RF_IHT_f2_pen                               0.4935         71.5±15.5%        34.1±5.2%      56.1%    0.144  0.58
+6     RF_SMOTEENN_gmean                           0.5249         71.0±12.1%        38.8±6.1%      63.9%    0.215  0.38
+7     RF_NearMiss_gmean                           0.5002         69.5±15.6%        36.0±6.0%      62.2%    0.175  0.49
+8     RF_RUS_gmean                                0.5477         69.0±16.2%       43.5±12.0%      70.7%    0.278  0.49
+9     RF_SMOTEENN_clinic                          0.4969         68.5±15.5%        36.0±6.3%      62.3%    0.182  0.40
+10    RF_RUS_clinic                               0.5176         67.0±20.0%       40.0±11.4%      68.4%    0.237  0.50
+11    RF_BorderlineSMOTE_clinic                   0.5051         63.5±18.2%       40.2±11.4%      72.0%    0.246  0.37
+12    RF_NearMiss_clinic                          0.4515         61.5±15.5%        33.1±6.1%      63.0%    0.143  0.52
+13    RF_SMOTE_gmean                              0.4737         59.5±16.3%        37.7±7.6%      71.2%    0.217  0.39
+14    RF_SMOTE_clinic                             0.4786         59.5±16.3%        38.5±7.3%      72.5%    0.231  0.39
+15    RF_SMOTE_f2_pen                             0.4737         59.5±16.3%        37.7±7.6%      71.2%    0.217  0.39
+16    RF_NearMiss_f2_pen                          0.4416         59.5±16.3%        32.8±6.3%      64.6%    0.141  0.52
+17    RF_BorderlineSMOTE_gmean                    0.4670         58.5±19.8%        37.3±9.2%      72.8%    0.219  0.39
+18    RF_BorderlineSMOTE_f2_pen                   0.4670         58.5±19.8%        37.3±9.2%      72.8%    0.219  0.39
+
+
+===============================================================================================
+DETALHAMENTO — PARÂMETROS ÓTIMOS POR EXPERIMENTO
+===============================================================================================
+
+[1] RF_RUS_gmean
+  Score Composto: 0.5477
+  Sensitivity:   69.00% ± 16.24%
+  Specificity:   70.67%
+  F1-Score:      43.47% ± 12.04%
+  PPV:           32.67%
+  Kappa:         0.2782
+  Matriz: VN=172 FP=71 FN=14 VP=30
+  Threshold: média=0.493 | min=0.400 | max=0.620
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : entropy
+    max_depth                   : 5
+    max_features                : log2
+    max_samples                 : 0.8483
+    min_samples_leaf            : 4.0000
+    min_samples_split           : 13.0000
+    n_estimators                : 562.0000
+    sampler.sampling_strategy   : 0.8659
+
+[2] RF_SMOTEENN_f2_pen
+  Score Composto: 0.5327
+  Sensitivity:   73.50% ± 10.93%
+  Specificity:   61.90%
+  F1-Score:      38.61% ± 5.43%
+  PPV:           26.90%
+  Kappa:         0.2101
+  Matriz: VN=150 FP=93 FN=12 VP=32
+  Threshold: média=0.379 | min=0.240 | max=0.560
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : entropy
+    max_depth                   : None
+    max_features                : log2
+    max_samples                 : 0.5987
+    min_samples_leaf            : 11.0000
+    min_samples_split           : 7.5000
+    n_estimators                : 461.5000
+
+[3] RF_RUS_f2_pen
+  Score Composto: 0.5315
+  Sensitivity:   71.50% ± 17.69%
+  Specificity:   64.27%
+  F1-Score:      39.50% ± 9.56%
+  PPV:           28.58%
+  Kappa:         0.2226
+  Matriz: VN=156 FP=87 FN=13 VP=31
+  Threshold: média=0.490 | min=0.390 | max=0.620
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : entropy
+    max_depth                   : 20
+    max_features                : log2
+    max_samples                 : 0.8209
+    min_samples_leaf            : 6.0000
+    min_samples_split           : 13.0000
+    n_estimators                : 334.0000
+    sampler.sampling_strategy   : 0.9558
+
+[4] RF_SMOTEENN_gmean
+  Score Composto: 0.5249
+  Sensitivity:   71.00% ± 12.14%
+  Specificity:   63.92%
+  F1-Score:      38.80% ± 6.14%
+  PPV:           27.43%
+  Kappa:         0.2153
+  Matriz: VN=155 FP=88 FN=13 VP=31
+  Threshold: média=0.383 | min=0.240 | max=0.500
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : entropy
+    max_depth                   : 15.0000
+    max_features                : log2
+    max_samples                 : 0.6429
+    min_samples_leaf            : 6.5000
+    min_samples_split           : 7.5000
+    n_estimators                : 392.5000
+
+[5] RF_RUS_clinic
+  Score Composto: 0.5176
+  Sensitivity:   67.00% ± 20.04%
+  Specificity:   68.38%
+  F1-Score:      39.99% ± 11.38%
+  PPV:           30.04%
+  Kappa:         0.2367
+  Matriz: VN=166 FP=77 FN=15 VP=29
+  Threshold: média=0.502 | min=0.390 | max=0.620
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced_subsample
+    criterion                   : gini
+    max_depth                   : 20
+    max_features                : log2
+    max_samples                 : 0.8209
+    min_samples_leaf            : 5.0000
+    min_samples_split           : 13.0000
+    n_estimators                : 334.0000
+    sampler.sampling_strategy   : 0.9353
+
+[6] RF_IHT_clinic
+  Score Composto: 0.5147
+  Sensitivity:   75.50% ± 15.03%
+  Specificity:   54.40%
+  F1-Score:      35.09% ± 5.20%
+  PPV:           23.23%
+  Kappa:         0.1542
+  Matriz: VN=132 FP=111 FN=11 VP=33
+  Threshold: média=0.557 | min=0.460 | max=0.620
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : entropy
+    max_depth                   : 10.0000
+    max_features                : sqrt
+    max_samples                 : 0.7141
+    min_samples_leaf            : 9.0000
+    min_samples_split           : 8.0000
+    n_estimators                : 523.0000
+
+[7] RF_IHT_gmean
+  Score Composto: 0.5115
+  Sensitivity:   77.50% ± 10.96%
+  Specificity:   48.23%
+  F1-Score:      33.77% ± 3.84%
+  PPV:           21.96%
+  Kappa:         0.1296
+  Matriz: VN=117 FP=126 FN=10 VP=34
+  Threshold: média=0.503 | min=0.420 | max=0.580
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : entropy
+    max_depth                   : 10.0000
+    max_features                : log2
+    max_samples                 : 0.6911
+    min_samples_leaf            : 9.0000
+    min_samples_split           : 13.0000
+    n_estimators                : 591.5000
+
+[8] RF_BorderlineSMOTE_clinic
+  Score Composto: 0.5051
+  Sensitivity:   63.50% ± 18.16%
+  Specificity:   72.00%
+  F1-Score:      40.18% ± 11.38%
+  PPV:           30.36%
+  Kappa:         0.2461
+  Matriz: VN=175 FP=68 FN=16 VP=28
+  Threshold: média=0.371 | min=0.260 | max=0.440
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : None
+    max_features                : sqrt
+    max_samples                 : 0.6605
+    min_samples_leaf            : 11.5000
+    min_samples_split           : 11.0000
+    n_estimators                : 547.5000
+    sampler.k_neighbors         : 7.0000
+    sampler.m_neighbors         : 17.5000
+
+[9] RF_NearMiss_gmean
+  Score Composto: 0.5002
+  Sensitivity:   69.50% ± 15.59%
+  Specificity:   62.18%
+  F1-Score:      36.00% ± 6.05%
+  PPV:           24.49%
+  Kappa:         0.1747
+  Matriz: VN=151 FP=92 FN=14 VP=30
+  Threshold: média=0.493 | min=0.330 | max=0.560
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 20
+    max_features                : log2
+    max_samples                 : 0.6386
+    min_samples_leaf            : 4.0000
+    min_samples_split           : 10.0000
+    n_estimators                : 579.0000
+    sampler.n_neighbors         : 2.0000
+
+[10] RF_SMOTEENN_clinic
+  Score Composto: 0.4969
+  Sensitivity:   68.50% ± 15.46%
+  Specificity:   62.32%
+  F1-Score:      36.05% ± 6.34%
+  PPV:           25.39%
+  Kappa:         0.1817
+  Matriz: VN=151 FP=92 FN=14 VP=30
+  Threshold: média=0.395 | min=0.260 | max=0.560
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : None
+    criterion                   : entropy
+    max_depth                   : 10
+    max_features                : sqrt
+    max_samples                 : 0.6455
+    min_samples_leaf            : 11.0000
+    min_samples_split           : 13.5000
+    n_estimators                : 465.0000
+
+[11] RF_IHT_f2_pen
+  Score Composto: 0.4935
+  Sensitivity:   71.50% ± 15.55%
+  Specificity:   56.07%
+  F1-Score:      34.07% ± 5.16%
+  PPV:           22.80%
+  Kappa:         0.1440
+  Matriz: VN=136 FP=107 FN=13 VP=31
+  Threshold: média=0.584 | min=0.460 | max=0.660
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced_subsample
+    criterion                   : gini
+    max_depth                   : 12.5000
+    max_features                : log2
+    max_samples                 : 0.7794
+    min_samples_leaf            : 4.5000
+    min_samples_split           : 8.0000
+    n_estimators                : 347.0000
+
+[12] RF_SMOTE_clinic
+  Score Composto: 0.4786
+  Sensitivity:   59.50% ± 16.30%
+  Specificity:   72.48%
+  F1-Score:      38.49% ± 7.29%
+  PPV:           30.84%
+  Kappa:         0.2305
+  Matriz: VN=176 FP=67 FN=18 VP=26
+  Threshold: média=0.393 | min=0.290 | max=0.460
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced_subsample
+    criterion                   : gini
+    max_depth                   : 5
+    max_features                : 0.3000
+    max_samples                 : 0.6114
+    min_samples_leaf            : 12.5000
+    min_samples_split           : 14.5000
+    n_estimators                : 542.0000
+    sampler.k_neighbors         : 6.0000
+
+[13] RF_SMOTE_gmean
+  Score Composto: 0.4737
+  Sensitivity:   59.50% ± 16.30%
+  Specificity:   71.23%
+  F1-Score:      37.71% ± 7.62%
+  PPV:           29.73%
+  Kappa:         0.2172
+  Matriz: VN=173 FP=70 FN=18 VP=26
+  Threshold: média=0.387 | min=0.290 | max=0.460
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced_subsample
+    criterion                   : entropy
+    max_depth                   : 5
+    max_features                : 0.3000
+    max_samples                 : 0.6167
+    min_samples_leaf            : 12.5000
+    min_samples_split           : 14.5000
+    n_estimators                : 530.0000
+    sampler.k_neighbors         : 6.5000
+
+[14] RF_SMOTE_f2_pen
+  Score Composto: 0.4737
+  Sensitivity:   59.50% ± 16.30%
+  Specificity:   71.23%
+  F1-Score:      37.71% ± 7.62%
+  PPV:           29.73%
+  Kappa:         0.2172
+  Matriz: VN=173 FP=70 FN=18 VP=26
+  Threshold: média=0.387 | min=0.290 | max=0.460
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced_subsample
+    criterion                   : entropy
+    max_depth                   : 5
+    max_features                : 0.3000
+    max_samples                 : 0.6167
+    min_samples_leaf            : 12.5000
+    min_samples_split           : 14.5000
+    n_estimators                : 530.0000
+    sampler.k_neighbors         : 6.5000
+
+[15] RF_BorderlineSMOTE_gmean
+  Score Composto: 0.4670
+  Sensitivity:   58.50% ± 19.81%
+  Specificity:   72.83%
+  F1-Score:      37.29% ± 9.21%
+  PPV:           29.71%
+  Kappa:         0.2187
+  Matriz: VN=177 FP=66 FN=18 VP=26
+  Threshold: média=0.391 | min=0.330 | max=0.500
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : entropy
+    max_depth                   : None
+    max_features                : sqrt
+    max_samples                 : 0.6918
+    min_samples_leaf            : 12.5000
+    min_samples_split           : 12.0000
+    n_estimators                : 223.0000
+    sampler.k_neighbors         : 7.0000
+    sampler.m_neighbors         : 18.0000
+
+[16] RF_BorderlineSMOTE_f2_pen
+  Score Composto: 0.4670
+  Sensitivity:   58.50% ± 19.81%
+  Specificity:   72.83%
+  F1-Score:      37.29% ± 9.21%
+  PPV:           29.71%
+  Kappa:         0.2187
+  Matriz: VN=177 FP=66 FN=18 VP=26
+  Threshold: média=0.391 | min=0.330 | max=0.500
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : entropy
+    max_depth                   : None
+    max_features                : sqrt
+    max_samples                 : 0.6918
+    min_samples_leaf            : 12.5000
+    min_samples_split           : 12.0000
+    n_estimators                : 223.0000
+    sampler.k_neighbors         : 7.0000
+    sampler.m_neighbors         : 18.0000
+
+[17] RF_NearMiss_clinic
+  Score Composto: 0.4515
+  Sensitivity:   61.50% ± 15.55%
+  Specificity:   62.97%
+  F1-Score:      33.14% ± 6.05%
+  PPV:           23.27%
+  Kappa:         0.1432
+  Matriz: VN=153 FP=90 FN=17 VP=27
+  Threshold: média=0.522 | min=0.460 | max=0.560
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 20
+    max_features                : 0.3000
+    max_samples                 : 0.6846
+    min_samples_leaf            : 7.0000
+    min_samples_split           : 6.0000
+    n_estimators                : 410.5000
+    sampler.n_neighbors         : 2.5000
+
+[18] RF_NearMiss_f2_pen
+  Score Composto: 0.4416
+  Sensitivity:   59.50% ± 16.30%
+  Specificity:   64.63%
+  F1-Score:      32.77% ± 6.31%
+  PPV:           23.18%
+  Kappa:         0.1413
+  Matriz: VN=157 FP=86 FN=18 VP=26
+  Threshold: média=0.523 | min=0.460 | max=0.560
+  Parâmetros ótimos (mediana dos 10 folds):
+    bootstrap                   : 1.0000
+    class_weight                : balanced
+    criterion                   : gini
+    max_depth                   : 20
+    max_features                : log2
+    max_samples                 : 0.6969
+    min_samples_leaf            : 7.0000
+    min_samples_split           : 7.5000
+    n_estimators                : 410.5000
+    sampler.n_neighbors         : 2.0000
+
+===============================================================================================
+MELHOR MODELO (Score Composto): RF_RUS_gmean
+===============================================================================================
+
+Score Composto  √(Sens×F1): 0.5477
+Sensibilidade:  69.0% ± 16.2%
+F1-Score:       43.5% ± 12.0%
+Especificidade: 70.7%
+Threshold (F2): 0.493
+

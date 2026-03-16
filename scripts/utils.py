@@ -10,7 +10,11 @@ from scripts.preprocessing.normalizacao import carregar_teste_normalizado
 
 
 def preparar_dados(target='GAD'):
-    """Prepara os dados para o modelo."""
+    """Prepara os dados para o modelo.
+
+    Args:
+        target: Variável alvo ('GAD' ou 'SAD')
+    """
     df = carregar_teste_normalizado()
 
     colunas_remover = [
