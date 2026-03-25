@@ -1,0 +1,5 @@
+BUSCA DE HIPERPARAMETROS — Fold Ajustado (sem leakage na normalizacao)
+Modo: medio | n_iter=200
+Correcao: MinMaxScaler aplicado dentro de cada fold (fit apenas no treino)
+================================================================================
+

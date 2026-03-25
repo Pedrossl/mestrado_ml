@@ -1,0 +1,191 @@
+================================================================================
+  MELHORES RESULTADOS — DISSERTAÇÃO DE MESTRADO
+  Predição de GAD e SAD em Crianças via Aprendizado de Máquina
+  Dataset: 287 amostras | 10-fold Stratified CV | Gerado: março 2026
+================================================================================
+
+LEGENDA DE MÉTRICAS
+  Acc   = Acurácia — % total de predições corretas (enganosa em dados desbalanceados)
+  Sens  = Sensibilidade (Recall) — % de casos positivos detectados corretamente
+  Spec  = Especificidade — % de casos negativos classificados corretamente
+  F1    = F1-Score — média harmônica entre Precisão e Sensibilidade
+  Kappa = Concordância de Cohen (0.21–0.40 = razoável; >0.40 = moderada)
+  IC95  = Intervalo de Confiança 95% (±)
+  (*)   = Acc calculada via Acc = Sens×0.153 + Spec×0.847 (proporção do dataset)
+
+================================================================================
+BLOCO 1 — MELHORES MODELOS PARA GAD (Ansiedade Generalizada)
+         Foco: melhor equilíbrio entre Sensibilidade, F1 e Kappa
+================================================================================
+
+Rank  Modelo / Técnica                    Acc(*)    Sens        F1        Spec      Kappa
+──────────────────────────────────────────────────────────────────────────────────────────
+  1   M03 BorderlineSMOTE (XGBoost)       85.4%    41.0%     45.2%     93.4%     0.372   ★ MELHOR KAPPA GERAL
+  2   M07 scale_pos_weight=20 (XGBoost)   82.3%    45.5%     44.4%     88.9%     0.340
+  3   M05 SMOTETomek (XGBoost)            85.4%    38.5%     43.2%     93.8%     0.354
+  4   M02 ADASYN (XGBoost)                85.6%    38.0%     43.1%     94.2%     0.354
+  5   M09 Threshold F2-score (XGBoost)    81.1%    47.5%     43.7%     87.2%     0.326   ★ MELHOR EQUILÍBRIO SENS+F1
+  6   XGBoost + Class Weighting           83.6%    38.0%     41.1%     91.8%     0.319
+  7   XGBoost + SMOTE (baseline)          85.0%    34.5%     37.5%     94.3%     0.307
+  8   M08 Threshold Youden's J            86.1%    36.5%     41.6%     95.1%     0.350
+  9   M10 Threshold PR-Curve              86.1%    36.5%     41.6%     95.1%     0.350
+──────────────────────────────────────────────────────────────────────────────────────────
+IC95 representativos:
+  BorderlineSMOTE: Acc≈85.4% | Sens 41.0% ± 12.8% | F1 45.2% ± 10.6% | Kappa 0.372 ± 0.119
+  XGBoost CW:      Acc 83.6% ± 3.7% | Sens 38.0% ± 12.4% | F1 41.1% ± 12.0% | Kappa 0.319 ± 0.137
+
+Nota: Nenhum modelo GAD atingiu concordância moderada (Kappa > 0.40).
+O melhor Kappa absoluto foi 0.372 (BorderlineSMOTE), limite da faixa razoável.
+Atenção: Acc alta (~85%) neste dataset reflete o desbalanceamento, não desempenho real.
+
+
+================================================================================
+BLOCO 2 — MODELOS GAD COM MÁXIMA SENSIBILIDADE (foco em triagem/screening)
+         Trade-off: Sensibilidade alta x Especificidade baixa
+================================================================================
+
+Rank  Modelo / Técnica                    Acc(*)    Sens        F1        Spec      Kappa
+──────────────────────────────────────────────────────────────────────────────────────────
+  1   M15 SMOTEENN + SPW + Threshold F2   64.3%    71.5%     38.7%     63.0%     0.209   ★ MÁXIMA SENSIBILIDADE
+  2   M12 EasyEnsemble (XGBoost)          66.3%    68.5%     38.9%     65.9%     0.217   ★ MELHOR SENS COM MELHOR KAPPA
+  3   XGBoost + Undersampling             64.9%    67.0%     37.4%     64.6%     0.195
+  4   SVM + Undersampling (GAD)           66.6%    65.0%     36.3%     67.1%     0.189
+  5   M11 Balanced Random Forest          67.0%    59.5%     36.2%     68.4%     0.187
+  6   M04 SMOTEENN (XGBoost)              73.9%    52.5%     39.1%     77.8%     0.243   ← bom equilíbrio Sens+Spec
+  7   M14 Balanced Bagging                74.6%    50.0%     37.7%     79.0%     0.233
+  8   M13 RUSBoost                        77.0%    47.5%     39.1%     82.3%     0.263
+──────────────────────────────────────────────────────────────────────────────────────────
+IC95 representativos:
+  M15 Combo:     Sens 71.5% ± 19.6% | Spec 63.0% ± 8.3%  | Kappa 0.209 ± 0.144
+  EasyEnsemble:  Sens 68.5% ± 13.0% | Spec 65.9% ± 7.4%  | Kappa 0.217 ± 0.108
+
+Matriz de Confusão (médias de 10 folds, de 287 amostras: 44 positivos / 243 negativos):
+  EasyEnsemble:  VP=30, FN=14, FP=83, VN=160  → Acc=66.2% | detecta 30/44 crianças com GAD
+  M15 Combo:     VP=31, FN=13, FP=90, VN=153  → Acc=64.1% | detecta 31/44 crianças com GAD
+  SMOTE base:    VP=15, FN=29, FP=14, VN=229  → Acc=85.0% | detecta 15/44 crianças com GAD
+
+
+================================================================================
+BLOCO 3 — BUSCA DE HIPERPARÂMETROS COM OTIMIZAÇÃO (200 iter, GAD)
+         Objetivo: maximizar recall ou F2
+================================================================================
+
+Rank  Experimento                         Acc(*)    Sens        F1        Spec      Kappa
+──────────────────────────────────────────────────────────────────────────────────────────
+  1   BorderlineSMOTE + recall opt.       15.3%   100.0%     26.5%      0.0%     0.000   ← inutilizável (Spec=0)
+  2   SMOTEENN + recall opt.              20.2%   100.0%     27.8%      5.8%     0.020   ← inutilizável
+  3   SMOTETomek + recall opt.            16.9%   100.0%     27.0%      2.0%     0.006   ← inutilizável
+  4   SMOTE + recall opt.                 17.3%    97.5%     26.4%      2.4%    -0.001   ← inutilizável
+  5   ADASYN + recall opt.                19.4%    97.5%     27.1%      4.9%     0.011   ← inutilizável
+  ──
+  6   BorderlineSMOTE + F2 opt.           61.3%    83.5%     41.2%     57.3%     0.236   ★ MELHOR HIPERPARÂMETROS F2
+  7   SMOTEENN + F2 opt.                  58.0%    74.5%     35.0%     53.2%     0.154
+  8   SMOTE + F2 opt.                     62.5%    73.5%     37.6%     60.1%     0.193
+  9   ADASYN + F2 opt.                    61.8%    73.5%     37.4%     59.2%     0.191
+ 10   SMOTETomek + F2 opt.                62.5%    72.5%     36.4%     60.1%     0.180
+──────────────────────────────────────────────────────────────────────────────────────────
+IC95:  BorderlineSMOTE_f2: Acc≈61.3% | Sens 83.5% ± 11.8% | F1 41.2% ± 5.9% | Kappa 0.236
+
+Conclusão: otimizar por recall gera Sens=100% e Acc≈15% (modelo inútil, chuta tudo como positivo).
+Otimizar por F2 gera melhor equilíbrio — destaque para BorderlineSMOTE_f2
+com Sens=83.5% e F1=41.2%, apesar de Kappa=0.236 ainda na faixa razoável baixa.
+
+Melhores hiperparâmetros XGBoost (BorderlineSMOTE_f2, n_iter=200):
+  learning_rate=0.0184 | max_depth=5-6 | n_estimators=340
+  scale_pos_weight=24.8 | min_child_weight=8
+  colsample_bytree=0.549 | subsample=0.683
+  BorderlineSMOTE: k_neighbors=4, m_neighbors=12
+
+
+================================================================================
+BLOCO 4 — MELHORES MODELOS PARA SAD (Ansiedade Social)
+================================================================================
+
+Rank  Modelo / Técnica                    Acc       Sens        F1        Spec      Kappa
+──────────────────────────────────────────────────────────────────────────────────────────
+  1   SVM + Class Weighting               74.9%    52.5%     39.7%     79.3%     0.255   ★ MELHOR F1+KAPPA SAD
+  2   XGBoost + SMOTE                     82.6%    30.5%     34.7%     92.6%     0.256   ★ MELHOR KAPPA SAD
+  3   XGBoost + Class Weighting           80.1%    35.0%     36.2%     88.8%     0.250
+  4   XGBoost + Undersampling             66.9%    68.0%     40.9%     66.9%     0.239   ★ MELHOR SENSIBILIDADE SAD
+  5   SVM + Undersampling                 66.6%    59.5%     35.8%     68.1%     0.181
+  6   XGBoost + Sem Balanceamento         82.9%    22.0%     29.4%     94.6%     0.213
+──────────────────────────────────────────────────────────────────────────────────────────
+IC95 representativos:
+  SVM CW (SAD):   Acc 74.9% ± 6.6% | Sens 52.5% ± 17.1% | F1 39.7% ± 12.8% | Kappa 0.255 ± 0.154
+  XGBoost SMOTE:  Acc 82.6% ± 3.9% | Sens 30.5% ± 14.1% | F1 34.7% ± 15.5% | Kappa 0.256 ± 0.172
+  XGBoost Under:  Acc 66.9% ± 8.9% | Sens 68.0% ± 14.1% | F1 40.9% ± 9.3%  | Kappa 0.239 ± 0.125
+
+Nota: SAD é mais difícil de predizer que GAD. Kappa máximo = 0.256 vs 0.372 (GAD).
+O SVM com Class Weighting se destacou para SAD (ao contrário de GAD, onde foi fraco).
+
+
+================================================================================
+BLOCO 5 — COMPARATIVO GAD vs SAD (SMOTE, com IC 95%)
+================================================================================
+
+Algoritmo         Target    Accuracy        Sens            Spec            Kappa
+────────────────────────────────────────────────────────────────────────────────
+XGBoost           GAD       85.0% ± 2.4%   34.5% ± 16.5%  94.3% ± 3.7%   0.307 ± 0.151
+XGBoost           SAD       82.6% ± 3.9%   30.5% ± 14.1%  92.6% ± 3.6%   0.256 ± 0.172
+SVM               GAD       75.7% ± 4.1%   22.5% ± 11.0%  85.3% ± 3.8%   0.084 ± 0.127
+SVM               SAD       74.2% ± 5.9%   28.5% ± 12.3%  83.0% ± 7.3%   0.112 ± 0.128
+────────────────────────────────────────────────────────────────────────────────
+ADTree (GAD, SMOTE): Sens=84.09%, Acc=32.75%, Kappa=0.028 — alta sens, modelo instável
+ADTree (GAD, CW):    Sens=59.00%, Acc=64.11%, Kappa=0.153 — mais equilibrado
+
+
+================================================================================
+BLOCO 6 — FEATURE IMPORTANCE (XGBoost, média 10 folds)
+================================================================================
+
+TOP 5 FEATURES — GAD
+  1. Number of Impairments         0.163 ± 0.046
+  2. Race                          0.112 ± 0.024
+  3. ODD                           0.083 ± 0.047
+  4. Social Phobia                 0.080 ± 0.022
+  5. ADHD                          0.078 ± 0.035
+
+TOP 5 FEATURES — SAD
+  1. Number of Sleep Disturbances  0.192 ± 0.041
+  2. Number of Sensory Sensitivities 0.191 ± 0.074
+  3. Social Phobia                 0.099 ± 0.039
+  4. Family History - Psychiatric  0.063 ± 0.007
+  5. CD                            0.049 ± 0.013
+
+Observação: os perfis de risco são distintos. GAD é associado a comprometimentos
+funcionais e comorbidades (ODD, ADHD); SAD é associado a distúrbios do sono,
+hipersensibilidades sensoriais e histórico familiar.
+
+
+================================================================================
+BLOCO 7 — RESUMO EXECUTIVO: RECOMENDAÇÕES FINAIS
+================================================================================
+
+CENÁRIO 1 — Melhor equilíbrio geral (uso clínico de apoio à decisão)
+  GAD → BorderlineSMOTE: Acc=85.4%, Sens=41%, F1=45.2%, Kappa=0.372
+  SAD → SVM Class Weighting: Acc=74.9%, Sens=52.5%, F1=39.7%, Kappa=0.255
+
+CENÁRIO 2 — Máxima sensibilidade aceitável (triagem em larga escala)
+  GAD → EasyEnsemble: Acc=66.2%, Sens=68.5%, F1=38.9%, Kappa=0.217
+         (detecta 30/44 crianças com GAD; 34% de alarmes falsos)
+  SAD → XGBoost Undersampling: Acc=66.9%, Sens=68%, F1=40.9%, Kappa=0.239
+
+CENÁRIO 3 — Máxima sensibilidade absoluta (rastreamento inicial)
+  GAD → M15 SMOTEENN+SPW+F2: Acc=64.1%, Sens=71.5%, F1=38.7%, Kappa=0.209
+         (detecta 31/44; 37% de alarmes falsos)
+  GAD → BorderlineSMOTE_f2 (hiperparâmetros otimizados): Acc=61.3%, Sens=83.5%, F1=41.2%, Kappa=0.236
+
+RANKING DE ALGORITMOS (por Kappa máximo atingido):
+  GAD: 1. XGBoost (Kappa=0.372) >> 2. SVM (0.210) >> 3. ADTree (0.156)
+  SAD: 1. XGBoost (Kappa=0.256) ≈ 2. SVM (0.255) >> 3. ADTree (não avaliado)
+
+LIMITAÇÕES PRINCIPAIS:
+  - Dataset pequeno (n=287; 44 GAD+, 46 SAD+) → ICs amplos, especialmente em Sens
+  - Nenhum modelo atingiu Kappa moderado (>0.40) para nenhum target
+  - Alta variabilidade nos folds (Sens varia ±10–19pp dependendo do modelo)
+  - Acc é métrica enganosa aqui: modelo que chuta tudo negativo tem Acc=84.7%
+  - Modelos não substituem avaliação clínica: servem como ferramenta de triagem
+
+================================================================================
+FIM DO RESUMO
+================================================================================

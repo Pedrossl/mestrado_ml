@@ -1,25 +1,25 @@
-MODELO ADTree (com SMOTE corrigido) - GAD
-========================================
+ADTree (com SMOTE) - GAD
+==================================================
 
-NOTA: SMOTE aplicado apenas no treino de cada fold
-      para evitar data leakage.
+MÉTRICAS (média ± IC 95%)
+--------------------------------------------------
+Accuracy:    58.56% ± 7.05%
+Sensitivity: 73.00% ± 14.62%
+Specificity: 55.90% ± 6.80%
+PPV:         23.51% ± 5.25%
+NPV:         91.58% ± 4.85%
+F1-Score:    35.43% ± 7.50%
+Kappa:       0.1574 ± 0.1035
 
-Amostras originais: 287 | Features: 17
-Validação: 10-fold Stratified CV
-
-MÉTRICAS
-----------------------------------------
-Accuracy:    32.75%
-Sensitivity: 84.09%
-Specificity: 23.46%
-PPV:         16.59%
-NPV:         89.06%
-F1-Score:    27.72%
-Kappa:       0.0283
+DESVIO PADRÃO
+--------------------------------------------------
+Accuracy:    σ = 9.86%
+Sensitivity: σ = 20.44%
+Specificity: σ = 9.51%
+F1-Score:    σ = 10.48%
+Kappa:       σ = 0.1447
 
 MATRIZ DE CONFUSÃO AGREGADA
-----------------------------------------
-VN=57 | FP=186
-FN=7 | VP=37
-
-Total: 287 | Acertos: 94 | Erros: 193
+--------------------------------------------------
+VN=136 | FP=107
+FN=12 | VP=32

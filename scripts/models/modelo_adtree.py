@@ -1,5 +1,8 @@
 
 
+import matplotlib
+matplotlib.use('Agg')
+
 import pandas as pd
 import logging
 import os
@@ -15,6 +18,7 @@ from weka.classifiers import Classifier, Evaluation
 from sklearn.model_selection import StratifiedKFold
 from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
+from imblearn.combine import SMOTEENN, SMOTETomek
 
 from scripts.utils import (
     preparar_dados, calcular_metricas_fold_cm, agregar_metricas_com_ic,
@@ -297,6 +301,130 @@ def treinar_adtree_undersampling(target='GAD'):
     return metricas
 
 
+def treinar_adtree_smoteenn(target='GAD'):
+    """Treina ADTree com SMOTEENN (SMOTE + Edited Nearest Neighbors) dentro de cada fold."""
+    output_path = f'output/plots/ADtree/{target.upper()}'
+    os.makedirs(output_path, exist_ok=True)
+
+    df, target_name = preparar_dados(target)
+
+    print("\n" + "=" * 60)
+    print("      MODELO ADTree - COM SMOTEENN (CORRIGIDO)")
+    print("=" * 60)
+
+    print("\n[DATASET ORIGINAL]")
+    print(f"  Amostras: {df.shape[0]} | Features: {df.shape[1] - 1} | Target: {target_name}")
+    dist = df[target_name].value_counts()
+    print(f"  Classe 0: {dist[0]} ({dist[0]/len(df)*100:.1f}%) | Classe 1: {dist[1]} ({dist[1]/len(df)*100:.1f}%)")
+
+    X = df.drop(columns=[target_name]).values
+    y = df[target_name].values
+    feature_names = df.drop(columns=[target_name]).columns.tolist()
+
+    print("\n[CROSS-VALIDATION COM SMOTEENN POR FOLD]")
+    print("  SMOTEENN aplicado apenas no treino (sem data leakage)")
+
+    n_folds = 10
+    skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
+    metricas_folds = []
+
+    print(f"  Executando {n_folds}-fold CV...", end=" ")
+
+    for train_idx, test_idx in skf.split(X, y):
+        X_train, X_test = X[train_idx], X[test_idx]
+        y_train, y_test = y[train_idx], y[test_idx]
+
+        sampler = SMOTEENN(random_state=42)
+        X_train_res, y_train_res = sampler.fit_resample(X_train, y_train)
+
+        df_train = pd.DataFrame(X_train_res, columns=feature_names)
+        df_train[target_name] = y_train_res
+        df_test = pd.DataFrame(X_test, columns=feature_names)
+        df_test[target_name] = y_test
+
+        dataset_train = criar_dataset_weka(df_train)
+        dataset_test = criar_dataset_weka(df_test)
+
+        adtree = Classifier(classname="weka.classifiers.trees.ADTree")
+        adtree.options = ["-B", "10", "-E", "-3"]
+        adtree.build_classifier(dataset_train)
+
+        evaluation = Evaluation(dataset_train)
+        evaluation.test_model(adtree, dataset_test)
+
+        metricas_folds.append(calcular_metricas_fold_cm(evaluation.confusion_matrix))
+
+    print("OK")
+
+    metricas = agregar_metricas_com_ic(metricas_folds)
+    output_file = f'{output_path}/adtree_{target.lower()}_smoteenn_metricas.txt'
+    exibir_resultados(metricas, target_name, "ADTree (com SMOTEENN)", output_file)
+
+    return metricas
+
+
+def treinar_adtree_smotetomek(target='GAD'):
+    """Treina ADTree com SMOTETomek (SMOTE + Tomek Links) dentro de cada fold."""
+    output_path = f'output/plots/ADtree/{target.upper()}'
+    os.makedirs(output_path, exist_ok=True)
+
+    df, target_name = preparar_dados(target)
+
+    print("\n" + "=" * 60)
+    print("     MODELO ADTree - COM SMOTETomek (CORRIGIDO)")
+    print("=" * 60)
+
+    print("\n[DATASET ORIGINAL]")
+    print(f"  Amostras: {df.shape[0]} | Features: {df.shape[1] - 1} | Target: {target_name}")
+    dist = df[target_name].value_counts()
+    print(f"  Classe 0: {dist[0]} ({dist[0]/len(df)*100:.1f}%) | Classe 1: {dist[1]} ({dist[1]/len(df)*100:.1f}%)")
+
+    X = df.drop(columns=[target_name]).values
+    y = df[target_name].values
+    feature_names = df.drop(columns=[target_name]).columns.tolist()
+
+    print("\n[CROSS-VALIDATION COM SMOTETomek POR FOLD]")
+    print("  SMOTETomek aplicado apenas no treino (sem data leakage)")
+
+    n_folds = 10
+    skf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
+    metricas_folds = []
+
+    print(f"  Executando {n_folds}-fold CV...", end=" ")
+
+    for train_idx, test_idx in skf.split(X, y):
+        X_train, X_test = X[train_idx], X[test_idx]
+        y_train, y_test = y[train_idx], y[test_idx]
+
+        sampler = SMOTETomek(random_state=42)
+        X_train_res, y_train_res = sampler.fit_resample(X_train, y_train)
+
+        df_train = pd.DataFrame(X_train_res, columns=feature_names)
+        df_train[target_name] = y_train_res
+        df_test = pd.DataFrame(X_test, columns=feature_names)
+        df_test[target_name] = y_test
+
+        dataset_train = criar_dataset_weka(df_train)
+        dataset_test = criar_dataset_weka(df_test)
+
+        adtree = Classifier(classname="weka.classifiers.trees.ADTree")
+        adtree.options = ["-B", "10", "-E", "-3"]
+        adtree.build_classifier(dataset_train)
+
+        evaluation = Evaluation(dataset_train)
+        evaluation.test_model(adtree, dataset_test)
+
+        metricas_folds.append(calcular_metricas_fold_cm(evaluation.confusion_matrix))
+
+    print("OK")
+
+    metricas = agregar_metricas_com_ic(metricas_folds)
+    output_file = f'{output_path}/adtree_{target.lower()}_smotetomek_metricas.txt'
+    exibir_resultados(metricas, target_name, "ADTree (com SMOTETomek)", output_file)
+
+    return metricas
+
+
 def instalar_pacote_adtree():
     """Instala o pacote ADTree do Weka se não estiver instalado."""
     import weka.core.packages as packages
@@ -352,6 +480,16 @@ if __name__ == "__main__":
 
                 m4 = treinar_adtree_undersampling(target)
                 resultados_dict['Undersampling'] = m4
+
+                print("\n" + "@" * 60 + "\n")
+
+                m5 = treinar_adtree_smoteenn(target)
+                resultados_dict['SMOTEENN'] = m5
+
+                print("\n" + "@" * 60 + "\n")
+
+                m6 = treinar_adtree_smotetomek(target)
+                resultados_dict['SMOTETomek'] = m6
 
                 print("\n" + "@" * 60 + "\n")
 

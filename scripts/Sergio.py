@@ -1,18 +1,28 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.datasets import load_breast_cancer
+from pathlib import Path
 from sklearn.feature_selection import mutual_info_classif
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from scripts.preprocessing.normalizacao import carregar_teste_normalizado
 
-# Carregar dataset
-data = load_breast_cancer()
-X = pd.DataFrame(data.data, columns=data.feature_names)
-y = data.target
+# Carregar e normalizar dataset
+BASE_DIR = Path(__file__).resolve().parent.parent
+df = carregar_teste_normalizado(caminho=str(BASE_DIR / "datasets" / "mestrado-teste.csv"))
 
-tamanho =  X.shape
+# Codificar coluna Sex (F=0, M=1)
+df["Sex"] = df["Sex"].map({"F": 0, "M": 1})
+
+# Definir target e features
+TARGET = "GAD"
+COLUNAS_EXCLUIR = ["Subject", "GAD", "GAD Probabiliy - Gamma", "SAD Probability - Gamma", "Sample Weight"]
+
+y = df[TARGET]
+X = df.drop(columns=COLUNAS_EXCLUIR, errors="ignore")
+
+tamanho = X.shape
 print(tamanho)
 
 # Calcular informação mútua (baseada em entropia)

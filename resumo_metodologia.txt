@@ -1,0 +1,345 @@
+================================================================================
+  RESUMO DE METODOLOGIA — DISSERTACAO DE MESTRADO
+  Deteccao de GAD em Criancas via Aprendizado de Maquina
+  Gerado em: Marco 2026
+================================================================================
+
+DATASET
+--------------------------------------------------------------------------------
+- 287 amostras | 17 features | Target binario: GAD (1) vs. sem GAD (0)
+- Distribuicao: 243 negativos (84.7%) e 44 positivos (15.3%)
+- Validacao: 10-fold Stratified Cross-Validation (mantendo proporcao das classes
+  em cada fold)
+
+
+================================================================================
+1. POR QUE SENSIBILIDADE E A METRICA PRIORITARIA
+================================================================================
+
+Em triagem clinica, o custo de um erro nao e simetrico. Existem dois tipos de
+erro possiveis:
+
+  - Falso Negativo (FN): o modelo diz "crianca sem GAD", mas ela tem GAD.
+    A crianca nao recebe encaminhamento. O transtorno evolui sem intervencao.
+
+  - Falso Positivo (FP): o modelo diz "crianca com GAD", mas ela nao tem.
+    A crianca e encaminhada desnecessariamente para avaliacao. Custo extra,
+    porem sem dano irreversivel.
+
+Sensibilidade (Recall) mede justamente a capacidade do modelo de detectar os
+casos positivos reais: Sens = VP / (VP + FN).
+
+Em transtornos de saude mental infantil, um falso negativo significa uma
+crianca com Transtorno de Ansiedade Generalizada (GAD) que nao recebe
+atencao adequada, com risco de agravamento dos sintomas ao longo do
+desenvolvimento. Portanto, maximizar sensibilidade — mesmo que isso aumente
+os falsos positivos — e clinicamente justificado quando o modelo e usado
+como ferramenta de triagem inicial (screening) e nao como diagnostico
+definitivo.
+
+Essa priorizacao e consistente com a literatura de decisao clinica:
+  - Metz (1978) estabelece que em triagem o ponto de operacao da curva ROC
+    deve favorecer sensibilidade.
+  - Drummond & Holte (2006) discutem que a escolha da metrica deve refletir
+    os custos assimetricos de cada tipo de erro no dominio de aplicacao.
+
+Metricas utilizadas para avaliacao:
+  - Sensibilidade: metrica primaria
+  - F1-Score: media harmonica de precisao e recall
+  - Score Composto: sqrt(Sensibilidade x F1) — penaliza queda em qualquer um
+  - Kappa de Cohen: concordancia alem do acaso (escala Landis & Koch 1977)
+  - Especificidade: complementar, para avaliar o trade-off
+
+
+================================================================================
+2. POR QUE ACCURACY NAO FOI USADA COMO METRICA PRINCIPAL
+================================================================================
+
+Com 84.7% de exemplos negativos, um modelo trivial que classifica todas as
+287 amostras como "sem GAD" atinge Accuracy = 84.7% com Sensibilidade = 0%.
+O SVM sem balanceamento ilustrou isso empiricamente:
+  Accuracy = 84.67% | Sensibilidade = 0.00% | Kappa = 0.000
+
+Accuracy e uma metrica enganosa em datasets desbalanceados. Por isso, F1,
+Kappa e Sensibilidade foram adotados como metricas de referencia neste trabalho.
+
+
+================================================================================
+3. ALGORITMOS UTILIZADOS
+================================================================================
+
+3.1 ADTree (Alternating Decision Tree)
+--------------------------------------
+Implementado via Weka. Arvore de decisao baseada em boosting de regras simples
+(Freund & Mason, 1999). Incluido como modelo interpretavel de referencia.
+Desempenho: abaixo do XGBoost em todas as configuracoes.
+Melhor resultado: Undersampling — Sens=56.8%, Kappa=0.156.
+Features usadas pela arvore: Number of Impairments, Age, Frequency of Temper
+Tantrums, Poverty Status, Sex, Race, Frequency of Irritable Mood.
+
+3.2 SVM com Kernel RBF
+-----------------------
+Support Vector Machine com kernel radial (Cortes & Vapnik, 1995). Algoritmo
+classico de margem maxima, sensivel ao desbalanceamento.
+Desempenho: pior geral.
+Sem balanceamento: Sensibilidade = 0% (classificou tudo como negativo).
+Melhor resultado: Class Weighting — Sens=38.6%, Kappa=0.203.
+
+3.3 XGBoost (Extreme Gradient Boosting)
+-----------------------------------------
+Implementacao de gradient boosting em arvores de decisao (Chen & Guestrin, 2016).
+Algoritmo principal do estudo. Melhor desempenho geral antes da busca de
+hiperparametros.
+Melhor resultado inicial: SMOTE — Sens=34.1%, F1=41.1%, Kappa=0.329.
+Melhor resultado com maximizacao de sensibilidade: M15 SMOTEENN+SPW+F2 —
+Sens=71.5%, F1=38.7%, Kappa=0.209.
+Melhor equilíbrio: BorderlineSMOTE — Sens=41.0%, F1=45.2%, Kappa=0.372.
+
+3.4 HistGradientBoosting (HistGBM)
+------------------------------------
+Implementacao de gradient boosting com histogramas, baseada no LightGBM
+(Ke et al., 2017). Incluida na busca de hiperparametros como alternativa mais
+rapida ao XGBoost para datasets de menor escala. Apresentou resultados
+competitivos.
+Melhor resultado na busca: HistGBM_NearMiss_clinic — Score Composto=0.542,
+Sens=76.0%, F1=38.7%, Kappa=0.204.
+
+3.5 Extra Trees (ET — Extremely Randomized Trees)
+---------------------------------------------------
+Variante de Random Forest com splits completamente aleatorios (Geurts et al.,
+2006). Incluida na busca de hiperparametros. Apresentou o melhor Kappa dentre
+os modelos de alta sensibilidade.
+Melhor resultado na busca: ET_NearMiss_f2_pen — Score Composto=0.529,
+Sens=65.5%, F1=42.7%, Kappa=0.282.
+
+
+================================================================================
+4. TECNICAS DE BALANCEAMENTO TESTADAS
+================================================================================
+
+4.1 Sem balanceamento (baseline)
+  Resultado: alta especificidade, sensibilidade proxima de zero.
+
+4.2 Class Weighting (scale_pos_weight)
+  Penaliza erros na classe minoritaria sem alterar os dados.
+  Ref: Elkan (2001). Cost-sensitive learning. IJCAI.
+  SPW natural (~5.5x) e SPW extremo (~20x) testados.
+  SPW=20: Sens=45.5%, F1=44.4%, Kappa=0.340.
+
+4.3 SMOTE (Synthetic Minority Over-sampling Technique)
+  Gera amostras sinteticas interpolando vizinhos da classe positiva.
+  Ref: Chawla et al. (2002). JAIR, 16, 321-357.
+  Resultado (baseline para comparacoes): Sens=34.5%, F1=37.5%, Kappa=0.307.
+  IMPORTANTE: SMOTE aplicado DENTRO de cada fold de treino, nunca no conjunto
+  de teste — prevenindo data leakage (He & Garcia, 2009).
+
+4.4 ADASYN (Adaptive Synthetic Sampling)
+  Gera mais amostras sinteticas nas regioes de fronteira dificil.
+  Ref: He et al. (2008). IEEE IJCNN, 1322-1328.
+  Resultado: Sens=38.0%, F1=43.1%, Kappa=0.354.
+
+4.5 BorderlineSMOTE
+  SMOTE restrito a amostras proximas a fronteira de decisao.
+  Ref: Han et al. (2005). Advances in Intelligent Computing.
+  Resultado: Sens=41.0%, F1=45.2%, Kappa=0.372 — MELHOR KAPPA GERAL.
+
+4.6 SMOTEENN
+  Combinacao de SMOTE (oversampling) com ENN (limpeza de fronteira).
+  Ref: Batista et al. (2004). ACM SIGKDD Explorations.
+  Resultado: Sens=52.5%, F1=39.1%, Kappa=0.243.
+
+4.7 SMOTETomek
+  Combinacao de SMOTE com remocao de pares Tomek Links.
+  Ref: Batista et al. (2004). ACM SIGKDD Explorations.
+  Resultado: Sens=38.5%, F1=43.2%, Kappa=0.354.
+
+4.8 NearMiss (Undersampling)
+  Seleciona amostras majoritarias proximas aos exemplos minoritarios.
+  Ref: Zhang & Mani (2003). ICML Workshop.
+  Dominante na busca de hiperparametros: ocupou os 10 primeiros lugares
+  do ranking. Com XGBoost: Sens=76.5% (maior sensibilidade absoluta obtida
+  antes do ensemble).
+
+4.9 Random Undersampling (RUS)
+  Remocao aleatoria de amostras da classe majoritaria.
+
+4.10 IHT (Instance Hardness Threshold)
+  Remove amostras majoritarias de alta dificuldade de classificacao.
+  Ref: Smith et al. (2014). Journal of Machine Learning Research.
+
+4.11 EasyEnsemble
+  Multiplos AdaBoosts em subconjuntos balanceados por undersampling.
+  Ref: Liu, Wu & Zhou (2009). IEEE TSMC, 39(2), 539-550.
+  Resultado: Sens=68.5%, F1=38.9%, Kappa=0.217. Melhor para triagem.
+
+4.12 Balanced Random Forest
+  Random Forest com undersampling em cada arvore.
+  Ref: Chen, Liaw & Breiman (2004). UCB Tech Report 666.
+  Resultado: Sens=59.5%, F1=36.2%, Kappa=0.187.
+
+4.13 RUSBoost
+  AdaBoost com undersampling aleatorio a cada iteracao de boosting.
+  Ref: Seiffert et al. (2010). IEEE TSMC, 40(1), 185-197.
+  Resultado: Sens=47.5%, F1=39.1%, Kappa=0.263.
+
+
+================================================================================
+5. OTIMIZACAO DE HIPERPARAMETROS (BUSCA COM NESTED CV)
+================================================================================
+
+Abordagem: RandomizedSearchCV com Nested Cross-Validation
+  - CV externo: 10-fold estratificado (avaliacao)
+  - CV interno: 5-fold estratificado (selecao de hiperparametros)
+  Ref: Varma & Simon (2006). Bias in error estimation. BMC Bioinformatics 7, 91.
+
+Scorings testados:
+  - recall (sensibilidade direta)
+  - F2-score ponderado (beta=2: falsos negativos tem 4x mais custo)
+  - G-mean (media geometrica de sens e spec)
+  - Score clinico customizado (penaliza kappa baixo com alta sens)
+
+Algoritmos na busca: XGBoost, HistGBM, Extra Trees
+Samplers na busca: SMOTE, BorderlineSMOTE, SMOTEENN, NearMiss, RUS, IHT
+
+Correcao metodologica: MinMaxScaler fitado APENAS no conjunto de treino de
+cada fold, aplicado no conjunto de teste sem re-fitting — eliminando data
+leakage na normalizacao.
+
+
+================================================================================
+6. OTIMIZACAO DE THRESHOLD DE DECISAO
+================================================================================
+
+O threshold padrao dos classificadores e 0.50. Reduzir o threshold aumenta
+sensibilidade ao custo de mais falsos positivos.
+
+Metodos de selecao de threshold testados:
+  - Threshold F2-score (Van Rijsbergen, 1979): threshold que maximiza F2
+  - Youden's J (Youden, 1950): maximiza Sens + Spec - 1
+  - Curva Precisao-Recall (Davis & Goadrich, 2006)
+
+Threshold F2 encontrou valores em torno de 0.25-0.30, indicando que o modelo
+deve "suspeitar" com probabilidade moderada, compativel com triagem.
+
+
+================================================================================
+7. RESUMO DOS MELHORES RESULTADOS
+================================================================================
+
+--- Antes da busca de hiperparametros (XGBoost, 18 metodos testados) ---
+
+Metrica prioritaria — Sensibilidade maxima:
+  M15 SMOTEENN + SPW + Threshold F2: Sens=71.5%, F1=38.7%, Kappa=0.209
+  EasyEnsemble:                       Sens=68.5%, F1=38.9%, Kappa=0.217
+
+Melhor equilíbrio de metricas:
+  BorderlineSMOTE:     Sens=41.0%, F1=45.2%, Kappa=0.372  ← KAPPA MAIS ALTO
+  scale_pos_weight=20: Sens=45.5%, F1=44.4%, Kappa=0.340
+
+Baseline (comparacao):
+  SMOTE padrao: Sens=34.5%, F1=37.5%, Kappa=0.307
+
+--- Apos busca de hiperparametros com nested CV (fold-ajustado, sem leakage) ---
+
+Ranking por Score Composto (sqrt(Sens x F1)):
+
+  1. HistGBM + NearMiss + scoring clinico:  Composto=0.542, Sens=76.0%, F1=38.7%, Kappa=0.204
+  2. XGB    + NearMiss + scoring clinico:   Composto=0.533, Sens=76.5%, F1=37.2%, Kappa=0.186
+  3. ET     + NearMiss + scoring F2:        Composto=0.529, Sens=65.5%, F1=42.7%, Kappa=0.282
+  4. XGB    + NearMiss + scoring gmean:     Composto=0.529, Sens=74.5%, F1=37.5%, Kappa=0.192
+  5. ET     + NearMiss + scoring clinico:   Composto=0.526, Sens=65.5%, F1=42.2%, Kappa=0.276
+
+Padrao dominante: NearMiss ocupou todos os 10 primeiros lugares do ranking.
+A otimizacao de hiperparametros elevou a sensibilidade de ~34% para ~76%,
+um ganho de +42 pontos percentuais.
+
+Nota: Kappa ainda baixo (max 0.282 na busca rapida, n_iter=50). A busca media
+(n_iter=200) esta em andamento e pode melhorar esses valores.
+
+
+================================================================================
+8. LIMITACOES RECONHECIDAS
+================================================================================
+
+1. Dataset pequeno: 287 amostras, 44 positivos (~4-5 por fold de teste).
+   Qualquer acerto ou erro a mais altera a sensibilidade em ~20pp.
+   Alta variabilidade: Sens = 76.5% +- 14.2% no melhor modelo.
+
+2. Kappa maximo obtido = 0.372 (BorderlineSMOTE) — concordancia "razoavel"
+   na escala de Landis & Koch (1977). Nenhum modelo atingiu concordancia
+   moderada (Kappa > 0.40).
+
+3. PPV (Valor Preditivo Positivo) baixo nos modelos de alta sensibilidade:
+   25-28%, significando que 3 em 4 alarmes sao falsos positivos. Isso restringe
+   o uso como diagnostico definitivo, mas e aceitavel para triagem inicial.
+
+4. Generalizacao limitada: resultados sao validos para a populacao representada
+   pelo dataset. Validacao externa com outro conjunto seria necessaria.
+
+
+================================================================================
+9. POSICIONAMENTO CLINICO SUGERIDO PARA A DISSERTACAO
+================================================================================
+
+O modelo nao se propoe a substituir avaliacao clinica. O uso recomendado e
+como ferramenta de SCREENING — identificar criancas com suspeita de GAD para
+encaminhamento a avaliacao especializada. Nesse contexto:
+
+  - Alta sensibilidade e prioritaria (nao perder casos reais)
+  - PPV moderado e aceitavel (falsos positivos sao gerenciados na avaliacao
+    clinica subsequente, de menor custo que ignorar um caso real)
+
+Dois modelos complementares podem ser apresentados:
+
+  MODELO A — Equilibrio (uso em consultorio/apoio a decisao):
+    BorderlineSMOTE | Sens=41%, F1=45.2%, Kappa=0.372
+    Melhor concordância com avaliacao clinica real.
+
+  MODELO B — Triagem em escala (uso em ambiente escolar/atencao primaria):
+    EasyEnsemble | Sens=68.5%, F1=38.9%, Kappa=0.217
+    Detecta 30 de 44 criancas com GAD no dataset. Custo: 34% de falsos alarmes.
+
+  Com hiperparametros otimizados (NearMiss + HistGBM/XGBoost):
+    Sensibilidade sobe para ~76%, porem com Kappa ainda mais baixo (~0.20).
+    Adequado quando o objetivo principal for nao perder nenhum caso.
+
+
+================================================================================
+10. REFERENCIAS PRINCIPAIS
+================================================================================
+
+Algoritmos:
+  - Freund & Mason (1999). ADTree. Machine Learning, 36(1-2), 105-139.
+  - Cortes & Vapnik (1995). SVM. Machine Learning, 20(3), 273-297.
+  - Chen & Guestrin (2016). XGBoost. ACM KDD, 785-794.
+  - Geurts et al. (2006). Extra Trees. Machine Learning, 63(1), 3-42.
+  - Ke et al. (2017). LightGBM. NeurIPS, 30.
+
+Balanceamento:
+  - He & Garcia (2009). Learning from imbalanced data. IEEE TKDE, 21(9).
+  - Chawla et al. (2002). SMOTE. JAIR, 16, 321-357.
+  - Han et al. (2005). BorderlineSMOTE. Advances in Intelligent Computing.
+  - He et al. (2008). ADASYN. IEEE IJCNN, 1322-1328.
+  - Batista et al. (2004). SMOTEENN/SMOTETomek. ACM SIGKDD Explorations.
+  - Liu et al. (2009). EasyEnsemble. IEEE TSMC, 39(2), 539-550.
+  - Seiffert et al. (2010). RUSBoost. IEEE TSMC, 40(1), 185-197.
+  - Chen, Liaw & Breiman (2004). Balanced RF. UCB Tech Report 666.
+  - Elkan (2001). Cost-sensitive learning. IJCAI 17(1), 973-978.
+
+Threshold:
+  - Youden (1950). Index for rating diagnostic. Cancer 3(1), 32-35.
+  - Van Rijsbergen (1979). F-beta score. Information Retrieval.
+  - Davis & Goadrich (2006). PR-ROC curves. ICML, 233-240.
+
+Validacao e busca:
+  - Varma & Simon (2006). Bias in error estimation. BMC Bioinformatics 7, 91.
+  - Bergstra & Bengio (2012). Random Search. JMLR 13, 281-305.
+
+Metricas de concordancia:
+  - Landis & Koch (1977). Kappa scale. Biometrics 33(1), 159-174.
+  - Metz (1978). ROC analysis. Semin Nucl Med 8(4), 283-298.
+  - Drummond & Holte (2006). Cost curves. Machine Learning 65(1), 95-130.
+
+================================================================================
+FIM DO RESUMO
+================================================================================

@@ -1,0 +1,1034 @@
+BUSCA DE HIPERPARAMETROS — Fold Ajustado (sem leakage na normalizacao)
+Modo: rapido | n_iter=50
+Correcao: MinMaxScaler aplicado dentro de cada fold (fit apenas no treino)
+================================================================================
+
+
+[XGB_SMOTEENN_gmean] (1.0 min)
+  Scorer:      gmean
+  Sensitivity: 62.00% +- 11.34%
+  Specificity: 72.37%
+  F1-Score:    40.90% +- 10.45%
+  PPV:         31.97%
+  Kappa:       0.2522
+  Threshold:   0.637
+  Composto:    0.5036
+  Matriz: VN=176 FP=67 FN=17 VP=27
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6958
+    colsample_bytree            : 0.7194
+    gamma                       : 0.0014
+    learning_rate               : 0.0529
+    max_depth                   : 5.5000
+    min_child_weight            : 6.5000
+    n_estimators                : 223.5000
+    reg_alpha                   : 0.0676
+    reg_lambda                  : 2.9373
+    scale_pos_weight            : 3.9477
+    subsample                   : 0.7472
+
+[XGB_BorderlineSMOTE_gmean] (1.2 min)
+  Scorer:      gmean
+  Sensitivity: 50.50% +- 14.15%
+  Specificity: 79.38%
+  F1-Score:    37.76% +- 6.61%
+  PPV:         32.83%
+  Kappa:       0.2383
+  Threshold:   0.658
+  Composto:    0.4367
+  Matriz: VN=193 FP=50 FN=22 VP=22
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6945
+    colsample_bytree            : 0.6375
+    gamma                       : 0.0041
+    learning_rate               : 0.0322
+    max_depth                   : 5.0000
+    min_child_weight            : 8.0000
+    n_estimators                : 266.5000
+    reg_alpha                   : 0.0072
+    reg_lambda                  : 0.3623
+    scale_pos_weight            : 3.2814
+    subsample                   : 0.8639
+    sampler.k_neighbors         : 4.0000
+    sampler.m_neighbors         : 12.0000
+
+[XGB_SMOTE_gmean] (0.9 min)
+  Scorer:      gmean
+  Sensitivity: 62.00% +- 18.49%
+  Specificity: 75.78%
+  F1-Score:    40.78% +- 7.92%
+  PPV:         32.46%
+  Kappa:       0.2650
+  Threshold:   0.573
+  Composto:    0.5028
+  Matriz: VN=184 FP=59 FN=17 VP=27
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.5870
+    colsample_bytree            : 0.5669
+    gamma                       : 0.0025
+    learning_rate               : 0.0258
+    max_depth                   : 6.0000
+    min_child_weight            : 9.0000
+    n_estimators                : 162.0000
+    reg_alpha                   : 0.0044
+    reg_lambda                  : 0.4060
+    scale_pos_weight            : 3.2153
+    subsample                   : 0.8971
+    sampler.k_neighbors         : 3.5000
+
+[XGB_NearMiss_gmean] (0.6 min)
+  Scorer:      gmean
+  Sensitivity: 74.50% +- 16.12%
+  Specificity: 56.68%
+  F1-Score:    37.54% +- 9.39%
+  PPV:         26.86%
+  Kappa:       0.1919
+  Threshold:   0.548
+  Composto:    0.5288
+  Matriz: VN=137 FP=106 FN=12 VP=32
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6423
+    colsample_bytree            : 0.4389
+    gamma                       : 0.0012
+    learning_rate               : 0.0041
+    max_depth                   : 8.0000
+    min_child_weight            : 2.0000
+    n_estimators                : 436.0000
+    reg_alpha                   : 0.0020
+    reg_lambda                  : 0.3713
+    scale_pos_weight            : 1.1168
+    subsample                   : 0.8048
+    sampler.n_neighbors         : 3.0000
+
+[XGB_RUS_gmean] (0.6 min)
+  Scorer:      gmean
+  Sensitivity: 50.50% +- 16.47%
+  Specificity: 78.58%
+  F1-Score:    37.77% +- 12.32%
+  PPV:         30.45%
+  Kappa:       0.2292
+  Threshold:   0.626
+  Composto:    0.4367
+  Matriz: VN=191 FP=52 FN=22 VP=22
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.7080
+    colsample_bytree            : 0.5283
+    gamma                       : 0.0316
+    learning_rate               : 0.0440
+    max_depth                   : 6.0000
+    min_child_weight            : 5.0000
+    n_estimators                : 194.0000
+    reg_alpha                   : 0.0068
+    reg_lambda                  : 0.5884
+    scale_pos_weight            : 3.2814
+    subsample                   : 0.9060
+    sampler.sampling_strategy   : 0.4209
+
+[XGB_IHT_gmean] (7.6 min)
+  Scorer:      gmean
+  Sensitivity: 76.00% +- 17.83%
+  Specificity: 49.43%
+  F1-Score:    32.89% +- 5.53%
+  PPV:         21.36%
+  Kappa:       0.1208
+  Threshold:   0.640
+  Composto:    0.5000
+  Matriz: VN=120 FP=123 FN=11 VP=33
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.8821
+    colsample_bytree            : 0.5646
+    gamma                       : 0.0026
+    learning_rate               : 0.0104
+    max_depth                   : 8.0000
+    min_child_weight            : 5.0000
+    n_estimators                : 253.5000
+    reg_alpha                   : 0.1402
+    reg_lambda                  : 0.2407
+    scale_pos_weight            : 1.5435
+    subsample                   : 0.7447
+
+[HistGBM_SMOTEENN_gmean] (2.0 min)
+  Scorer:      gmean
+  Sensitivity: 68.00% +- 18.18%
+  Specificity: 64.77%
+  F1-Score:    37.61% +- 6.89%
+  PPV:         27.86%
+  Kappa:       0.2084
+  Threshold:   0.508
+  Composto:    0.5057
+  Matriz: VN=157 FP=86 FN=14 VP=30
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    l2_regularization           : 0.0383
+    learning_rate               : 0.0115
+    max_bins                    : 158.0000
+    max_depth                   : 5.0000
+    max_iter                    : 228.0000
+    max_leaf_nodes              : 41.0000
+    min_samples_leaf            : 43.0000
+
+[HistGBM_BorderlineSMOTE_gmean] (2.4 min)
+  Scorer:      gmean
+  Sensitivity: 54.50% +- 19.40%
+  Specificity: 69.88%
+  F1-Score:    33.39% +- 9.13%
+  PPV:         25.52%
+  Kappa:       0.1634
+  Threshold:   0.362
+  Composto:    0.4266
+  Matriz: VN=170 FP=73 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0025
+    learning_rate               : 0.0057
+    max_bins                    : 193.0000
+    max_depth                   : 2.5000
+    max_iter                    : 250.0000
+    max_leaf_nodes              : 26.5000
+    min_samples_leaf            : 37.0000
+    sampler.k_neighbors         : 3.0000
+    sampler.m_neighbors         : 10.5000
+
+[HistGBM_SMOTE_gmean] (2.7 min)
+  Scorer:      gmean
+  Sensitivity: 59.00% +- 17.51%
+  Specificity: 73.62%
+  F1-Score:    39.43% +- 11.80%
+  PPV:         30.79%
+  Kappa:       0.2400
+  Threshold:   0.430
+  Composto:    0.4823
+  Matriz: VN=179 FP=64 FN=18 VP=26
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0825
+    learning_rate               : 0.0031
+    max_bins                    : 123.0000
+    max_depth                   : 4.0000
+    max_iter                    : 341.0000
+    max_leaf_nodes              : 15.0000
+    min_samples_leaf            : 22.0000
+    sampler.k_neighbors         : 4.0000
+
+[HistGBM_NearMiss_gmean] (1.1 min)
+  Scorer:      gmean
+  Sensitivity: 71.00% +- 14.78%
+  Specificity: 61.00%
+  F1-Score:    37.86% +- 8.67%
+  PPV:         26.92%
+  Kappa:       0.2000
+  Threshold:   0.513
+  Composto:    0.5184
+  Matriz: VN=148 FP=95 FN=13 VP=31
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    l2_regularization           : 0.0114
+    learning_rate               : 0.0129
+    max_bins                    : 112.0000
+    max_depth                   : 5.0000
+    max_iter                    : 323.5000
+    max_leaf_nodes              : 26.5000
+    min_samples_leaf            : 24.5000
+    sampler.n_neighbors         : 3.0000
+
+[HistGBM_RUS_gmean] (1.4 min)
+  Scorer:      gmean
+  Sensitivity: 55.00% +- 17.11%
+  Specificity: 66.93%
+  F1-Score:    34.37% +- 14.66%
+  PPV:         26.25%
+  Kappa:       0.1627
+  Threshold:   0.462
+  Composto:    0.4348
+  Matriz: VN=163 FP=80 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0027
+    learning_rate               : 0.0334
+    max_bins                    : 155.5000
+    max_depth                   : 4.0000
+    max_iter                    : 265.0000
+    max_leaf_nodes              : 45.5000
+    min_samples_leaf            : 20.5000
+    sampler.sampling_strategy   : 0.6374
+
+[ET_SMOTEENN_gmean] (5.8 min)
+  Scorer:      gmean
+  Sensitivity: 64.00% +- 17.67%
+  Specificity: 63.08%
+  F1-Score:    33.95% +- 6.12%
+  PPV:         23.88%
+  Kappa:       0.1560
+  Threshold:   0.428
+  Composto:    0.4661
+  Matriz: VN=153 FP=90 FN=16 VP=28
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    max_depth                   : 9.5000
+    max_features                : 0.3000
+    min_samples_leaf            : 9.0000
+    min_samples_split           : 7.5000
+    n_estimators                : 233.5000
+
+[ET_BorderlineSMOTE_gmean] (5.7 min)
+  Scorer:      gmean
+  Sensitivity: 66.00% +- 19.86%
+  Specificity: 70.03%
+  F1-Score:    38.55% +- 7.00%
+  PPV:         28.91%
+  Kappa:       0.2287
+  Threshold:   0.433
+  Composto:    0.5044
+  Matriz: VN=170 FP=73 FN=15 VP=29
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    max_depth                   : 4.0000
+    max_features                : sqrt
+    min_samples_leaf            : 10.5000
+    min_samples_split           : 11.5000
+    n_estimators                : 201.0000
+    sampler.k_neighbors         : 4.0000
+    sampler.m_neighbors         : 15.5000
+
+[ET_SMOTE_gmean] (4.8 min)
+  Scorer:      gmean
+  Sensitivity: 54.00% +- 16.50%
+  Specificity: 76.55%
+  F1-Score:    38.98% +- 11.12%
+  PPV:         31.61%
+  Kappa:       0.2410
+  Threshold:   0.450
+  Composto:    0.4588
+  Matriz: VN=186 FP=57 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced_subsample
+    max_depth                   : 6.5000
+    max_features                : 0.3000
+    min_samples_leaf            : 10.5000
+    min_samples_split           : 14.0000
+    n_estimators                : 242.0000
+    sampler.k_neighbors         : 6.0000
+
+[ET_NearMiss_gmean] (4.1 min)
+  Scorer:      gmean
+  Sensitivity: 63.00% +- 22.13%
+  Specificity: 75.68%
+  F1-Score:    41.68% +- 10.04%
+  PPV:         38.62%
+  Kappa:       0.2781
+  Threshold:   0.563
+  Composto:    0.5125
+  Matriz: VN=184 FP=59 FN=16 VP=28
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced_subsample
+    max_depth                   : 5.0000
+    max_features                : log2
+    min_samples_leaf            : 7.0000
+    min_samples_split           : 12.5000
+    n_estimators                : 255.5000
+    sampler.n_neighbors         : 2.0000
+
+[ET_RUS_gmean] (4.2 min)
+  Scorer:      gmean
+  Sensitivity: 60.00% +- 21.98%
+  Specificity: 68.70%
+  F1-Score:    35.83% +- 10.27%
+  PPV:         28.77%
+  Kappa:       0.1942
+  Threshold:   0.478
+  Composto:    0.4637
+  Matriz: VN=167 FP=76 FN=18 VP=26
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced_subsample
+    max_depth                   : 11.5000
+    max_features                : log2
+    min_samples_leaf            : 4.0000
+    min_samples_split           : 10.5000
+    n_estimators                : 272.5000
+    sampler.sampling_strategy   : 0.7149
+
+[XGB_SMOTEENN_clinic] (0.9 min)
+  Scorer:      clinic
+  Sensitivity: 69.00% +- 16.24%
+  Specificity: 65.08%
+  F1-Score:    37.24% +- 6.49%
+  PPV:         25.85%
+  Kappa:       0.1964
+  Threshold:   0.607
+  Composto:    0.5069
+  Matriz: VN=158 FP=85 FN=14 VP=30
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6174
+    colsample_bytree            : 0.7985
+    gamma                       : 0.0587
+    learning_rate               : 0.0413
+    max_depth                   : 6.5000
+    min_child_weight            : 10.0000
+    n_estimators                : 295.0000
+    reg_alpha                   : 0.0890
+    reg_lambda                  : 2.4192
+    scale_pos_weight            : 6.0544
+    subsample                   : 0.7043
+
+[XGB_BorderlineSMOTE_clinic] (1.2 min)
+  Scorer:      clinic
+  Sensitivity: 52.50% +- 16.37%
+  Specificity: 78.57%
+  F1-Score:    38.95% +- 8.75%
+  PPV:         33.76%
+  Kappa:       0.2509
+  Threshold:   0.709
+  Composto:    0.4522
+  Matriz: VN=191 FP=52 FN=21 VP=23
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6346
+    colsample_bytree            : 0.5685
+    gamma                       : 0.0062
+    learning_rate               : 0.0226
+    max_depth                   : 4.5000
+    min_child_weight            : 10.0000
+    n_estimators                : 269.0000
+    reg_alpha                   : 0.0031
+    reg_lambda                  : 0.3623
+    scale_pos_weight            : 10.1970
+    subsample                   : 0.8739
+    sampler.k_neighbors         : 6.0000
+    sampler.m_neighbors         : 8.5000
+
+[XGB_SMOTE_clinic] (0.9 min)
+  Scorer:      clinic
+  Sensitivity: 54.50% +- 17.48%
+  Specificity: 76.20%
+  F1-Score:    38.12% +- 9.98%
+  PPV:         31.91%
+  Kappa:       0.2360
+  Threshold:   0.685
+  Composto:    0.4558
+  Matriz: VN=185 FP=58 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.5935
+    colsample_bytree            : 0.5637
+    gamma                       : 0.0014
+    learning_rate               : 0.0430
+    max_depth                   : 3.5000
+    min_child_weight            : 13.0000
+    n_estimators                : 124.0000
+    reg_alpha                   : 0.1548
+    reg_lambda                  : 2.1390
+    scale_pos_weight            : 8.8945
+    subsample                   : 0.8404
+    sampler.k_neighbors         : 3.0000
+
+[XGB_NearMiss_clinic] (0.6 min)
+  Scorer:      clinic
+  Sensitivity: 76.50% +- 14.21%
+  Specificity: 55.43%
+  F1-Score:    37.16% +- 6.96%
+  PPV:         25.63%
+  Kappa:       0.1855
+  Threshold:   0.552
+  Composto:    0.5332
+  Matriz: VN=134 FP=109 FN=11 VP=33
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6423
+    colsample_bytree            : 0.4389
+    gamma                       : 0.0030
+    learning_rate               : 0.0041
+    max_depth                   : 7.0000
+    min_child_weight            : 2.0000
+    n_estimators                : 436.0000
+    reg_alpha                   : 0.0020
+    reg_lambda                  : 0.3713
+    scale_pos_weight            : 1.1168
+    subsample                   : 0.8048
+    sampler.n_neighbors         : 3.0000
+
+[XGB_RUS_clinic] (0.6 min)
+  Scorer:      clinic
+  Sensitivity: 52.50% +- 17.70%
+  Specificity: 78.58%
+  F1-Score:    38.23% +- 10.20%
+  PPV:         31.40%
+  Kappa:       0.2380
+  Threshold:   0.730
+  Composto:    0.4480
+  Matriz: VN=191 FP=52 FN=21 VP=23
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.5951
+    colsample_bytree            : 0.5027
+    gamma                       : 0.0552
+    learning_rate               : 0.0844
+    max_depth                   : 4.5000
+    min_child_weight            : 3.0000
+    n_estimators                : 150.0000
+    reg_alpha                   : 0.0359
+    reg_lambda                  : 2.0746
+    scale_pos_weight            : 7.7667
+    subsample                   : 0.9211
+    sampler.sampling_strategy   : 0.4462
+
+[XGB_IHT_clinic] (7.9 min)
+  Scorer:      clinic
+  Sensitivity: 74.00% +- 16.84%
+  Specificity: 50.60%
+  F1-Score:    32.81% +- 6.79%
+  PPV:         21.16%
+  Kappa:       0.1179
+  Threshold:   0.741
+  Composto:    0.4927
+  Matriz: VN=123 FP=120 FN=12 VP=32
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.9367
+    colsample_bytree            : 0.5601
+    gamma                       : 0.0409
+    learning_rate               : 0.0539
+    max_depth                   : 8.0000
+    min_child_weight            : 3.0000
+    n_estimators                : 273.0000
+    reg_alpha                   : 0.2124
+    reg_lambda                  : 0.3014
+    scale_pos_weight            : 2.1148
+    subsample                   : 0.7675
+
+[HistGBM_SMOTEENN_clinic] (2.1 min)
+  Scorer:      clinic
+  Sensitivity: 72.50% +- 18.79%
+  Specificity: 56.57%
+  F1-Score:    35.23% +- 7.01%
+  PPV:         24.74%
+  Kappa:       0.1653
+  Threshold:   0.512
+  Composto:    0.5054
+  Matriz: VN=137 FP=106 FN=12 VP=32
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    l2_regularization           : 0.6358
+    learning_rate               : 0.0022
+    max_bins                    : 198.0000
+    max_depth                   : 3.0000
+    max_iter                    : 252.5000
+    max_leaf_nodes              : 47.0000
+    min_samples_leaf            : 37.0000
+
+[HistGBM_BorderlineSMOTE_clinic] (2.5 min)
+  Scorer:      clinic
+  Sensitivity: 54.50% +- 18.20%
+  Specificity: 71.55%
+  F1-Score:    35.02% +- 9.33%
+  PPV:         27.63%
+  Kappa:       0.1887
+  Threshold:   0.341
+  Composto:    0.4368
+  Matriz: VN=174 FP=69 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0025
+    learning_rate               : 0.0079
+    max_bins                    : 193.0000
+    max_depth                   : 2.5000
+    max_iter                    : 257.0000
+    max_leaf_nodes              : 30.0000
+    min_samples_leaf            : 28.5000
+    sampler.k_neighbors         : 6.0000
+    sampler.m_neighbors         : 13.5000
+
+[HistGBM_SMOTE_clinic] (2.6 min)
+  Scorer:      clinic
+  Sensitivity: 59.00% +- 17.51%
+  Specificity: 73.62%
+  F1-Score:    39.43% +- 11.80%
+  PPV:         30.79%
+  Kappa:       0.2400
+  Threshold:   0.430
+  Composto:    0.4823
+  Matriz: VN=179 FP=64 FN=18 VP=26
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0825
+    learning_rate               : 0.0031
+    max_bins                    : 123.0000
+    max_depth                   : 4.0000
+    max_iter                    : 341.0000
+    max_leaf_nodes              : 15.0000
+    min_samples_leaf            : 22.0000
+    sampler.k_neighbors         : 4.0000
+
+[HistGBM_NearMiss_clinic] (1.1 min)
+  Scorer:      clinic
+  Sensitivity: 76.00% +- 12.48%
+  Specificity: 57.35%
+  F1-Score:    38.71% +- 8.59%
+  PPV:         27.01%
+  Kappa:       0.2042
+  Threshold:   0.534
+  Composto:    0.5424
+  Matriz: VN=139 FP=104 FN=11 VP=33
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    l2_regularization           : 0.0111
+    learning_rate               : 0.0130
+    max_bins                    : 136.5000
+    max_depth                   : 6.5000
+    max_iter                    : 297.0000
+    max_leaf_nodes              : 24.0000
+    min_samples_leaf            : 25.0000
+    sampler.n_neighbors         : 3.0000
+
+[HistGBM_RUS_clinic] (1.3 min)
+  Scorer:      clinic
+  Sensitivity: 57.50% +- 15.48%
+  Specificity: 68.18%
+  F1-Score:    37.09% +- 14.45%
+  PPV:         28.63%
+  Kappa:       0.1968
+  Threshold:   0.455
+  Composto:    0.4618
+  Matriz: VN=166 FP=77 FN=19 VP=25
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0099
+    learning_rate               : 0.0108
+    max_bins                    : 144.0000
+    max_depth                   : 3.5000
+    max_iter                    : 334.5000
+    max_leaf_nodes              : 46.5000
+    min_samples_leaf            : 29.0000
+    sampler.sampling_strategy   : 0.4709
+
+[ET_SMOTEENN_clinic] (4.9 min)
+  Scorer:      clinic
+  Sensitivity: 61.00% +- 17.42%
+  Specificity: 67.92%
+  F1-Score:    35.46% +- 6.96%
+  PPV:         25.81%
+  Kappa:       0.1826
+  Threshold:   0.487
+  Composto:    0.4651
+  Matriz: VN=165 FP=78 FN=17 VP=27
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    max_depth                   : 7.5000
+    max_features                : log2
+    min_samples_leaf            : 10.0000
+    min_samples_split           : 7.0000
+    n_estimators                : 228.0000
+
+[ET_BorderlineSMOTE_clinic] (4.6 min)
+  Scorer:      clinic
+  Sensitivity: 61.00% +- 16.07%
+  Specificity: 74.08%
+  F1-Score:    39.81% +- 7.79%
+  PPV:         30.67%
+  Kappa:       0.2457
+  Threshold:   0.447
+  Composto:    0.4928
+  Matriz: VN=180 FP=63 FN=17 VP=27
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    max_depth                   : 4.0000
+    max_features                : sqrt
+    min_samples_leaf            : 10.5000
+    min_samples_split           : 12.0000
+    n_estimators                : 166.5000
+    sampler.k_neighbors         : 9.0000
+    sampler.m_neighbors         : 15.0000
+
+[ET_SMOTE_clinic] (4.8 min)
+  Scorer:      clinic
+  Sensitivity: 54.50% +- 17.48%
+  Specificity: 78.25%
+  F1-Score:    39.85% +- 11.35%
+  PPV:         32.38%
+  Kappa:       0.2553
+  Threshold:   0.453
+  Composto:    0.4660
+  Matriz: VN=190 FP=53 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced_subsample
+    max_depth                   : 6.5000
+    max_features                : 0.3000
+    min_samples_leaf            : 9.0000
+    min_samples_split           : 10.0000
+    n_estimators                : 267.5000
+    sampler.k_neighbors         : 5.5000
+
+[ET_NearMiss_clinic] (4.2 min)
+  Scorer:      clinic
+  Sensitivity: 65.50% +- 20.33%
+  Specificity: 74.42%
+  F1-Score:    42.20% +- 10.17%
+  PPV:         32.67%
+  Kappa:       0.2763
+  Threshold:   0.555
+  Composto:    0.5257
+  Matriz: VN=181 FP=62 FN=15 VP=29
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    max_depth                   : 14.0000
+    max_features                : log2
+    min_samples_leaf            : 5.0000
+    min_samples_split           : 15.0000
+    n_estimators                : 273.0000
+    sampler.n_neighbors         : 2.0000
+
+[ET_RUS_clinic] (4.1 min)
+  Scorer:      clinic
+  Sensitivity: 61.50% +- 15.55%
+  Specificity: 65.93%
+  F1-Score:    35.21% +- 6.38%
+  PPV:         26.23%
+  Kappa:       0.1766
+  Threshold:   0.470
+  Composto:    0.4653
+  Matriz: VN=160 FP=83 FN=17 VP=27
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    max_depth                   : 12.5000
+    max_features                : 0.3000
+    min_samples_leaf            : 5.0000
+    min_samples_split           : 10.0000
+    n_estimators                : 216.5000
+    sampler.sampling_strategy   : 0.7549
+
+[XGB_SMOTEENN_f2_pen] (0.9 min)
+  Scorer:      f2_pen
+  Sensitivity: 59.00% +- 16.76%
+  Specificity: 68.33%
+  F1-Score:    34.43% +- 7.40%
+  PPV:         24.71%
+  Kappa:       0.1688
+  Threshold:   0.695
+  Composto:    0.4507
+  Matriz: VN=166 FP=77 FN=18 VP=26
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6174
+    colsample_bytree            : 0.8058
+    gamma                       : 0.0394
+    learning_rate               : 0.0409
+    max_depth                   : 8.0000
+    min_child_weight            : 7.0000
+    n_estimators                : 341.0000
+    reg_alpha                   : 0.1160
+    reg_lambda                  : 2.0284
+    scale_pos_weight            : 7.6384
+    subsample                   : 0.6330
+
+[XGB_BorderlineSMOTE_f2_pen] (1.3 min)
+  Scorer:      f2_pen
+  Sensitivity: 52.50% +- 16.37%
+  Specificity: 78.57%
+  F1-Score:    38.95% +- 8.75%
+  PPV:         33.76%
+  Kappa:       0.2509
+  Threshold:   0.709
+  Composto:    0.4522
+  Matriz: VN=191 FP=52 FN=21 VP=23
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6346
+    colsample_bytree            : 0.5685
+    gamma                       : 0.0062
+    learning_rate               : 0.0226
+    max_depth                   : 4.5000
+    min_child_weight            : 10.0000
+    n_estimators                : 269.0000
+    reg_alpha                   : 0.0031
+    reg_lambda                  : 0.3623
+    scale_pos_weight            : 10.1970
+    subsample                   : 0.8739
+    sampler.k_neighbors         : 6.0000
+    sampler.m_neighbors         : 8.5000
+
+[XGB_SMOTE_f2_pen] (1.0 min)
+  Scorer:      f2_pen
+  Sensitivity: 57.00% +- 19.89%
+  Specificity: 74.15%
+  F1-Score:    37.45% +- 10.37%
+  PPV:         30.13%
+  Kappa:       0.2224
+  Threshold:   0.676
+  Composto:    0.4620
+  Matriz: VN=180 FP=63 FN=19 VP=25
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.5895
+    colsample_bytree            : 0.5564
+    gamma                       : 0.0079
+    learning_rate               : 0.0332
+    max_depth                   : 3.0000
+    min_child_weight            : 12.5000
+    n_estimators                : 124.0000
+    reg_alpha                   : 0.0048
+    reg_lambda                  : 0.9448
+    scale_pos_weight            : 6.6882
+    subsample                   : 0.8147
+    sampler.k_neighbors         : 3.5000
+
+[XGB_NearMiss_f2_pen] (0.6 min)
+  Scorer:      f2_pen
+  Sensitivity: 74.00% +- 15.44%
+  Specificity: 57.43%
+  F1-Score:    36.97% +- 7.10%
+  PPV:         25.69%
+  Kappa:       0.1856
+  Threshold:   0.571
+  Composto:    0.5230
+  Matriz: VN=139 FP=104 FN=12 VP=32
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.6423
+    colsample_bytree            : 0.4389
+    gamma                       : 0.0085
+    learning_rate               : 0.0075
+    max_depth                   : 7.0000
+    min_child_weight            : 2.0000
+    n_estimators                : 436.0000
+    reg_alpha                   : 0.0020
+    reg_lambda                  : 0.3713
+    scale_pos_weight            : 1.3438
+    subsample                   : 0.7794
+    sampler.n_neighbors         : 3.0000
+
+[XGB_RUS_f2_pen] (0.6 min)
+  Scorer:      f2_pen
+  Sensitivity: 60.00% +- 17.20%
+  Specificity: 74.00%
+  F1-Score:    40.34% +- 11.35%
+  PPV:         31.88%
+  Kappa:       0.2507
+  Threshold:   0.684
+  Composto:    0.4920
+  Matriz: VN=180 FP=63 FN=18 VP=26
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.5822
+    colsample_bytree            : 0.5027
+    gamma                       : 0.1788
+    learning_rate               : 0.0592
+    max_depth                   : 5.0000
+    min_child_weight            : 3.0000
+    n_estimators                : 117.5000
+    reg_alpha                   : 0.0072
+    reg_lambda                  : 1.6065
+    scale_pos_weight            : 3.2814
+    subsample                   : 0.9335
+    sampler.sampling_strategy   : 0.6052
+
+[XGB_IHT_f2_pen] (5.4 min)
+  Scorer:      f2_pen
+  Sensitivity: 74.00% +- 16.84%
+  Specificity: 52.73%
+  F1-Score:    33.38% +- 5.92%
+  PPV:         21.77%
+  Kappa:       0.1298
+  Threshold:   0.809
+  Composto:    0.4970
+  Matriz: VN=128 FP=115 FN=12 VP=32
+  Parametros (consenso dos 10 folds):
+    colsample_bylevel           : 0.8821
+    colsample_bytree            : 0.5527
+    gamma                       : 0.0409
+    learning_rate               : 0.0717
+    max_depth                   : 5.0000
+    min_child_weight            : 2.0000
+    n_estimators                : 304.0000
+    reg_alpha                   : 0.1402
+    reg_lambda                  : 0.6184
+    scale_pos_weight            : 10.9940
+    subsample                   : 0.7221
+
+[HistGBM_SMOTEENN_f2_pen] (1.7 min)
+  Scorer:      f2_pen
+  Sensitivity: 67.50% +- 18.02%
+  Specificity: 56.60%
+  F1-Score:    33.32% +- 6.63%
+  PPV:         23.64%
+  Kappa:       0.1425
+  Threshold:   0.520
+  Composto:    0.4743
+  Matriz: VN=137 FP=106 FN=14 VP=30
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    l2_regularization           : 0.0516
+    learning_rate               : 0.0022
+    max_bins                    : 198.0000
+    max_depth                   : 4.0000
+    max_iter                    : 237.5000
+    max_leaf_nodes              : 43.0000
+    min_samples_leaf            : 37.0000
+
+[HistGBM_BorderlineSMOTE_f2_pen] (2.0 min)
+  Scorer:      f2_pen
+  Sensitivity: 54.50% +- 19.40%
+  Specificity: 69.88%
+  F1-Score:    33.39% +- 9.13%
+  PPV:         25.52%
+  Kappa:       0.1634
+  Threshold:   0.362
+  Composto:    0.4266
+  Matriz: VN=170 FP=73 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0025
+    learning_rate               : 0.0057
+    max_bins                    : 193.0000
+    max_depth                   : 2.5000
+    max_iter                    : 250.0000
+    max_leaf_nodes              : 26.5000
+    min_samples_leaf            : 37.0000
+    sampler.k_neighbors         : 3.0000
+    sampler.m_neighbors         : 10.5000
+
+[HistGBM_SMOTE_f2_pen] (2.1 min)
+  Scorer:      f2_pen
+  Sensitivity: 61.50% +- 15.55%
+  Specificity: 72.42%
+  F1-Score:    40.28% +- 11.24%
+  PPV:         31.01%
+  Kappa:       0.2463
+  Threshold:   0.433
+  Composto:    0.4977
+  Matriz: VN=176 FP=67 FN=17 VP=27
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.1383
+    learning_rate               : 0.0044
+    max_bins                    : 123.0000
+    max_depth                   : 2.5000
+    max_iter                    : 341.0000
+    max_leaf_nodes              : 12.0000
+    min_samples_leaf            : 22.0000
+    sampler.k_neighbors         : 4.0000
+
+[HistGBM_NearMiss_f2_pen] (0.9 min)
+  Scorer:      f2_pen
+  Sensitivity: 71.00% +- 12.14%
+  Specificity: 61.52%
+  F1-Score:    38.54% +- 8.09%
+  PPV:         27.53%
+  Kappa:       0.2098
+  Threshold:   0.554
+  Composto:    0.5231
+  Matriz: VN=149 FP=94 FN=13 VP=31
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    l2_regularization           : 0.0114
+    learning_rate               : 0.0085
+    max_bins                    : 136.5000
+    max_depth                   : 8.0000
+    max_iter                    : 273.0000
+    max_leaf_nodes              : 25.5000
+    min_samples_leaf            : 21.0000
+    sampler.n_neighbors         : 3.5000
+
+[HistGBM_RUS_f2_pen] (1.0 min)
+  Scorer:      f2_pen
+  Sensitivity: 59.50% +- 14.84%
+  Specificity: 65.68%
+  F1-Score:    36.56% +- 14.22%
+  PPV:         27.56%
+  Kappa:       0.1847
+  Threshold:   0.438
+  Composto:    0.4664
+  Matriz: VN=160 FP=83 FN=18 VP=26
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    l2_regularization           : 0.0070
+    learning_rate               : 0.0411
+    max_bins                    : 153.5000
+    max_depth                   : 4.0000
+    max_iter                    : 250.0000
+    max_leaf_nodes              : 34.0000
+    min_samples_leaf            : 29.0000
+    sampler.sampling_strategy   : 0.7173
+
+[ET_SMOTEENN_f2_pen] (4.0 min)
+  Scorer:      f2_pen
+  Sensitivity: 61.00% +- 17.42%
+  Specificity: 66.67%
+  F1-Score:    34.87% +- 6.99%
+  PPV:         25.23%
+  Kappa:       0.1728
+  Threshold:   0.479
+  Composto:    0.4612
+  Matriz: VN=162 FP=81 FN=17 VP=27
+  Parametros (consenso dos 10 folds):
+    class_weight                : None
+    max_depth                   : 7.5000
+    max_features                : 0.3000
+    min_samples_leaf            : 9.0000
+    min_samples_split           : 7.0000
+    n_estimators                : 228.0000
+
+[ET_BorderlineSMOTE_f2_pen] (3.7 min)
+  Scorer:      f2_pen
+  Sensitivity: 66.00% +- 19.86%
+  Specificity: 70.03%
+  F1-Score:    38.55% +- 7.00%
+  PPV:         28.91%
+  Kappa:       0.2287
+  Threshold:   0.433
+  Composto:    0.5044
+  Matriz: VN=170 FP=73 FN=15 VP=29
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    max_depth                   : 4.0000
+    max_features                : sqrt
+    min_samples_leaf            : 10.5000
+    min_samples_split           : 11.5000
+    n_estimators                : 201.0000
+    sampler.k_neighbors         : 4.0000
+    sampler.m_neighbors         : 15.5000
+
+[ET_SMOTE_f2_pen] (3.9 min)
+  Scorer:      f2_pen
+  Sensitivity: 54.00% +- 16.50%
+  Specificity: 76.55%
+  F1-Score:    38.98% +- 11.12%
+  PPV:         31.61%
+  Kappa:       0.2410
+  Threshold:   0.450
+  Composto:    0.4588
+  Matriz: VN=186 FP=57 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced_subsample
+    max_depth                   : 6.5000
+    max_features                : 0.3000
+    min_samples_leaf            : 10.5000
+    min_samples_split           : 14.0000
+    n_estimators                : 242.0000
+    sampler.k_neighbors         : 6.0000
+
+[ET_NearMiss_f2_pen] (3.4 min)
+  Scorer:      f2_pen
+  Sensitivity: 65.50% +- 20.33%
+  Specificity: 74.80%
+  F1-Score:    42.74% +- 11.11%
+  PPV:         32.97%
+  Kappa:       0.2823
+  Threshold:   0.571
+  Composto:    0.5291
+  Matriz: VN=182 FP=61 FN=15 VP=29
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    max_depth                   : 12.0000
+    max_features                : 0.3000
+    min_samples_leaf            : 4.0000
+    min_samples_split           : 15.0000
+    n_estimators                : 291.5000
+    sampler.n_neighbors         : 2.0000
+
+[ET_RUS_f2_pen] (3.8 min)
+  Scorer:      f2_pen
+  Sensitivity: 55.00% +- 19.59%
+  Specificity: 74.83%
+  F1-Score:    36.77% +- 10.32%
+  PPV:         30.00%
+  Kappa:       0.2128
+  Threshold:   0.501
+  Composto:    0.4497
+  Matriz: VN=182 FP=61 FN=20 VP=24
+  Parametros (consenso dos 10 folds):
+    class_weight                : balanced
+    max_depth                   : 13.5000
+    max_features                : log2
+    min_samples_leaf            : 4.0000
+    min_samples_split           : 9.5000
+    n_estimators                : 242.5000
+    sampler.sampling_strategy   : 0.7549
