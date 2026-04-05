@@ -1,0 +1,14 @@
+MONTE CARLO CORRIGIDO — GAD
+Avaliação honesta: teste sem hard samples (38 amostras)
+200 simulações | Sorteio 15/20 | ε=0.1
+
+PROBLEMA DA V1: avaliava nos próprios hard samples usados no treino (data leakage)
+CORREÇÃO V2:    avalia no restante do teste (excluindo os hard samples)
+
+Métrica                  Base       Sem Smooth       Com Smooth
+--------------------------------------------------------------
+accuracy                84.21     84.21 ± 0.00     84.21 ± 0.00
+sensitivity              0.00      0.00 ± 0.00      0.00 ± 0.00
+specificity             94.12     94.12 ± 0.00     94.12 ± 0.00
+f1                       0.00      0.00 ± 0.00      0.00 ± 0.00
+kappa                   -0.08     -0.08 ± 0.00     -0.08 ± 0.00
