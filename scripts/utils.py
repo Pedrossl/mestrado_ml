@@ -434,7 +434,7 @@ def salvar_auc_metricas(roc_dados_dict, target_name, titulo, output_file):
         f.write(f"AUC - {titulo} - {target_name}\n")
         f.write("=" * 60 + "\n\n")
 
-        f.write(f"{'Modelo':<25} {'AUC M\u00e9dia':>12} {'Desvio':>10} {'IC 95%':>12}\n")
+        f.write(f"{'Modelo':<25} {'AUC Média':>12} {'Desvio':>10} {'IC 95%':>12}\n")
         f.write("-" * 60 + "\n")
 
         for nome, dados in roc_dados_dict.items():

@@ -7,8 +7,8 @@ CORREÇÃO V2:    avalia no restante do teste (excluindo os hard samples)
 
 Métrica                  Base       Sem Smooth       Com Smooth
 --------------------------------------------------------------
-accuracy                84.21     84.21 ± 0.00     84.21 ± 0.00
-sensitivity              0.00      0.00 ± 0.00      0.00 ± 0.00
-specificity             94.12     94.12 ± 0.00     94.12 ± 0.00
-f1                       0.00      0.00 ± 0.00      0.00 ± 0.00
-kappa                   -0.08     -0.08 ± 0.00     -0.08 ± 0.00
+accuracy                84.21     82.88 ± 0.29     82.93 ± 0.31
+sensitivity              0.00      9.13 ± 1.39     11.01 ± 1.42
+specificity             94.12     93.18 ± 0.22     92.96 ± 0.26
+f1                       0.00     11.23 ± 1.69     13.52 ± 1.72
+kappa                   -0.08      0.03 ± 0.02      0.05 ± 0.02

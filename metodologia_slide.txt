@@ -1,0 +1,41 @@
+================================================================================
+METODOLOGIA — SLIDE
+================================================================================
+
+
+1. AQUISIÇÃO DE DADOS
+   • Dataset PTRTS: 307 pacientes pediátricos, 27 variáveis
+   • Variáveis alvo: GAD (15,3% positivos) e SAD (16,0% positivos)
+
+
+2. PRÉ-PROCESSAMENTO
+
+   Tratamento de valores ausentes:
+   • 20 registros removidos (Poverty Status e Social Phobia) → 287 amostras
+
+   Variáveis removidas:
+   • Depression, Number of Type A Stressors, Number of Physical Symptoms,
+     Family History - Substance Abuse          ← critério clínico/técnico
+   • Subject, GAD Probability, SAD Probability, Sample Weight
+                                               ← identificadores/pesos externos
+
+   Transformações:
+   • Sex                    → codificação binária (M=0, F=1)
+   • Number of Siblings     → binarização (0=sem irmãos, 1=tem irmãos)
+   • Number of Bio. Parents → normalização customizada (0 / 0.5 / 1)
+   • Variáveis contínuas    → normalização MinMax [0, 1]
+
+   Resultado: 287 amostras × 17 features
+
+
+3. MODELAGEM
+   • 5 algoritmos: ADTree, SVM, XGBoost, HistGBM, Extra Trees
+   • 13 técnicas de balanceamento (SMOTE, NearMiss, EasyEnsemble, etc.)
+   • Validação: 10-fold Stratified Cross-Validation
+   • Busca de hiperparâmetros: Nested CV + RandomizedSearchCV
+
+
+4. AVALIAÇÃO
+   • Métrica principal: Sensibilidade (contexto de triagem clínica)
+   • Métricas complementares: F1-Score, Kappa de Cohen, Especificidade
+   • Otimização de threshold: F2-score e Youden's J

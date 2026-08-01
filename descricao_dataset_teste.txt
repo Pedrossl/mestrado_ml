@@ -1,0 +1,94 @@
+================================================================================
+DESCRIÇÃO DO DATASET DE TESTE (PTRTS)
+================================================================================
+
+Variáveis analisadas: 27 indicadores clínicos, demográficos e socioeconômicos
+
+Escala de dados: 8.289 medições totais, sendo 20 campos sem preenchimento (0,24% de incompletude)
+  - Poverty Status: 19 ausentes
+  - Social Phobia: 1 ausente
+
+Tamanho do conjunto: 307 registros de pacientes (PTRTS)
+
+Formatos de entrada: mistura de medidas numéricas, categorias binárias e textos
+
+
+--------------------------------------------------------------------------------
+TIPOS DE DADOS
+--------------------------------------------------------------------------------
+
+CATEGÓRICO BINÁRIO (int_bool): 11 variáveis
+  - Race
+  - Poverty Status
+  - SAD
+  - GAD
+  - Social Phobia
+  - ADHD
+  - CD
+  - Depression
+  - ODD
+  - Family History - Substance Abuse
+  - Family History - Psychiatric Diagnosis
+
+NUMÉRICO INTEIRO (int): 11 variáveis
+  - Age
+  - Number of Bio. Parents
+  - Number of Siblings
+  - Number of Impairments
+  - Number of Type A Stressors
+  - Number of Type B Stressors
+  - Frequency Temper Tantrums
+  - Frequency Irritable Mood
+  - Number of Sleep Disturbances
+  - Number of Physical Symptoms
+  - Number of Sensory Sensitivities
+
+NUMÉRICO DECIMAL (float): 0 variáveis
+
+TEXTO (string): 5 variáveis
+  - Subject
+  - Sex
+  - GAD Probability - Gamma
+  - SAD Probability - Gamma
+  - Sample Weight
+
+
+--------------------------------------------------------------------------------
+DISTRIBUIÇÃO DOS DESFECHOS POR VARIÁVEL
+--------------------------------------------------------------------------------
+
+CATEGÓRICAS BINÁRIAS (0 = ausente, 1 = presente):
+  Sex:                                  M=166 (54,1%) | F=141 (45,9%)
+  Race:                                 1=168 (54,7%) | 0=139 (45,3%)
+  Poverty Status:                       0=188 (61,2%) | 1=100 (32,6%) | ausente=19 (6,2%)
+  SAD:                                  0=258 (84,0%) | 1=49  (16,0%)
+  GAD:                                  0=261 (85,0%) | 1=46  (15,0%)
+  Social Phobia:                        0=283 (92,2%) | 1=23   (7,5%) | ausente=1  (0,3%)
+  ADHD:                                 0=285 (92,8%) | 1=22   (7,2%)
+  CD:                                   0=283 (92,2%) | 1=24   (7,8%)
+  Depression:                           0=290 (94,5%) | 1=17   (5,5%)
+  ODD:                                  0=273 (88,9%) | 1=34  (11,1%)
+  Family History - Substance Abuse:     0=235 (76,5%) | 1=72  (23,5%)
+  Family History - Psychiatric Diag.:   0=205 (66,8%) | 1=102 (33,2%)
+
+NUMÉRICAS INTEIRAS (min / max / média / mediana):
+  Age:                          2 / 6   | média=3,4  | mediana=3,0
+  Number of Bio. Parents:       0 / 2   | média=1,4  | mediana=1,0
+  Number of Siblings:           0 / 3   | média=1,2  | mediana=1,0
+  Number of Impairments:        0 / 10  | média=1,2  | mediana=0,0
+  Number of Type A Stressors:   1 / 7   | média=1,8  | mediana=2,0
+  Number of Type B Stressors:   0 / 8   | média=1,0  | mediana=1,0
+  Frequency Temper Tantrums:    0 / 1110| média=79,5 | mediana=24,0
+  Frequency Irritable Mood:     0 / 2430| média=143,4| mediana=12,0
+  Number of Sleep Disturbances: 1 / 13  | média=3,9  | mediana=4,0
+  Number of Physical Symptoms:  0 / 6   | média=0,9  | mediana=1,0
+  Number of Sensory Sensitivities: 0 / 4| média=0,2  | mediana=0,0
+
+
+--------------------------------------------------------------------------------
+VARIÁVEL ALVO
+--------------------------------------------------------------------------------
+
+Transtorno de Ansiedade Generalizada Atual (tagatual)
+  - Score de 0 a 3
+  - Proveniente de projeto externo de avaliação clínica

@@ -52,6 +52,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from utils import (
     preparar_dados, calcular_ic, calcular_metricas_fold,
     agregar_metricas_com_ic,
+    coletar_roc_folds,
 )
 
 warnings.filterwarnings('ignore')
@@ -151,6 +152,46 @@ def _rodar_cv_com_sampler(sampler, scale_pos_weight=None, threshold_fn=None):
     return agregar_metricas_com_ic(metricas), thresholds_usados
 
 
+def _rodar_cv_com_sampler_e_auc(sampler, scale_pos_weight=None):
+    """Executa 10-fold CV e também calcula a AUC-ROC média por fold."""
+    df, target_name = preparar_dados(TARGET)
+    X = df.drop(columns=[target_name]).values
+    y = df[target_name].values
+    dist = df[target_name].value_counts()
+    spw = scale_pos_weight if scale_pos_weight is not None else dist[0] / dist[1] if scale_pos_weight == 'auto' else None
+
+    skf = StratifiedKFold(n_splits=N_FOLDS, shuffle=True, random_state=RANDOM_STATE)
+    metricas = []
+    y_trues_folds = []
+    y_scores_folds = []
+
+    for train_idx, test_idx in skf.split(X, y):
+        X_tr, X_te = X[train_idx], X[test_idx]
+        y_tr, y_te = y[train_idx], y[test_idx]
+
+        if sampler is not None:
+            X_tr, y_tr = sampler.fit_resample(X_tr, y_tr)
+
+        model = _base_xgb(scale_pos_weight=spw)
+        model.fit(X_tr, y_tr)
+
+        y_score = model.predict_proba(X_te)[:, 1]
+        y_pred = (y_score >= 0.5).astype(int)
+
+        metricas.append(calcular_metricas_fold(y_te, y_pred))
+        y_trues_folds.append(y_te)
+        y_scores_folds.append(y_score)
+
+    resultado = agregar_metricas_com_ic(metricas)
+    roc_dados = coletar_roc_folds(y_trues_folds, y_scores_folds)
+    auc_media, auc_desvio, auc_ic = calcular_ic(roc_dados['aucs'])
+    resultado['auc'] = auc_media
+    resultado['auc_std'] = auc_desvio
+    resultado['auc_ic'] = auc_ic
+
+    return resultado
+
+
 def _rodar_cv_ensemble(EstimatorClass, **kwargs):
     """Executa 10-fold CV com um estimador ensemble do imblearn."""
     df, target_name = preparar_dados(TARGET)
@@ -191,6 +232,8 @@ def _salvar_resultado_individual(nome, codigo, referencia, descricao, metricas, 
         f.write(f"NPV:          {m['npv']:.2f}% ± {m['npv_ic']:.2f}%\n")
         f.write(f"F1-Score:     {m['f1']:.2f}% ± {m['f1_ic']:.2f}%\n")
         f.write(f"Kappa:        {m['kappa']:.4f} ± {m['kappa_ic']:.4f}\n\n")
+        if 'auc' in m:
+            f.write(f"AUC-ROC:      {m['auc']:.4f} ± {m['auc_ic']:.4f}\n\n")
         f.write("MATRIZ DE CONFUSÃO AGREGADA\n")
         f.write("-" * 60 + "\n")
         f.write(f"  VN={m['vn']:>4}  FP={m['fp']:>4}\n")
@@ -208,7 +251,8 @@ def _print_metodo(nome, metricas, thresholds=None):
     spec_str = f"{m['specificity']:.1f}%"
     kappa_str = f"{m['kappa']:.3f}"
     t_str = f" | threshold≈{np.mean(thresholds):.2f}" if thresholds else ""
-    print(f"  {nome:<40}  Sens={sens_str:<18}  F1={f1_str:<18}  Spec={spec_str:<8}  Kappa={kappa_str}{t_str}")
+    auc_str = f"  AUC={m['auc']:.3f}±{m['auc_ic']:.3f}" if 'auc' in m else ""
+    print(f"  {nome:<40}  Sens={sens_str:<18}  F1={f1_str:<18}  Spec={spec_str:<8}  Kappa={kappa_str}{auc_str}{t_str}")
 
 
 # ─── DEFINIÇÃO DE CADA MÉTODO ──────────────────────────────────────────────────
@@ -250,7 +294,7 @@ METODOS['M02_ADASYN'] = {
 }
 
 def _m03_borderline_smote():
-    m, t = _rodar_cv_com_sampler(BorderlineSMOTE(random_state=RANDOM_STATE, kind='borderline-1'))
+    m = _rodar_cv_com_sampler_e_auc(BorderlineSMOTE(random_state=RANDOM_STATE, kind='borderline-1'))
     return m, None
 
 METODOS['M03_BorderlineSMOTE'] = {

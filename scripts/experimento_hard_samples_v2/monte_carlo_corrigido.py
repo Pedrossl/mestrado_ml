@@ -81,29 +81,38 @@ def rodar_monte_carlo(usar_smoothing):
     rng = np.random.default_rng(seed=0)
 
     for _ in range(N_SIMULACOES):
-        idx = rng.choice(len(X_hard), size=TAMANHO_SORTEIO, replace=False)
-        X_sim = X_hard[idx]
-        y_sim = y_hard[idx]
+        # Sorteia 15 hard samples para treino
+        idx_treino = rng.choice(len(X_hard), size=TAMANHO_SORTEIO, replace=False)
+        X_sim_treino = X_hard[idx_treino]
+        y_sim_treino = y_hard[idx_treino]
 
-        X_combinado = np.vstack([X_tr_res, X_sim])
-        y_combinado = np.concatenate([y_tr_res, y_sim])
+        # Os 5 restantes vão para avaliação
+        idx_sobra = np.setdiff1d(np.arange(len(X_hard)), idx_treino)
+        X_sim_teste = X_hard[idx_sobra]
+        y_sim_teste = y_hard[idx_sobra]
+
+        X_combinado = np.vstack([X_tr_res, X_sim_treino])
+        y_combinado = np.concatenate([y_tr_res, y_sim_treino])
 
         pesos_treino = np.ones(len(y_tr_res))
         if usar_smoothing:
-            probas_hard = modelo_base.predict_proba(X_sim)[:, 1]
+            probas_hard = modelo_base.predict_proba(X_sim_treino)[:, 1]
             margem_hard = np.abs(probas_hard - 0.5)
             pesos_hard  = SMOOTH_EPSILON + (1 - SMOOTH_EPSILON) * (margem_hard / 0.5)
         else:
-            pesos_hard = np.ones(len(y_sim))
+            pesos_hard = np.ones(len(y_sim_treino))
 
         pesos = np.concatenate([pesos_treino, pesos_hard])
 
         modelo = XGBClassifier(eval_metric='logloss', verbosity=0, random_state=42)
         modelo.fit(X_combinado, y_combinado, sample_weight=pesos)
 
-        # Avalia no teste HONESTO (sem os hard samples)
-        y_pred = modelo.predict(X_teste_honesto)
-        resultados.append(calcular_metricas_fold(y_teste_honesto.astype(int), y_pred.astype(int)))
+        # Avalia no teste honesto + 5 hard samples sobressalentes
+        X_aval = np.vstack([X_teste_honesto, X_sim_teste])
+        y_aval = np.concatenate([y_teste_honesto, y_sim_teste])
+
+        y_pred = modelo.predict(X_aval)
+        resultados.append(calcular_metricas_fold(y_aval.astype(int), y_pred.astype(int)))
 
     return resultados
 

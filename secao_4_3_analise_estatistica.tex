@@ -1,0 +1,29 @@
+% ============================================================
+\section{Análise Estatística dos Resultados}
+\label{sec:analise_estatistica}
+% ============================================================
+
+Dado o reduzido tamanho amostral, a diferença de desempenho entre o
+\textit{XGBoost} e o SVM foi submetida a um teste de significância antes de se
+afirmar a superioridade de um sobre o outro (BROWNLEE, 2020b). A comparação
+usou os valores de AUC pareados nas dez partições da validação cruzada, de
+modo que ambos os modelos foram avaliados sobre exatamente os mesmos
+\textit{folds}.
+
+O \textit{XGBoost} + SMOTE (AUC $= 0,722$) superou o SVM + SMOTE
+(AUC $= 0,678$) por uma diferença média de $0,044$, vencendo em 6 dos 10
+\textit{folds}. Ainda assim, o teste \textit{t} de Student pareado não rejeitou
+a hipótese de igualdade ($t = 1,19$; $\text{gl} = 9$; abaixo do crítico
+$2,262$), e o intervalo de confiança de 95\,\% da diferença ($-0,039$ a
+$+0,127$) contém o zero. O teste não-paramétrico de Wilcoxon confirmou o
+resultado ($W = 18,5$; $n = 10$). Ou seja, a AUC isolada não sustenta a
+superioridade do \textit{XGBoost} de forma estatisticamente significativa,
+achado atribuído à baixa potência imposta pelos poucos casos positivos.
+
+A separação entre os modelos torna-se clara nas métricas de concordância. O
+Coeficiente Kappa de Cohen do \textit{XGBoost} (0,372 sob \textit{BorderlineSMOTE})
+supera o melhor resultado do SVM (0,210), padrão que se repete no F1-Score.
+Ainda assim, na escala de Landis e Koch (LANDIS; KOCH, 1977), nenhuma
+configuração atinge concordância moderada ($\kappa > 0,40$), permanecendo na
+faixa razoável (\textit{fair}). Isso reforça a recomendação dos modelos como
+ferramentas auxiliares de triagem, e não como substitutos da avaliação clínica.
