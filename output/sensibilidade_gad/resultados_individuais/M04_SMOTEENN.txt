@@ -2,19 +2,20 @@ MÉTODO: SMOTEENN
 Código: M04_SMOTEENN
 Referência: Batista et al. (2004). A study of several methods for balancing ML training data. ACM SIGKDD Explorations 6(1), 20-29.
 Descrição: SMOTE para oversample + ENN (Edited Nearest Neighbours) para limpar amostras ambíguas de ambas as classes, resultando em fronteira mais limpa.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     73.92% ± 8.02%
-Sensitivity:  52.50% ± 17.70%
-Specificity:  77.75% ± 7.47%
-PPV:          31.80% ± 11.00%
-NPV:          89.73% ± 4.21%
-F1-Score:     39.10% ± 12.96%
-Kappa:        0.2426 ± 0.1684
+Accuracy:     76.28% ± 6.24%
+Sensitivity:  47.00% ± 14.33%
+Specificity:  81.47% ± 6.82%
+PPV:          34.08% ± 10.73%
+NPV:          89.57% ± 2.58%
+F1-Score:     38.36% ± 11.32%
+Kappa:        0.2493 ± 0.1381
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 189  FP=  54
-  FN=  21  VP=  23
+  VN= 198  FP=  45
+  FN=  23  VP=  21

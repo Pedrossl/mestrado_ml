@@ -1,0 +1,12 @@
+Metrica,V1_com_vazamento,V1_desvio,V2_corrigida,V2_desvio,Diferenca_pp
+Acurácia,93.2,0.63,82.88,0.29,-10.32
+Sensibilidade,84.3,2.13,9.13,1.39,-75.17
+Especificidade,96.17,0.57,93.18,0.22,-2.99
+F1-Score,85.67,1.4,11.23,1.69,-74.44
+Kappa,0.81,0.02,0.03,0.02,-0.78
+
+# V1 = experimento original: avaliava nos proprios hard samples usados no treino (data leakage)
+# V2 = corrigido: avalia no restante do teste (38 amostras, hard samples excluidos)
+# 200 simulacoes | sorteio 15/20 hard samples | epsilon=0.1 | valores da coluna 'sem smoothing'
+# Fontes: output/experimento_hard_samples/monte_carlo_resultado.txt
+#         output/experimento_hard_samples_v2/monte_carlo_corrigido_resultado.txt

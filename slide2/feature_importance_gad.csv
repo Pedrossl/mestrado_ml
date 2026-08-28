@@ -1,0 +1,21 @@
+Rank,Variavel_EN,Variavel_PT,Importancia,IC95
+1,Number of Impairments,Número de prejuízos funcionais,0.1676,0.0656
+2,Age,Idade,0.0831,0.0167
+3,ADHD,TDAH,0.075,0.0173
+4,Race,Raça/cor,0.0748,0.0113
+5,Frequency Irritable Mood,Frequência de humor irritável,0.0676,0.026
+6,Number of Type B Stressors,Número de estressores tipo B,0.0625,0.0154
+7,Sex,Sexo,0.0615,0.0185
+8,Number of Bio. Parents,Número de pais biológicos,0.0601,0.0117
+9,Number of Sensory Sensitivities,Número de sensibilidades sensoriais,0.0596,0.0139
+10,Frequency Temper Tantrums,Frequência de acessos de raiva,0.0506,0.0072
+11,Social Phobia,Fobia social,0.0453,0.0104
+12,Number of Sleep Disturbances,Número de distúrbios do sono,0.0452,0.0072
+13,ODD,TOD (transtorno opositor desafiador),0.0435,0.0161
+14,Number of Siblings,Número de irmãos,0.034,0.0093
+15,CD,TC (transtorno de conduta),0.0252,0.0094
+16,Family History - Psychiatric Diagnosis,Histórico familiar psiquiátrico,0.0234,0.0076
+17,Poverty Status,Situação de pobreza,0.0212,0.0035
+
+# XGBoost + SMOTE - GAD | media das importancias (gain) dos 10 folds, com IC 95%
+# Fonte: output/plots/XGBoost/GAD/feature_importance_gad.txt

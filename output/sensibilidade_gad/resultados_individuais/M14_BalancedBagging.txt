@@ -2,19 +2,20 @@ MÉTODO: Balanced Bagging
 Código: M14_BalancedBagging
 Referência: Wallace et al. (2011). Class imbalance, redux. IEEE ICDM. Implementação: imblearn docs.
 Descrição: Bagging clássico com resampling balanceado em cada bootstrap, permitindo que qualquer classificador base se beneficie do ensemble com dados balanceados.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     74.61% ± 5.87%
-Sensitivity:  50.00% ± 15.36%
+Accuracy:     74.95% ± 6.19%
+Sensitivity:  52.00% ± 16.71%
 Specificity:  79.05% ± 6.25%
-PPV:          31.54% ± 8.43%
-NPV:          89.72% ± 3.28%
-F1-Score:     37.68% ± 9.58%
-Kappa:        0.2328 ± 0.1211
+PPV:          32.26% ± 9.42%
+NPV:          90.13% ± 3.52%
+F1-Score:     38.90% ± 11.07%
+Kappa:        0.2470 ± 0.1381
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
   VN= 192  FP=  51
-  FN=  22  VP=  22
+  FN=  21  VP=  23

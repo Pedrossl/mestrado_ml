@@ -2,6 +2,7 @@ MÉTODO: scale_pos_weight 2× natural
 Código: M06_SPW_Alto
 Referência: Chen & Guestrin (2016). XGBoost: A Scalable Tree Boosting System. ACM SIGKDD, 785-794.
 Descrição: scale_pos_weight = 2× a razão natural neg/pos (~11x), penalizando ainda mais erros na classe positiva durante o boosting.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)

@@ -1,0 +1,55 @@
+MATRIZES DE CONFUSAO NORMALIZADAS - GAD
+======================================================================
+Normalizacao: por classe real (cada linha soma 100%)
+Agregadas dos 10 folds de cross-validation
+
+
+======================================================================
+XGBoost
+======================================================================
+
+  Sem Balanceamento:
+    Sem GAD (n=243): Correto=96.7% (235)  Errado=3.3% (8)
+    Com GAD (n=44): Errado=75.0% (33)  Correto=25.0% (11)
+    -> Especificidade=96.7%  Sensibilidade=25.0%
+
+  Class Weighting:
+    Sem GAD (n=243): Correto=91.8% (223)  Errado=8.2% (20)
+    Com GAD (n=44): Errado=61.4% (27)  Correto=38.6% (17)
+    -> Especificidade=91.8%  Sensibilidade=38.6%
+
+  SMOTE:
+    Sem GAD (n=243): Correto=94.2% (229)  Errado=5.8% (14)
+    Com GAD (n=44): Errado=65.9% (29)  Correto=34.1% (15)
+    -> Especificidade=94.2%  Sensibilidade=34.1%
+
+  Undersampling:
+    Sem GAD (n=243): Correto=64.6% (157)  Errado=35.4% (86)
+    Com GAD (n=44): Errado=34.1% (15)  Correto=65.9% (29)
+    -> Especificidade=64.6%  Sensibilidade=65.9%
+
+
+======================================================================
+SVM
+======================================================================
+
+  Sem Balanceamento:
+    Sem GAD (n=243): Correto=100.0% (243)  Errado=0.0% (0)
+    Com GAD (n=44): Errado=100.0% (44)  Correto=0.0% (0)
+    -> Especificidade=100.0%  Sensibilidade=0.0%
+
+  Class Weighting:
+    Sem GAD (n=243): Correto=84.0% (204)  Errado=16.0% (39)
+    Com GAD (n=44): Errado=61.4% (27)  Correto=38.6% (17)
+    -> Especificidade=84.0%  Sensibilidade=38.6%
+
+  SMOTE:
+    Sem GAD (n=243): Correto=85.2% (207)  Errado=14.8% (36)
+    Com GAD (n=44): Errado=77.3% (34)  Correto=22.7% (10)
+    -> Especificidade=85.2%  Sensibilidade=22.7%
+
+  Undersampling:
+    Sem GAD (n=243): Correto=67.1% (163)  Errado=32.9% (80)
+    Com GAD (n=44): Errado=36.4% (16)  Correto=63.6% (28)
+    -> Especificidade=67.1%  Sensibilidade=63.6%
+

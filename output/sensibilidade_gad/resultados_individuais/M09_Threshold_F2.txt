@@ -2,23 +2,24 @@ MÉTODO: SMOTE + Threshold F2-score (β=2)
 Código: M09_Threshold_F2
 Referência: Van Rijsbergen (1979). Information Retrieval. Sokolova & Lapalme (2009). Information Processing & Management 45(4), 427-437.
 Descrição: Threshold que maximiza F-beta com β=2: penaliza falsos negativos 4× mais que falsos positivos, priorizando sensibilidade sobre precisão.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     81.21% ± 4.20%
-Sensitivity:  47.50% ± 11.22%
-Specificity:  87.23% ± 4.10%
-PPV:          41.67% ± 10.30%
-NPV:          90.19% ± 2.12%
-F1-Score:     43.68% ± 9.67%
-Kappa:        0.3262 ± 0.1160
+Accuracy:     77.71% ± 4.24%
+Sensitivity:  43.50% ± 10.26%
+Specificity:  83.92% ± 4.59%
+PPV:          33.67% ± 6.69%
+NPV:          89.07% ± 2.22%
+F1-Score:     37.36% ± 7.21%
+Kappa:        0.2430 ± 0.0899
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 212  FP=  31
-  FN=  23  VP=  21
+  VN= 204  FP=  39
+  FN=  25  VP=  19
 
 THRESHOLD (determinado no treino de cada fold)
-  Média: 0.260 | Mín: 0.210 | Máx: 0.300
-  Por fold: ['0.23', '0.21', '0.22', '0.21', '0.30', '0.28', '0.30', '0.29', '0.26', '0.30']
+  Média: 0.283 | Mín: 0.230 | Máx: 0.340
+  Por fold: ['0.27', '0.23', '0.31', '0.23', '0.29', '0.29', '0.28', '0.28', '0.31', '0.34']

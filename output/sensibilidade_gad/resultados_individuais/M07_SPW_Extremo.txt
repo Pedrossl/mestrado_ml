@@ -2,6 +2,7 @@ MÉTODO: scale_pos_weight=20 (extremo)
 Código: M07_SPW_Extremo
 Referência: Elkan (2001). The foundations of cost-sensitive learning. IJCAI 17(1), 973-978.
 Descrição: Penaliza falsos negativos 20x mais que falsos positivos na função de perda do XGBoost, forçando atenção máxima à classe positiva.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)

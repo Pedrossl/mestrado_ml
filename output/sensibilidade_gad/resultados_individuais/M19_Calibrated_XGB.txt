@@ -2,23 +2,24 @@ MÉTODO: Calibrated XGBoost + Threshold F2
 Código: M19_Calibrated_XGB
 Referência: Zadrozny & Elkan (2002). Transforming classifier scores into accurate multiclass probability estimates. KDD. E Platt (1999).
 Descrição: Calibra as probabilidades geradas pelo XGBoost (distorcidas pelo SMOTE) usando regressão isotônica antes de otimizar o limiar de decisão F2.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     83.93% ± 3.27%
-Sensitivity:  37.00% ± 12.64%
-Specificity:  92.57% ± 3.66%
-PPV:          53.50% ± 19.13%
-NPV:          89.02% ± 2.35%
-F1-Score:     40.54% ± 10.21%
-Kappa:        0.3193 ± 0.1168
+Accuracy:     82.59% ± 3.85%
+Sensitivity:  29.00% ± 17.75%
+Specificity:  92.18% ± 4.30%
+PPV:          34.69% ± 22.77%
+NPV:          87.94% ± 2.52%
+F1-Score:     30.16% ± 17.60%
+Kappa:        0.2162 ± 0.1761
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 225  FP=  18
-  FN=  28  VP=  16
+  VN= 224  FP=  19
+  FN=  31  VP=  13
 
 THRESHOLD (determinado no treino de cada fold)
-  Média: 0.282 | Mín: 0.160 | Máx: 0.380
-  Por fold: ['0.22', '0.38', '0.27', '0.38', '0.29', '0.29', '0.26', '0.30', '0.27', '0.16']
+  Média: 0.374 | Mín: 0.300 | Máx: 0.450
+  Por fold: ['0.40', '0.34', '0.30', '0.36', '0.38', '0.40', '0.45', '0.32', '0.36', '0.43']

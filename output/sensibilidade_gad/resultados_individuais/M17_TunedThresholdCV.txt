@@ -2,23 +2,24 @@ MÉTODO: TunedThresholdClassifierCV (F2, sklearn 1.5)
 Código: M17_TunedThresholdCV
 Referência: scikit-learn >= 1.5 (2024). TunedThresholdClassifierCV. Documentação oficial sklearn. Baseado em Provost & Fawcett (1997). Analysis and Visualization of Classifier Performance.
 Descrição: Wrapper sklearn que re-calibra automaticamente o threshold de decisão via cross-validation interna (5-fold), otimizando F2-score sem alterar o modelo base.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     71.85% ± 8.06%
-Sensitivity:  55.00% ± 17.68%
-Specificity:  75.07% ± 10.23%
-PPV:          32.69% ± 11.46%
-NPV:          90.47% ± 3.83%
-F1-Score:     38.13% ± 10.14%
-Kappa:        0.2340 ± 0.1306
+Accuracy:     71.47% ± 7.11%
+Sensitivity:  60.00% ± 17.92%
+Specificity:  73.75% ± 7.73%
+PPV:          31.00% ± 8.88%
+NPV:          91.00% ± 4.16%
+F1-Score:     39.72% ± 10.18%
+Kappa:        0.2438 ± 0.1335
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 182  FP=  61
-  FN=  20  VP=  24
+  VN= 179  FP=  64
+  FN=  18  VP=  26
 
 THRESHOLD (determinado no treino de cada fold)
-  Média: 0.150 | Mín: 0.042 | Máx: 0.434
-  Por fold: ['0.06', '0.43', '0.17', '0.11', '0.09', '0.04', '0.05', '0.09', '0.10', '0.34']
+  Média: 0.122 | Mín: 0.061 | Máx: 0.182
+  Por fold: ['0.18', '0.16', '0.13', '0.17', '0.09', '0.07', '0.06', '0.12', '0.12', '0.10']

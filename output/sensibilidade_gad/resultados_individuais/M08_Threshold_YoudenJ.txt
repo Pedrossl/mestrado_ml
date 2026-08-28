@@ -2,23 +2,24 @@ MÉTODO: SMOTE + Threshold Youden's J
 Código: M08_Threshold_YoudenJ
 Referência: Youden (1950). Index for rating diagnostic tests. Cancer 3(1), 32-35. Survey: Fluss et al. (2005). Biometrical Journal 47(4), 458-472.
 Descrição: Threshold t* que maximiza Sensitivity + Specificity - 1 (ponto mais alto da curva ROC acima da diagonal), determinado nos dados de treino de cada fold.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     86.05% ± 2.08%
-Sensitivity:  36.50% ± 14.61%
-Specificity:  95.10% ± 2.99%
-PPV:          55.00% ± 21.34%
-NPV:          89.32% ± 2.22%
-F1-Score:     41.59% ± 13.90%
-Kappa:        0.3501 ± 0.1335
+Accuracy:     84.32% ± 4.56%
+Sensitivity:  33.50% ± 16.09%
+Specificity:  93.40% ± 5.28%
+PPV:          53.86% ± 27.67%
+NPV:          88.70% ± 2.34%
+F1-Score:     37.35% ± 15.80%
+Kappa:        0.2982 ± 0.1621
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 231  FP=  12
-  FN=  28  VP=  16
+  VN= 227  FP=  16
+  FN=  29  VP=  15
 
 THRESHOLD (determinado no treino de cada fold)
-  Média: 0.521 | Mín: 0.482 | Máx: 0.596
-  Por fold: ['0.60', '0.48', '0.54', '0.51', '0.52', '0.48', '0.51', '0.51', '0.53', '0.53']
+  Média: 0.580 | Mín: 0.484 | Máx: 0.689
+  Por fold: ['0.57', '0.63', '0.48', '0.59', '0.53', '0.58', '0.69', '0.60', '0.55', '0.57']

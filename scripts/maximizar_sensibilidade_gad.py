@@ -19,6 +19,9 @@ Autor: Dissertação de Mestrado — Fevereiro 2026
 
 import numpy as np
 import os
+import json
+import subprocess
+from datetime import datetime, timezone
 import warnings
 import matplotlib
 matplotlib.use('Agg')
@@ -66,17 +69,57 @@ FOLDS_DIR = f'{OUTPUT_DIR}/resultados_individuais'
 N_FOLDS = 10
 RANDOM_STATE = 42
 
+np.random.seed(RANDOM_STATE)
+
+XGB_BASE_PARAMS = {
+    'n_estimators': 100,
+    'max_depth': 5,
+    'learning_rate': 0.1,
+    'random_state': RANDOM_STATE,
+    'use_label_encoder': False,
+    'eval_metric': 'logloss',
+    'verbosity': 0,
+    'n_jobs': 1,
+}
+
+M03_SAMPLER_PARAMS = {
+    'random_state': RANDOM_STATE,
+    'kind': 'borderline-1',
+}
+
+
+def _obter_commit_curto():
+    try:
+        return subprocess.check_output(
+            ['git', 'rev-parse', '--short', 'HEAD'],
+            cwd=os.path.dirname(os.path.dirname(__file__)),
+            stderr=subprocess.DEVNULL,
+        ).decode('utf-8').strip()
+    except Exception:
+        return 'sem_git'
+
+
+def _montar_manifesto_execucao():
+    return {
+        'timestamp_utc': datetime.now(timezone.utc).isoformat(),
+        'seed': RANDOM_STATE,
+        'commit': _obter_commit_curto(),
+        'dataset': TARGET,
+        'n_folds': N_FOLDS,
+        'xgb_base_params': XGB_BASE_PARAMS,
+        'm03_sampler_params': M03_SAMPLER_PARAMS,
+    }
+
+
+EXECUCAO_INFO = _montar_manifesto_execucao()
+
 os.makedirs(PLOTS_DIR, exist_ok=True)
 os.makedirs(FOLDS_DIR, exist_ok=True)
 
 # ─── Funções auxiliares ────────────────────────────────────────────────────────
 
 def _base_xgb(scale_pos_weight=None):
-    params = dict(
-        n_estimators=100, max_depth=5, learning_rate=0.1,
-        random_state=RANDOM_STATE, use_label_encoder=False,
-        eval_metric='logloss', verbosity=0,
-    )
+    params = dict(XGB_BASE_PARAMS)
     if scale_pos_weight is not None:
         params['scale_pos_weight'] = scale_pos_weight
     return XGBClassifier(**params)
@@ -222,6 +265,7 @@ def _salvar_resultado_individual(nome, codigo, referencia, descricao, metricas, 
         f.write(f"Código: {codigo}\n")
         f.write(f"Referência: {referencia}\n")
         f.write(f"Descrição: {descricao}\n")
+        f.write(f"Execução: seed={EXECUCAO_INFO['seed']} | commit={EXECUCAO_INFO['commit']} | timestamp_utc={EXECUCAO_INFO['timestamp_utc']}\n")
         f.write("=" * 60 + "\n\n")
         f.write("MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)\n")
         f.write("-" * 60 + "\n")
@@ -294,7 +338,7 @@ METODOS['M02_ADASYN'] = {
 }
 
 def _m03_borderline_smote():
-    m = _rodar_cv_com_sampler_e_auc(BorderlineSMOTE(random_state=RANDOM_STATE, kind='borderline-1'))
+    m = _rodar_cv_com_sampler_e_auc(BorderlineSMOTE(**M03_SAMPLER_PARAMS))
     return m, None
 
 METODOS['M03_BorderlineSMOTE'] = {
@@ -564,7 +608,7 @@ def _m16_focal_loss():
         # alpha=0.75: 3× mais peso para a classe positiva (minoritária) vs negativa
         booster_raw = xgb.train(
             {'max_depth': 5, 'learning_rate': 0.1, 'seed': RANDOM_STATE,
-             'verbosity': 0, 'nthread': -1},
+             'verbosity': 0, 'nthread': 1},
             dtrain,
             num_boost_round=100,
             obj=lambda predt, dtrain: _focal_loss_obj(predt, dtrain, gamma=2.0, alpha=0.75),
@@ -676,6 +720,7 @@ def _m18_gridsearch_recall():
             ('clf', XGBClassifier(
                 learning_rate=0.1, random_state=RANDOM_STATE,
                 use_label_encoder=False, eval_metric='logloss', verbosity=0,
+                n_jobs=1,
             )),
         ])
 
@@ -910,6 +955,7 @@ def gerar_relatorio(resultados):
         f.write("  COMPARATIVO DE MÉTODOS PARA MAXIMIZAR SENSIBILIDADE — XGBoost para GAD\n")
         f.write("  Dissertação de Mestrado | Fevereiro 2026\n")
         f.write("  10-fold Stratified CV | Ordenado por Sensibilidade (decrescente)\n")
+        f.write(f"  Execução: seed={EXECUCAO_INFO['seed']} | commit={EXECUCAO_INFO['commit']} | timestamp_utc={EXECUCAO_INFO['timestamp_utc']}\n")
         f.write("=" * 100 + "\n\n")
 
         # Tabela principal
@@ -974,6 +1020,14 @@ def gerar_relatorio(resultados):
 
     print(f"\n  Relatório salvo em: {relatorio_path}")
     return relatorio_path, ordenados
+
+
+def _salvar_manifesto_execucao():
+    manifesto_path = f'{OUTPUT_DIR}/manifesto_execucao.json'
+    with open(manifesto_path, 'w') as f:
+        json.dump(EXECUCAO_INFO, f, indent=2, ensure_ascii=False)
+    print(f"  Manifesto salvo em: {manifesto_path}")
+    return manifesto_path
 
 
 # ─── GRÁFICOS ─────────────────────────────────────────────────────────────────
@@ -1113,6 +1167,7 @@ if __name__ == '__main__':
 
     relatorio_path, ordenados = gerar_relatorio(resultados)
     gerar_graficos(resultados, ordenados)
+    _salvar_manifesto_execucao()
 
     print("\n" + "=" * 80)
     print("  RESUMO FINAL — TOP 5 POR SENSIBILIDADE (18 métodos)")

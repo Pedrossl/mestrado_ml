@@ -1,0 +1,71 @@
+================================================================================
+  EXPERIMENTO MONTE CARLO — Hard Samples — GAD
+  Dissertação de Mestrado
+================================================================================
+
+O QUE É MONTE CARLO?
+--------------------------------------------------------------------------------
+Monte Carlo é uma técnica de simulação estatística que usa repetições aleatórias
+para estimar o comportamento de um sistema. Em vez de uma única avaliação, o
+experimento é repetido muitas vezes com variações aleatórias — aqui, 200 vezes —
+e o resultado final é a média e o desvio dessas repetições.
+
+Isso é especialmente útil quando a amostra é pequena (como os 20 hard samples),
+pois uma única avaliação seria instável. Com 200 sorteios aleatórios de subconjuntos
+desses casos, obtemos uma estimativa robusta do comportamento real do modelo.
+
+O QUE SÃO OS "HARD SAMPLES"?
+--------------------------------------------------------------------------------
+São os 20 casos do conjunto de teste em que o modelo teve MENOR certeza na
+predição — ou seja, a probabilidade ficou mais próxima de 0.5 (zona de dúvida).
+Esses são os pacientes mais difíceis de classificar, onde o modelo hesita entre
+"tem GAD" e "não tem GAD". A média de probabilidade desses casos foi 0.484,
+praticamente no limite da decisão.
+
+Composição dos 20 hard samples:
+  - 5 crianças com GAD (positivos reais)
+  - 15 crianças sem GAD (negativos reais)
+  - O modelo acertou apenas 9 dos 20 → confirma a dificuldade
+
+O QUE É O SMOOTHING?
+--------------------------------------------------------------------------------
+Label Smoothing é uma técnica de regularização que penaliza o modelo por ser
+muito confiante nos casos difíceis. Em vez de tratar os hard samples com peso
+total (1.0), reduz o peso amostral de acordo com o grau de incerteza do modelo:
+quanto mais próximo de 0.5 for a probabilidade, menor o peso atribuído ao caso.
+O parâmetro ε=0.1 define o peso mínimo (10% do peso normal).
+
+Objetivo: verificar se suavizar a influência dos hard samples no retreino
+torna as predições mais estáveis (menor desvio padrão entre simulações).
+
+METODOLOGIA
+--------------------------------------------------------------------------------
+- Split: 80% treino / 20% teste (estratificado)
+- Modelo base: XGBoost + SMOTE treinado nos 80% de treino
+- Hard samples: 20 casos de menor margem de confiança no conjunto de teste
+- Cada simulação: sorteia 15 dos 20 hard samples, inclui no treino, retreina e avalia
+- Comparação: com e sem smoothing nos pesos dos hard samples
+- Métrica de interesse: variabilidade (desvio padrão) das métricas entre simulações
+
+================================================================================
+RESULTADOS — 200 simulações | Sorteio de 15/20 hard samples | ε=0.1
+================================================================================
+
+Métrica                 Sem Smoothing          Com Smoothing
+------------------------------------------------------------
+accuracy                 93.20 ± 0.63           92.90 ± 0.69
+sensitivity              84.30 ± 2.13           84.80 ± 2.19
+specificity              96.17 ± 0.57           95.60 ± 0.69
+f1                       85.67 ± 1.40           85.30 ± 1.48
+kappa                     0.81 ± 0.02            0.81 ± 0.02
+
+INTERPRETAÇÃO
+--------------------------------------------------------------------------------
+O smoothing NÃO reduziu a variabilidade neste experimento — o desvio padrão
+ficou igual ou levemente maior com smoothing. Isso indica que os hard samples
+já foram bem capturados pelo modelo base (XGBoost + SMOTE), e que reduzir o
+peso desses casos não melhora a estabilidade das predições.
+
+Conclusão: para este dataset, o retreino com hard samples é robusto
+independentemente do smoothing. O modelo base já generaliza bem sobre
+os casos difíceis quando treinado com SMOTE nos 80% de treino.

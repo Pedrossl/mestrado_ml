@@ -2,23 +2,24 @@ MÉTODO: HistGradientBoosting + Threshold F2
 Código: M20_HistGBM
 Referência: Ke et al. (2017). LightGBM: A Highly Efficient Gradient Boosting Decision Tree. NIPS (Inspiração do Sklearn HistGBM).
 Descrição: Usa HistGradientBoosting (equivalente nativo do Sklearn ao LightGBM) que agrupa features em bins, suportando class_weight e otimizando F2.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     84.32% ± 2.92%
-Sensitivity:  45.50% ± 10.86%
-Specificity:  91.37% ± 3.23%
-PPV:          50.50% ± 10.49%
-NPV:          90.29% ± 1.91%
-F1-Score:     46.54% ± 8.68%
-Kappa:        0.3760 ± 0.0989
+Accuracy:     80.87% ± 5.34%
+Sensitivity:  50.50% ± 14.15%
+Specificity:  86.38% ± 4.92%
+PPV:          41.84% ± 10.90%
+NPV:          90.47% ± 2.93%
+F1-Score:     44.95% ± 11.31%
+Kappa:        0.3370 ± 0.1398
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 222  FP=  21
-  FN=  24  VP=  20
+  VN= 210  FP=  33
+  FN=  22  VP=  22
 
 THRESHOLD (determinado no treino de cada fold)
-  Média: 0.234 | Mín: 0.190 | Máx: 0.290
-  Por fold: ['0.28', '0.19', '0.23', '0.23', '0.29', '0.23', '0.21', '0.23', '0.26', '0.19']
+  Média: 0.245 | Mín: 0.150 | Máx: 0.320
+  Por fold: ['0.23', '0.15', '0.26', '0.22', '0.29', '0.22', '0.26', '0.27', '0.32', '0.23']

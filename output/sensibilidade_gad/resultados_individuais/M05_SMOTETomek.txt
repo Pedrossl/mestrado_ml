@@ -2,19 +2,20 @@ MÉTODO: SMOTETomek
 Código: M05_SMOTETomek
 Referência: Batista et al. (2004). Idem acima. SMOTETomek: SMOTE + remoção de Tomek Links.
 Descrição: SMOTE para oversample + remove Tomek Links (pares inter-classe que são vizinhos mais próximos), limpando a fronteira de decisão.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     85.36% ± 3.69%
-Sensitivity:  38.50% ± 15.55%
-Specificity:  93.85% ± 2.83%
-PPV:          54.83% ± 22.40%
-NPV:          89.47% ± 2.52%
-F1-Score:     43.25% ± 16.07%
-Kappa:        0.3540 ± 0.1767
+Accuracy:     83.65% ± 4.19%
+Sensitivity:  36.00% ± 16.33%
+Specificity:  92.18% ± 4.52%
+PPV:          48.52% ± 25.03%
+NPV:          88.95% ± 2.42%
+F1-Score:     38.32% ± 16.09%
+Kappa:        0.2971 ± 0.1700
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 228  FP=  15
-  FN=  27  VP=  17
+  VN= 224  FP=  19
+  FN=  28  VP=  16

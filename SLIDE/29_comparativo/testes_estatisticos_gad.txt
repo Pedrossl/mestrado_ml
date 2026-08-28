@@ -1,0 +1,171 @@
+TESTES DE SIGNIFICANCIA ESTATISTICA - GAD
+================================================================================
+Nivel de significancia: alpha = 0.05
+Convencao: * p<0.05  ** p<0.01  *** p<0.001
+
+
+--------------------------------------------------------------------------------
+WILCOXON: XGBoost SMOTE vs SVM SMOTE
+--------------------------------------------------------------------------------
+
+WILCOXON SIGNED-RANK TEST (pareado por fold, nao-parametrico)
+H0: Nao ha diferenca entre XGBoost SMOTE e SVM SMOTE
+
+Metrica            Media A    Media B       Diff    Statistic    p-valor Resultado
+................................................................................
+accuracy             85.00      75.67      +9.33          1.5     0.0059 **
+sensitivity          34.50      22.50     +12.00          7.0     0.3281 
+specificity          94.28      85.25      +9.03          2.0     0.0059 **
+f1                   37.51      22.50     +15.01         12.0     0.1309 
+kappa                 0.31       0.08      +0.22          9.0     0.0645 
+
+Conclusao: Diferenca significativa encontrada em 2 metrica(s).
+
+--------------------------------------------------------------------------------
+McNEMAR: XGBoost SMOTE vs SVM SMOTE
+--------------------------------------------------------------------------------
+
+McNEMAR'S TEST (comparacao de predicoes individuais)
+H0: XGBoost SMOTE e SVM SMOTE cometem os mesmos erros
+
+Tabela de Contingencia:
+                         SVM SMOTE
+                     Correto    Errado
+  XGBoost SMOTE Correto    208         36
+               Errado       9         34
+
+  Discordancias: XGBoost SMOTE correto/SVM SMOTE errado = 36
+                 XGBoost SMOTE errado/SVM SMOTE correto = 9
+
+  Chi-quadrado (corrigido): 15.0222
+  p-valor:                  0.0001
+  *** Altamente significativo (p < 0.001)
+
+Conclusao: XGBoost SMOTE acerta significativamente mais que SVM SMOTE.
+
+--------------------------------------------------------------------------------
+WILCOXON: XGB SMOTE vs XGB Sem Balanc.
+--------------------------------------------------------------------------------
+
+WILCOXON SIGNED-RANK TEST (pareado por fold, nao-parametrico)
+H0: Nao ha diferenca entre XGB SMOTE e XGB Sem Balanc.
+
+Metrica            Media A    Media B       Diff    Statistic    p-valor Resultado
+................................................................................
+accuracy             85.00      85.68      -0.68          4.0     0.8750 
+sensitivity          34.50      24.00     +10.50          4.0     0.2500 
+specificity          94.28      96.72      -2.43          2.5     0.2500 
+f1                   37.51      33.52      +3.98         11.5     0.7188 
+kappa                 0.31       0.27      +0.04         10.0     0.5781 
+
+Conclusao: Nenhuma diferenca estatisticamente significativa encontrada (p >= 0.05).
+           Os modelos tem desempenho estatisticamente equivalente.
+
+--------------------------------------------------------------------------------
+WILCOXON: XGB SMOTE vs XGB Class Weight
+--------------------------------------------------------------------------------
+
+WILCOXON SIGNED-RANK TEST (pareado por fold, nao-parametrico)
+H0: Nao ha diferenca entre XGB SMOTE e XGB Class Weight
+
+Metrica            Media A    Media B       Diff    Statistic    p-valor Resultado
+................................................................................
+accuracy             85.00      83.62      +1.38          8.5     0.7188 
+sensitivity          34.50      38.00      -3.50          6.0     0.8125 
+specificity          94.28      91.77      +2.52          7.0     0.2969 
+f1                   37.51      41.13      -3.62         14.0     0.6406 
+kappa                 0.31       0.32      -0.01         16.0     0.8438 
+
+Conclusao: Nenhuma diferenca estatisticamente significativa encontrada (p >= 0.05).
+           Os modelos tem desempenho estatisticamente equivalente.
+
+--------------------------------------------------------------------------------
+WILCOXON: XGB SMOTE vs XGB Undersamp.
+--------------------------------------------------------------------------------
+
+WILCOXON SIGNED-RANK TEST (pareado por fold, nao-parametrico)
+H0: Nao ha diferenca entre XGB SMOTE e XGB Undersamp.
+
+Metrica            Media A    Media B       Diff    Statistic    p-valor Resultado
+................................................................................
+accuracy             85.00      64.90     +20.10          0.0     0.0039 **
+sensitivity          34.50      67.00     -32.50          3.5     0.0234 *
+specificity          94.28      64.58     +29.70          0.0     0.0020 **
+f1                   37.51      37.43      +0.08         26.0     0.9219 
+kappa                 0.31       0.19      +0.11         17.0     0.3223 
+
+Conclusao: Diferenca significativa encontrada em 3 metrica(s).
+
+--------------------------------------------------------------------------------
+WILCOXON: SVM SMOTE vs SVM Sem Balanc.
+--------------------------------------------------------------------------------
+
+WILCOXON SIGNED-RANK TEST (pareado por fold, nao-parametrico)
+H0: Nao ha diferenca entre SVM SMOTE e SVM Sem Balanc.
+
+Metrica            Media A    Media B       Diff    Statistic    p-valor Resultado
+................................................................................
+accuracy             75.67      84.68      -9.01          0.0     0.0078 **
+sensitivity          22.50       0.00     +22.50          0.0     0.0078 **
+specificity          85.25     100.00     -14.75          0.0     0.0020 **
+f1                   22.50       0.00     +22.50          0.0     0.0078 **
+kappa                 0.08       0.00      +0.08         13.0     0.1523 
+
+Conclusao: Diferenca significativa encontrada em 4 metrica(s).
+
+--------------------------------------------------------------------------------
+WILCOXON: SVM SMOTE vs SVM Class Weight
+--------------------------------------------------------------------------------
+
+WILCOXON SIGNED-RANK TEST (pareado por fold, nao-parametrico)
+H0: Nao ha diferenca entre SVM SMOTE e SVM Class Weight
+
+Metrica            Media A    Media B       Diff    Statistic    p-valor Resultado
+................................................................................
+accuracy             75.67      77.04      -1.38         16.5     0.5156 
+sensitivity          22.50      39.00     -16.50          2.5     0.0781 
+specificity          85.25      84.07      +1.18          5.0     0.6250 
+f1                   22.50      33.93     -11.43          8.5     0.1055 
+kappa                 0.08       0.21      -0.13          8.0     0.0977 
+
+Conclusao: Nenhuma diferenca estatisticamente significativa encontrada (p >= 0.05).
+           Os modelos tem desempenho estatisticamente equivalente.
+
+--------------------------------------------------------------------------------
+WILCOXON: SVM SMOTE vs SVM Undersamp.
+--------------------------------------------------------------------------------
+
+WILCOXON SIGNED-RANK TEST (pareado por fold, nao-parametrico)
+H0: Nao ha diferenca entre SVM SMOTE e SVM Undersamp.
+
+Metrica            Media A    Media B       Diff    Statistic    p-valor Resultado
+................................................................................
+accuracy             75.67      66.59      +9.08          3.0     0.0098 **
+sensitivity          22.50      65.00     -42.50          1.5     0.0117 *
+specificity          85.25      67.12     +18.13          0.0     0.0020 **
+f1                   22.50      36.27     -13.77         10.0     0.0840 
+kappa                 0.08       0.19      -0.11         15.0     0.2324 
+
+Conclusao: Diferenca significativa encontrada em 3 metrica(s).
+
+
+================================================================================
+NOTA METODOLOGICA
+================================================================================
+
+Wilcoxon signed-rank test:
+  Teste nao-parametrico para amostras pareadas. Compara as metricas de
+  desempenho obtidas nos mesmos 10 folds do cross-validation. Adequado
+  quando nao se pode assumir normalidade (n=10 folds e pequeno).
+  Referencia: Demsar (2006). Statistical Comparisons of Classifiers over
+  Multiple Data Sets. JMLR, 7, 1-30.
+
+McNemar's test:
+  Teste para tabelas de contingencia 2x2. Compara se dois classificadores
+  cometem erros diferentes nas mesmas instancias. Usa correcao de
+  continuidade de Edwards. Apropriado quando as predicoes sao feitas
+  nos mesmos dados (10-fold CV garante que cada instancia aparece
+  exatamente uma vez no teste).
+  Referencia: McNemar (1947). Note on the sampling error of the
+  difference between correlated proportions or percentages.
+  Psychometrika, 12(2), 153-157.

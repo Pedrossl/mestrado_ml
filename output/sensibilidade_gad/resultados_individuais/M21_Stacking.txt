@@ -2,23 +2,24 @@ MÉTODO: Stacking (KNN+Ada+XGB) + MetaLR + F2
 Código: M21_Stacking
 Referência: Wolpert (1992). Stacked generalization. Neural networks, 5(2), 241-259.
 Descrição: Stacking heterogêneo combinando modelos base (KNN, AdaBoost, XGBoost) e um meta-modelo (Regressão Logística balanceada) para maximizar recall inter-modelos.
+Execução: seed=42 | commit=e7cd7df | timestamp_utc=2026-08-01T17:34:00.562498+00:00
 ============================================================
 
 MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
 ------------------------------------------------------------
-Accuracy:     79.79% ± 4.86%
-Sensitivity:  50.00% ± 12.84%
-Specificity:  85.23% ± 6.17%
-PPV:          40.87% ± 11.00%
-NPV:          90.50% ± 2.18%
-F1-Score:     43.12% ± 9.34%
-Kappa:        0.3168 ± 0.1117
+Accuracy:     80.14% ± 5.22%
+Sensitivity:  43.50% ± 19.74%
+Specificity:  86.78% ± 4.45%
+PPV:          35.89% ± 12.37%
+NPV:          89.44% ± 3.53%
+F1-Score:     38.65% ± 15.09%
+Kappa:        0.2706 ± 0.1732
 
 MATRIZ DE CONFUSÃO AGREGADA
 ------------------------------------------------------------
-  VN= 207  FP=  36
-  FN=  22  VP=  22
+  VN= 211  FP=  32
+  FN=  25  VP=  19
 
 THRESHOLD (determinado no treino de cada fold)
-  Média: 0.296 | Mín: 0.210 | Máx: 0.390
-  Por fold: ['0.27', '0.21', '0.25', '0.39', '0.29', '0.25', '0.29', '0.37', '0.27', '0.37']
+  Média: 0.326 | Mín: 0.260 | Máx: 0.410
+  Por fold: ['0.31', '0.26', '0.28', '0.28', '0.35', '0.32', '0.37', '0.32', '0.41', '0.36']

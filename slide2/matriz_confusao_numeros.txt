@@ -1,0 +1,35 @@
+MATRIZ DE CONFUSAO - XGBoost + SMOTE - GAD (modelo escolhido)
+10-Fold Stratified CV agregado | 287 criancas (243 sem GAD, 44 com GAD)
+========================================================================
+
+THRESHOLD PADRAO (0.50)
+------------------------------------------------------------------------
+                       Predito: Sem GAD    Predito: Com GAD
+  Real: Sem GAD (243)   229  (94,2%)          14  (5,8%)
+  Real: Com GAD  (44)    29  (65,9%)          15  (34,1%)
+
+  Sensibilidade = 34,1%   Especificidade = 94,2%
+  PPV = 51,7%             NPV = 88,8%
+  F1 = 41,1%              Kappa = 0,329
+
+
+THRESHOLD YOUDEN (0.22) - para o slide 30 (trade-off clinico)
+------------------------------------------------------------------------
+                       Predito: Sem GAD    Predito: Com GAD
+  Real: Sem GAD (243)   211  (86,8%)          32  (13,2%)
+  Real: Com GAD  (44)    21  (47,7%)          23  (52,3%)
+
+  Sensibilidade = 52,3%   Especificidade = 86,8%
+  PPV = 41,8%             NPV = 90,9%
+  F1 = 46,5%              Kappa = 0,355
+
+
+O TRADE-OFF EM NUMEROS DE CRIANCAS
+------------------------------------------------------------------------
+  Baixar o threshold de 0.50 para 0.22:
+    +8 criancas com GAD detectadas   (15 -> 23 de 44)
+    +18 falsos alarmes               (14 -> 32 de 243)
+    Custo: 2,2 falsos alarmes por caso verdadeiro adicional detectado
+
+Fontes: output/plots/Comparativo/GAD/matrizes_confusao_norm_gad.txt
+        output/plots/AnaliseThreshold/GAD/analise_threshold_gad.txt
