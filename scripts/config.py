@@ -40,10 +40,12 @@ MODEL_DROP_COLUMNS = [
 
 FEATURE_DROP_COLUMNS = [
     "CD",
+    "Family History - Psychiatric Diagnosis",
 ]
 
 FEATURE_DROP_RATIONALE = {
-    "CD": "Redundante com ODD (Spearman rho=0.48). ODD carrega mais sinal com GAD. Remocao melhora CV (+0.008 Kappa) e Monte Carlo v1 (+0.028 Kappa, de 0.813 para 0.841).",
+    "CD": "Redundante com ODD (Spearman rho=0.48). ODD carrega mais sinal com GAD. Remocao melhora CV (+0.008 Kappa) e Monte Carlo v1 (+0.028 Kappa).",
+    "Family History - Psychiatric Diagnosis": "Correlacao fraca com GAD (Spearman rho=0.12). Permutation Importance negativa (-0.013). Remocao melhora Monte Carlo v1 (+0.085 Kappa, de 0.813 para 0.898).",
 }
 
 SENSITIVE_FEATURES = [
