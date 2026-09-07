@@ -29,6 +29,7 @@ scripts/
   evaluation/          # comparativos, learning curves e testes estatisticos
   analysis/            # ROC, threshold, EDA, matriz de confusao e erros
   hyperparameters/     # grid search canonico
+  experimento_hard_samples/    # Monte Carlo v1 em uso
   experimento_hard_samples_v2/ # Monte Carlo corrigido
 
 docs/                  # manifestos e notas de organizacao
@@ -86,7 +87,13 @@ Rodar EDA:
 PYTHONPATH=. .venv/bin/python scripts/analysis/eda.py
 ```
 
-Rodar Monte Carlo corrigido dos hard samples:
+Rodar Monte Carlo v1 dos hard samples:
+
+```bash
+PYTHONPATH=. .venv/bin/python -m scripts.experimento_hard_samples.executar_tudo
+```
+
+Rodar Monte Carlo v2 dos hard samples:
 
 ```bash
 PYTHONPATH=. .venv/bin/python scripts/experimento_hard_samples_v2/monte_carlo_corrigido.py

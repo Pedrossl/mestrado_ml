@@ -115,12 +115,14 @@ Scripts removidos nesta limpeza por serem exploratorios, historicos ou substitui
 - `scripts/hyperparameters/busca_hiperparametros_v3.py`
 - `scripts/hyperparameters/busca_hiperparametros_fold_ajustado.py`
 - `scripts/hyperparameters/busca_rf.py`
-- `scripts/experimento_hard_samples/`
 
-Scripts de Monte Carlo v2 permanecem no caminho principal porque sustentam a dissertacao:
+Scripts de Monte Carlo preservados:
 
+- `scripts/experimento_hard_samples/`: fluxo v1 ainda em uso.
 - `scripts/experimento_hard_samples_v2/monte_carlo_corrigido.py`
 - `scripts/experimento_hard_samples_v2/convergencia_monte_carlo.py`
+
+O v1 foi restaurado apos a limpeza porque ainda faz parte do fluxo atual de analise. O comparativo antes/depois da limpeza de features esta em `output/experimento_hard_samples/comparativo_pre_pos_feature_cleanup_v1.txt`.
 
 ### Etapa 3: padronizar execucao
 

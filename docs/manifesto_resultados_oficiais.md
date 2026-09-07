@@ -154,6 +154,10 @@ Resultados principais:
 
 Fontes:
 
+- `output/experimento_hard_samples/monte_carlo_resultado_pre_feature_cleanup.txt`
+- `output/experimento_hard_samples/monte_carlo_resultado.txt`
+- `output/experimento_hard_samples/comparativo_pre_pos_feature_cleanup_v1.txt`
+- `scripts/experimento_hard_samples/`
 - `output/experimento_hard_samples_v2/monte_carlo_corrigido_resultado.txt`
 - `output/experimento_hard_samples_v2/convergencia_monte_carlo.txt`
 - `scripts/experimento_hard_samples_v2/monte_carlo_corrigido.py`
@@ -262,7 +266,6 @@ Scripts removidos por nao sustentarem diretamente a versao atual da dissertacao:
 - `scripts/hyperparameters/busca_hiperparametros_v3.py`
 - `scripts/hyperparameters/busca_hiperparametros_fold_ajustado.py`
 - `scripts/hyperparameters/busca_rf.py`
-- `scripts/experimento_hard_samples/`
 
 Outputs removidos por serem historicos, exploratorios ou fora do escopo GAD atual:
 
