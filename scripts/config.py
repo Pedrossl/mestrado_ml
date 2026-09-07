@@ -38,6 +38,20 @@ MODEL_DROP_COLUMNS = [
     "Sample Weight",
 ]
 
+FEATURE_DROP_COLUMNS = [
+    "Poverty Status",
+    "Number of Siblings",
+    "Family History - Psychiatric Diagnosis",
+    "Number of Bio. Parents",
+]
+
+FEATURE_DROP_RATIONALE = {
+    "Poverty Status": "Correlacao Spearman quase nula com GAD e redundancia com Race/Number of Bio. Parents.",
+    "Number of Siblings": "Correlacao Spearman quase nula com GAD e baixa importancia no XGBoost.",
+    "Family History - Psychiatric Diagnosis": "Correlacao Spearman fraca com GAD e baixa importancia no XGBoost.",
+    "Number of Bio. Parents": "Correlacao Spearman fraca com GAD, VIF moderado e redundancia com Race/Poverty Status.",
+}
+
 SENSITIVE_FEATURES = [
     "Race",
     "Sex",

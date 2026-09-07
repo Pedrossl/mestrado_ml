@@ -283,3 +283,4 @@ Resolver obrigatoriamente:
 3. Protocolo real de MinMax dentro ou fora dos folds.
 4. Figura quebrada `Figura ??`.
 5. Status do SAD: futuro ou resultado complementar.
+6. Decidir se a limpeza ativa de features (`Poverty Status`, `Number of Siblings`, `Family History - Psychiatric Diagnosis`, `Number of Bio. Parents`) entra na versao final ou fica apenas como experimento.

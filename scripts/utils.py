@@ -6,15 +6,17 @@ from scipy import stats
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix, roc_curve, auc
 
-from scripts.config import MODEL_DROP_COLUMNS, TARGETS
+from scripts.config import FEATURE_DROP_COLUMNS, MODEL_DROP_COLUMNS, TARGETS
 from scripts.preprocessing.normalizacao import carregar_teste_normalizado
 
 
-def preparar_dados(target='GAD'):
+def preparar_dados(target='GAD', aplicar_limpeza_features=True, features_remover=None):
     """Prepara os dados para o modelo.
 
     Args:
         target: Variável alvo ('GAD' ou 'SAD')
+        aplicar_limpeza_features: remove as features definidas para a limpeza ativa.
+        features_remover: lista opcional para sobrescrever as features removidas.
     """
     if target not in TARGETS:
         raise ValueError(f"Target inválido: {target}. Use um de {TARGETS}.")
@@ -22,6 +24,8 @@ def preparar_dados(target='GAD'):
     df = carregar_teste_normalizado()
 
     colunas_remover = list(MODEL_DROP_COLUMNS)
+    if aplicar_limpeza_features:
+        colunas_remover.extend(features_remover or FEATURE_DROP_COLUMNS)
 
     if target == 'GAD':
         colunas_remover.append('SAD')

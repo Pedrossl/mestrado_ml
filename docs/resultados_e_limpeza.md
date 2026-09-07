@@ -56,6 +56,25 @@ Features que merecem cuidado antes de remover:
 
 Conclusao: a limpeza de features deve ser feita por ablation study, nao por corte manual baseado apenas em correlacao.
 
+## Ablation inicial de features
+
+A primeira limpeza ativa esta registrada em `scripts/config.py` (`FEATURE_DROP_COLUMNS`) e remove:
+
+- `Poverty Status`
+- `Number of Siblings`
+- `Family History - Psychiatric Diagnosis`
+- `Number of Bio. Parents`
+
+Comparativo gerado em `output/feature_ablation/comparativo_ablation_gad.txt`:
+
+| Cenario | Amostras | Features | Sensibilidade | Especificidade | F1 | Kappa |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Baseline | 287 | 17 | 36.00 ± 13.99 | 92.18 ± 4.52 | 39.24 ± 12.41 | 0.3042 ± 0.1370 |
+| Sem 4 features, mesmas linhas | 287 | 13 | 39.00 ± 11.90 | 93.40 ± 3.73 | 43.67 ± 9.29 | 0.3580 ± 0.1049 |
+| Sem 4 features, mais amostras | 306 | 13 | 37.00 ± 17.54 | 92.69 ± 3.03 | 39.09 ± 16.12 | 0.3085 ± 0.1718 |
+
+Leitura: na comparacao mais controlada, mantendo as mesmas 287 linhas do baseline, a limpeza inicial melhora sensibilidade, especificidade, F1 e Kappa. No uso pratico com 306 amostras validas, o resultado fica proximo do baseline; como os intervalos de confianca se sobrepoem, a conclusao conservadora e que a limpeza nao piora o modelo e deixa o conjunto mais simples.
+
 ## Limpeza federal do codigo
 
 ### Etapa 1: limpeza segura
@@ -137,11 +156,10 @@ Extrair funcoes comuns para:
 
 ### Etapa 6: limpeza de features com evidencia
 
-Criar um script de ablation study que rode:
+O script `scripts/analysis/feature_ablation.py` compara o baseline completo com a limpeza ativa. Proximas extensoes:
 
-- baseline com todas as features;
 - remocao uma-a-uma;
 - remocao por blocos correlacionados;
 - comparacao por sensitivity, specificity, F1, Kappa e AUC.
 
-So depois disso decidir a lista final de features.
+So depois disso decidir se a lista final de features fica com 13 variaveis ou se novos blocos entram na limpeza.
