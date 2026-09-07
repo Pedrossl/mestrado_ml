@@ -25,20 +25,7 @@ Na busca focada em sensibilidade para GAD:
 
 ### SAD
 
-No XGBoost:
-
-- Default: sensitivity 22.0%, specificity 94.6%, Kappa 0.213.
-- Class weighting: sensitivity 35.0%, specificity 88.8%, Kappa 0.250.
-- Undersampling: sensitivity 68.0%, specificity 66.9%, Kappa 0.239.
-- SMOTE + threshold: sensitivity 68.0%, specificity 71.8%, F1 43.6%, Kappa 0.279.
-
-Na analise de threshold com XGBoost + SMOTE:
-
-- Threshold default 0.50: sensitivity 30.4%, specificity 92.5%, Kappa 0.262.
-- Threshold Youden 0.12: sensitivity 60.9%, specificity 77.6%, Kappa 0.292.
-- Threshold para sensitivity >= 70%: 0.06, com sensitivity 71.7% e specificity 66.0%.
-
-SAD responde melhor que GAD ao ajuste de threshold, principalmente se o objetivo for triagem.
+Os outputs de SAD foram removidos desta branch porque a dissertacao atual trata SAD como trabalho futuro. O codigo canonico ainda permite regenerar esses resultados quando eles entrarem no artigo ou em uma nova versao do texto.
 
 ## Leitura das features
 
@@ -63,9 +50,9 @@ Candidatas para teste de remocao por baixo sinal ou redundancia potencial:
 Features que merecem cuidado antes de remover:
 
 - `Race`, `Sex`, `Poverty Status` e `Number of Bio. Parents`: podem ter implicacoes de vies/fairness.
-- `Number of Physical Symptoms`: foi removida no preprocessamento atual, mas no dado bruto tem correlacao razoavel com GAD/SAD. A decisao de remover precisa ser justificada.
+- `Number of Physical Symptoms`: foi removida no preprocessamento atual, mas no dado bruto tem correlacao razoavel com GAD. A decisao de remover precisa ser justificada.
 - `Age`: tem VIF moderado, mas aparece com importancia alta para GAD.
-- `Number of Sleep Disturbances`: VIF moderado, mas e a feature mais forte para SAD.
+- `Number of Sleep Disturbances`: VIF moderado, mas tem sinal clinico relevante e nao deve ser removida apenas por VIF.
 
 Conclusao: a limpeza de features deve ser feita por ablation study, nao por corte manual baseado apenas em correlacao.
 
@@ -98,16 +85,23 @@ Sugestao de scripts canonicos:
 - `scripts/hyperparameters/gridsearch.py`
 - `scripts/maximizar_sensibilidade_gad.py`
 
-Scripts candidatos a arquivo historico ou revisao:
+Scripts removidos nesta limpeza por serem exploratorios, historicos ou substituidos por fluxos canonicos:
 
 - `scripts/index.py`
 - `scripts/Sergio.py`
 - `scripts/ml_avaliacao.py`
+- `scripts/compare_columns.py`
+- `scripts/visualization/`
 - `scripts/hyperparameters/busca_hiperparametros.py`
 - `scripts/hyperparameters/busca_hiperparametros_v3.py`
 - `scripts/hyperparameters/busca_hiperparametros_fold_ajustado.py`
+- `scripts/hyperparameters/busca_rf.py`
 - `scripts/experimento_hard_samples/`
-- `scripts/experimento_hard_samples_v2/`
+
+Scripts de Monte Carlo v2 permanecem no caminho principal porque sustentam a dissertacao:
+
+- `scripts/experimento_hard_samples_v2/monte_carlo_corrigido.py`
+- `scripts/experimento_hard_samples_v2/convergencia_monte_carlo.py`
 
 ### Etapa 3: padronizar execucao
 

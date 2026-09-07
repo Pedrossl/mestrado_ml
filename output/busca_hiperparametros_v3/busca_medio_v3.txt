@@ -1,5 +1,0 @@
-BUSCA DE HIPERPARÂMETROS v3 — GAD
-Modo: medio | n_iter=200
-Novidades: Normalização + NearMiss/RUS/IHT + HistGBM + ExtraTrees
-================================================================================
-

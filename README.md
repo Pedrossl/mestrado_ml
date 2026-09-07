@@ -22,14 +22,17 @@ datasets/
   Planilha_mestrado.xlsx
 
 scripts/
+  config.py             # paths, seeds, targets e listas de colunas
+  utils.py              # metricas, IC e funcoes compartilhadas
   preprocessing/       # normalizacao e transformacoes dos dados
   models/              # ADTree, XGBoost e SVM
   evaluation/          # comparativos, learning curves e testes estatisticos
   analysis/            # ROC, threshold, EDA, matriz de confusao e erros
-  hyperparameters/     # buscas de hiperparametros
-  utils.py             # metricas, IC e funcoes compartilhadas
+  hyperparameters/     # grid search canonico
+  experimento_hard_samples_v2/ # Monte Carlo corrigido
 
-output/                # resultados ja gerados
+docs/                  # manifestos e notas de organizacao
+output/                # resultados oficiais preservados
 SLIDE/ e slide2/       # materiais para apresentacao
 ```
 
@@ -47,10 +50,10 @@ Os scripts usam imports do pacote local `scripts`, entao execute os comandos a p
 
 ## Comandos uteis
 
-Rodar avaliacao geral de combinacoes:
+Rodar a busca de sensibilidade para GAD:
 
 ```bash
-PYTHONPATH=. .venv/bin/python scripts/ml_avaliacao.py
+PYTHONPATH=. .venv/bin/python scripts/maximizar_sensibilidade_gad.py
 ```
 
 Gerar comparativo entre algoritmos:
@@ -83,6 +86,18 @@ Rodar EDA:
 PYTHONPATH=. .venv/bin/python scripts/analysis/eda.py
 ```
 
+Rodar Monte Carlo corrigido dos hard samples:
+
+```bash
+PYTHONPATH=. .venv/bin/python scripts/experimento_hard_samples_v2/monte_carlo_corrigido.py
+```
+
+Consultar o manifesto de resultados oficiais:
+
+```bash
+less docs/manifesto_resultados_oficiais.md
+```
+
 ## Observacoes metodologicas
 
 - SMOTE e undersampling devem ser aplicados apenas no conjunto de treino em cada fold, para evitar vazamento de informacao.
@@ -93,8 +108,8 @@ PYTHONPATH=. .venv/bin/python scripts/analysis/eda.py
 
 ## Proximos passos recomendados
 
-1. Consolidar um script de validacao holdout final.
-2. Fixar sementes nos scripts que ainda usam splits/modelos sem `random_state`.
-3. Documentar claramente o tratamento de missing values.
-4. Decidir quais resultados de `output/` devem permanecer versionados como artefatos finais.
-5. Remover do git, em um commit separado, caches como `__pycache__`, `.pyc` e `.DS_Store` que ja estao rastreados.
+1. Reconciliar os resultados oficiais listados em `docs/manifesto_resultados_oficiais.md`.
+2. Corrigir a divergencia entre o Kappa 0.372 e 0.3105 do BorderlineSMOTE.
+3. Regerar ou localizar a feature importance usada na Tabela 4.11 da dissertacao.
+4. Padronizar a normalizacao MinMax dentro dos folds, se essa for a metodologia final.
+5. Criar um estudo de ablation para decidir limpeza de features com evidencia.
