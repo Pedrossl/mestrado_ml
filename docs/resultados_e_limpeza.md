@@ -65,7 +65,7 @@ A primeira limpeza ativa esta registrada em `scripts/config.py` (`FEATURE_DROP_C
 - `Family History - Psychiatric Diagnosis`
 - `Number of Bio. Parents`
 
-Comparativo gerado em `output/feature_ablation/comparativo_ablation_gad.txt`:
+Comparativo gerado em `output/feature_ablation/comparativo_ablation_gad.txt` e arquivado como snapshot em `output/feature_removal_runs/01_sem_4_features/`:
 
 | Cenario | Amostras | Features | Sensibilidade | Especificidade | F1 | Kappa |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -122,7 +122,7 @@ Scripts de Monte Carlo preservados:
 - `scripts/experimento_hard_samples_v2/monte_carlo_corrigido.py`
 - `scripts/experimento_hard_samples_v2/convergencia_monte_carlo.py`
 
-O v1 foi restaurado apos a limpeza porque ainda faz parte do fluxo atual de analise. O comparativo antes/depois da limpeza de features esta em `output/experimento_hard_samples/comparativo_pre_pos_feature_cleanup_v1.txt`.
+O v1 foi restaurado apos a limpeza porque ainda faz parte do fluxo atual de analise. O comparativo antes/depois da limpeza de features esta em `output/experimento_hard_samples/comparativo_pre_pos_feature_cleanup_v1.txt` e tambem foi arquivado no snapshot `output/feature_removal_runs/01_sem_4_features/`.
 
 ### Etapa 3: padronizar execucao
 

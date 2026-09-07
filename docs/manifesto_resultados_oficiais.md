@@ -157,6 +157,7 @@ Fontes:
 - `output/experimento_hard_samples/monte_carlo_resultado_pre_feature_cleanup.txt`
 - `output/experimento_hard_samples/monte_carlo_resultado.txt`
 - `output/experimento_hard_samples/comparativo_pre_pos_feature_cleanup_v1.txt`
+- `output/feature_removal_runs/01_sem_4_features/`
 - `scripts/experimento_hard_samples/`
 - `output/experimento_hard_samples_v2/monte_carlo_corrigido_resultado.txt`
 - `output/experimento_hard_samples_v2/convergencia_monte_carlo.txt`

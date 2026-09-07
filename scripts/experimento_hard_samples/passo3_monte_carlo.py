@@ -12,6 +12,7 @@
 import os
 import numpy as np
 import pandas as pd
+import re
 from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from sklearn.metrics import accuracy_score
@@ -23,6 +24,7 @@ SMOOTH_EPSILON  = 0.1  # Grau de suavização (0 = sem, 0.1 = leve, 0.3 = forte)
 ALVO = 'GAD'
 
 OUTPUT = 'output/experimento_hard_samples'
+PRE_FEATURE_CLEANUP_FILE = f'{OUTPUT}/monte_carlo_resultado_pre_feature_cleanup.txt'
 os.makedirs(OUTPUT, exist_ok=True)
 
 # Carrega dados
@@ -133,15 +135,76 @@ for m in ['sensitivity', 'specificity', 'kappa']:
 
 print(f"\n{'=' * 70}")
 
+def formatar_resultado_salvo(metricas):
+    linhas = []
+    for m in ['accuracy', 'sensitivity', 'specificity', 'f1', 'kappa']:
+        v_sem = f"{metricas['sem'][m]:.2f} ± {metricas['sem'][m + '_ic']:.2f}"
+        v_com = f"{metricas['com'][m]:.2f} ± {metricas['com'][m + '_ic']:.2f}"
+        linhas.append(f"{m:<16} {v_sem:>20} {v_com:>22}")
+    return "\n".join(linhas)
+
+
+def extrair_metricas_arquivo(path):
+    if not os.path.exists(path):
+        return None
+
+    padrao = re.compile(
+        r"^(accuracy|sensitivity|specificity|f1|kappa)\s+"
+        r"([0-9.]+)\s*±\s*([0-9.]+)\s+"
+        r"([0-9.]+)\s*±\s*([0-9.]+)"
+    )
+    metricas = {"sem": {}, "com": {}}
+
+    with open(path, "r", encoding="utf-8") as f:
+        for linha in f:
+            match = padrao.match(linha.strip())
+            if not match:
+                continue
+            nome, sem, sem_ic, com, com_ic = match.groups()
+            metricas["sem"][nome] = float(sem)
+            metricas["sem"][f"{nome}_ic"] = float(sem_ic)
+            metricas["com"][nome] = float(com)
+            metricas["com"][f"{nome}_ic"] = float(com_ic)
+
+    if all(m in metricas["sem"] and m in metricas["com"] for m in ['accuracy', 'sensitivity', 'specificity', 'f1', 'kappa']):
+        return metricas
+    return None
+
+
+def escrever_comparacao_antes_depois(f, metricas_antes, metricas_depois):
+    f.write("\n\nCOMPARAÇÃO COM ANTES DA LIMPEZA DE FEATURES\n")
+    f.write("=" * 60 + "\n\n")
+    f.write("ANTES DA LIMPEZA\n")
+    f.write("-" * 60 + "\n")
+    f.write(f"{'Métrica':<16} {'Sem Smoothing':>20} {'Com Smoothing':>22}\n")
+    f.write("-" * 60 + "\n")
+    f.write(formatar_resultado_salvo(metricas_antes))
+    f.write("\n\nDEPOIS DA LIMPEZA\n")
+    f.write("-" * 60 + "\n")
+    f.write(f"{'Métrica':<16} {'Sem Smoothing':>20} {'Com Smoothing':>22}\n")
+    f.write("-" * 60 + "\n")
+    f.write(formatar_resultado_salvo(metricas_depois))
+    f.write("\n\nDELTA DEPOIS - ANTES\n")
+    f.write("-" * 60 + "\n")
+    f.write(f"{'Métrica':<16} {'Sem Smoothing':>20} {'Com Smoothing':>22}\n")
+    f.write("-" * 60 + "\n")
+    for m in ['accuracy', 'sensitivity', 'specificity', 'f1', 'kappa']:
+        delta_sem = metricas_depois["sem"][m] - metricas_antes["sem"][m]
+        delta_com = metricas_depois["com"][m] - metricas_antes["com"][m]
+        f.write(f"{m:<16} {delta_sem:>+20.2f} {delta_com:>+22.2f}\n")
+
+
 # Salva resultado
+metricas_depois = {"sem": agg_sem, "com": agg_com}
+metricas_antes = extrair_metricas_arquivo(PRE_FEATURE_CLEANUP_FILE)
+
 with open(f'{OUTPUT}/monte_carlo_resultado.txt', 'w') as f:
     f.write(f"MONTE CARLO — {ALVO}\n")
     f.write(f"{N_SIMULACOES} simulações | Sorteio de {TAMANHO_SORTEIO}/{len(X_hard)} hard samples | ε={SMOOTH_EPSILON}\n\n")
     f.write(f"{'Métrica':<16} {'Sem Smoothing':>20} {'Com Smoothing':>22}\n")
     f.write("-" * 60 + "\n")
-    for m in ['accuracy', 'sensitivity', 'specificity', 'f1', 'kappa']:
-        v_sem = f"{agg_sem[m]:.2f} ± {agg_sem[m+'_ic']:.2f}"
-        v_com = f"{agg_com[m]:.2f} ± {agg_com[m+'_ic']:.2f}"
-        f.write(f"{m:<16} {v_sem:>20} {v_com:>22}\n")
+    f.write(formatar_resultado_salvo(metricas_depois))
+    if metricas_antes is not None:
+        escrever_comparacao_antes_depois(f, metricas_antes, metricas_depois)
 
 print(f"\n  Resultado salvo em: {OUTPUT}/monte_carlo_resultado.txt\n")

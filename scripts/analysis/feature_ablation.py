@@ -22,7 +22,9 @@ from scripts.config import (
 from scripts.utils import agregar_metricas_com_ic, calcular_metricas_fold, preparar_dados
 
 
+RUN_ID = "01_sem_4_features"
 OUTPUT_PATH = OUTPUT_DIR / "feature_ablation"
+RUN_OUTPUT_PATH = OUTPUT_DIR / "feature_removal_runs" / RUN_ID
 
 
 def treinar_xgboost_smote(df, target_name):
@@ -79,19 +81,14 @@ def formatar_metrica(linha, nome):
     return f"{linha[nome]:.2f} +/- {linha[f'{nome}_ic']:.2f}"
 
 
-def salvar_relatorio(target, linhas, features_antes, features_depois):
-    OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
-    csv_path = OUTPUT_PATH / f"comparativo_ablation_{target.lower()}.csv"
-    txt_path = OUTPUT_PATH / f"comparativo_ablation_{target.lower()}.txt"
-
-    pd.DataFrame(linhas).to_csv(csv_path, index=False)
-
+def escrever_relatorio(txt_path, target, linhas, features_antes, features_depois):
     baseline = linhas[0]
     limpo = linhas[2]
 
     with txt_path.open("w", encoding="utf-8") as f:
         f.write(f"ABLACAO DE FEATURES - {target.upper()}\n")
         f.write("=" * 80 + "\n\n")
+        f.write(f"Rodada: {RUN_ID}\n")
         f.write("Modelo: XGBoost + SMOTE com 10-fold CV\n")
         f.write("Objetivo: comparar baseline completo vs conjunto limpo.\n\n")
 
@@ -138,6 +135,22 @@ def salvar_relatorio(target, linhas, features_antes, features_depois):
             delta = limpo[metrica] - baseline[metrica]
             f.write(f"{metrica}: {delta:+.4f}\n")
 
+
+def salvar_relatorio(target, linhas, features_antes, features_depois):
+    OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+    RUN_OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+
+    csv_path = OUTPUT_PATH / f"comparativo_ablation_{target.lower()}.csv"
+    txt_path = OUTPUT_PATH / f"comparativo_ablation_{target.lower()}.txt"
+    run_csv_path = RUN_OUTPUT_PATH / f"feature_ablation_{target.lower()}.csv"
+    run_txt_path = RUN_OUTPUT_PATH / f"feature_ablation_{target.lower()}.txt"
+
+    df_linhas = pd.DataFrame(linhas)
+    df_linhas.to_csv(csv_path, index=False)
+    df_linhas.to_csv(run_csv_path, index=False)
+
+    escrever_relatorio(txt_path, target, linhas, features_antes, features_depois)
+    escrever_relatorio(run_txt_path, target, linhas, features_antes, features_depois)
     return csv_path, txt_path
 
 

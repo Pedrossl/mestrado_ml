@@ -34,6 +34,7 @@ scripts/
 
 docs/                  # manifestos e notas de organizacao
 output/                # resultados oficiais preservados
+  feature_removal_runs/ # snapshots por rodada de limpeza de features
 SLIDE/ e slide2/       # materiais para apresentacao
 ```
 
@@ -110,6 +111,8 @@ Comparar o baseline completo com a limpeza atual de features:
 ```bash
 PYTHONPATH=. .venv/bin/python -m scripts.analysis.feature_ablation
 ```
+
+Os snapshots por rodada ficam em `output/feature_removal_runs/`.
 
 ## Observacoes metodologicas
 
