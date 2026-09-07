@@ -39,17 +39,11 @@ MODEL_DROP_COLUMNS = [
 ]
 
 FEATURE_DROP_COLUMNS = [
-    "Poverty Status",
-    "Number of Siblings",
-    "Family History - Psychiatric Diagnosis",
-    "Number of Bio. Parents",
+    "CD",
 ]
 
 FEATURE_DROP_RATIONALE = {
-    "Poverty Status": "Correlacao Spearman quase nula com GAD e redundancia com Race/Number of Bio. Parents.",
-    "Number of Siblings": "Correlacao Spearman quase nula com GAD e baixa importancia no XGBoost.",
-    "Family History - Psychiatric Diagnosis": "Correlacao Spearman fraca com GAD e baixa importancia no XGBoost.",
-    "Number of Bio. Parents": "Correlacao Spearman fraca com GAD, VIF moderado e redundancia com Race/Poverty Status.",
+    "CD": "Redundante com ODD (Spearman rho=0.48). ODD carrega mais sinal com GAD. Remocao melhora CV (+0.008 Kappa) e Monte Carlo v1 (+0.028 Kappa, de 0.813 para 0.841).",
 }
 
 SENSITIVE_FEATURES = [
