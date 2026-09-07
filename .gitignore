@@ -1,2 +1,26 @@
-.venv
+# Ambiente local
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Sistema/editores
+.DS_Store
+.vscode/
+.idea/
+
+# Arquivos locais de apoio
 resumo.md
+
+# Resultados gerados localmente.
+# Obs.: alguns arquivos em output/ ja estao versionados; esta regra evita
+# adicionar novos resultados acidentalmente sem apagar o historico atual.
+output/

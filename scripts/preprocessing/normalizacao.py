@@ -1,5 +1,7 @@
 import pandas as pd
-from scripts.preprocessing.minmax import normalizar_minmax, COLUNAS_NUMERICAS
+
+from scripts.config import PREPROCESSING_DROP_COLUMNS, TEST_DATASET
+from scripts.preprocessing.minmax import normalizar_minmax
 
 
 def normalizar_teste(df, aplicar_minmax=True):
@@ -37,21 +39,14 @@ def normalizar_teste(df, aplicar_minmax=True):
         df_norm['Number of Bio. Parents'] = df_norm['Number of Bio. Parents'] / 2.0
 
     # Remover colunas não utilizadas
-    colunas_remover = [
-        'Depression',
-        'Number of Type A Stressors',
-        'Number of Physical Symptoms',
-        'Family History - Substance Abuse'
-    ]
-
-    for col in colunas_remover:
+    for col in PREPROCESSING_DROP_COLUMNS:
         if col in df_norm.columns:
             df_norm = df_norm.drop(col, axis=1)
 
     return df_norm
 
 
-def carregar_teste_normalizado(caminho='datasets/mestrado-teste.csv', aplicar_minmax=True):
+def carregar_teste_normalizado(caminho=TEST_DATASET, aplicar_minmax=True):
     """
     Carrega e normaliza o dataset de teste.
 

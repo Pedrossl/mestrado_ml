@@ -1,0 +1,15 @@
+pandas
+numpy
+scipy
+scikit-learn
+imbalanced-learn
+xgboost
+matplotlib
+seaborn
+statsmodels
+openpyxl
+umap-learn
+
+# Opcional: necessario apenas para os experimentos com ADTree/Weka.
+# Tambem exige Java instalado no sistema.
+python-weka-wrapper3

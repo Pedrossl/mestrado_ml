@@ -6,6 +6,7 @@ from scipy import stats
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix, roc_curve, auc
 
+from scripts.config import MODEL_DROP_COLUMNS, TARGETS
 from scripts.preprocessing.normalizacao import carregar_teste_normalizado
 
 
@@ -15,14 +16,12 @@ def preparar_dados(target='GAD'):
     Args:
         target: Variável alvo ('GAD' ou 'SAD')
     """
+    if target not in TARGETS:
+        raise ValueError(f"Target inválido: {target}. Use um de {TARGETS}.")
+
     df = carregar_teste_normalizado()
 
-    colunas_remover = [
-        'Subject',
-        'GAD Probabiliy - Gamma',
-        'SAD Probability - Gamma',
-        'Sample Weight'
-    ]
+    colunas_remover = list(MODEL_DROP_COLUMNS)
 
     if target == 'GAD':
         colunas_remover.append('SAD')

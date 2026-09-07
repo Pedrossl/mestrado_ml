@@ -1,20 +1,11 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
+from scripts.config import NUMERIC_COLUMNS
 
-# Colunas numéricas do dataset de TESTE que devem ser normalizadas com MinMax
+# Colunas numericas do dataset de TESTE que devem ser normalizadas com MinMax
 # Nota: Number of Bio. Parents e Number of Siblings têm tratamento customizado em normalizacao.py
-COLUNAS_NUMERICAS = [
-    'Age',
-    'Number of Impairments',
-    'Number of Type A Stressors',
-    'Number of Type B Stressors',
-    'Frequency Temper Tantrums',
-    'Frequency Irritable Mood',
-    'Number of Sleep Disturbances',
-    'Number of Physical Symptoms',
-    'Number of Sensory Sensitivities',
-]
+COLUNAS_NUMERICAS = NUMERIC_COLUMNS
 
 
 def normalizar_minmax(df, scaler=None, colunas=None):
