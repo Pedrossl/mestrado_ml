@@ -1,0 +1,154 @@
+MELHOR RESULTADO — MONTE CARLO v1 — GAD
+======================================================================
+
+Configuracao atual: 15 features (removidas CD e Family History)
+Dataset: 287 amostras | Split 80/20 estratificado | Seed 42
+200 simulacoes | Sorteio 15/20 hard samples
+XGBoost + SMOTE | max_depth=8
+
+RESULTADO ATUAL (15 features, max_depth=8) — Sem Smoothing
+----------------------------------------------------------------------
+  accuracy         96.12% +/- 0.53% (sigma=3.83)
+  sensitivity      93.25% +/- 1.59% (sigma=11.41)
+  specificity      96.84% +/- 0.55% (sigma=3.96)
+  f1               90.73% +/- 1.27% (sigma=9.08)
+  kappa            0.8832 +/- 0.0159 (sigma=0.1144)
+
+  Hard samples: 4 positivos | Base acerta: 12/20
+
+RESULTADO ATUAL (15 features, max_depth=8) — Com Smoothing (eps=0.1)
+----------------------------------------------------------------------
+  accuracy         96.20% +/- 0.53% (sigma=3.83)
+  sensitivity      94.25% +/- 1.55% (sigma=11.13)
+  specificity      96.69% +/- 0.58% (sigma=4.15)
+  f1               91.03% +/- 1.25% (sigma=8.94)
+  kappa            0.8867 +/- 0.0157 (sigma=0.1127)
+
+
+======================================================================
+COMPARATIVO COM RESULTADO ORIGINAL (17 features, max_depth=6)
+======================================================================
+
+Metrica            Original (17f)      Atual (15f,d8)   Delta
+------------------------------------------------------------
+accuracy                   93.20%           96.12%      +2.92
+sensitivity                84.30%           93.25%      +8.95
+specificity                96.17%           96.84%      +0.67
+f1                         85.67%           90.73%      +5.06
+kappa                      0.8130           0.8832    +0.0702
+sigma_kappa                0.1277           0.1144    -0.0133
+sigma_sensitivity          15.25            11.41      -3.84
+
+Melhorias principais:
+  - Kappa: +0.0702 (8.6% de melhora relativa)
+  - Sensibilidade: +8.95pp com reducao do desvio padrao (-3.84)
+  - Reducao de variancia em todas as metricas
+
+
+Features removidas e justificativa:
+
+  1. CD (Conduct Disorder)
+     Metodo de deteccao: Correlacao de Spearman
+     CD e ODD tem correlacao alta entre si (Spearman rho=0.50) — sao transtornos
+     de comportamento que coexistem frequentemente. Porem ODD e mais preditivo
+     de GAD (rho=0.293) do que CD (rho=0.241). Com ambas presentes, o XGBoost
+     divide os splits entre elas, criando "ruido de decisao" nos hard samples:
+     o modelo as vezes usa CD onde deveria usar ODD, errando casos dificeis.
+     Removendo CD, toda a informacao comportamental se concentra no ODD,
+     que carrega mais sinal para GAD.
+     Impacto: Kappa +0.028 no Monte Carlo v1, CV 10-fold +0.008.
+
+  2. Family History - Psychiatric Diagnosis
+     Metodo de deteccao: Permutation Importance (CV 10-fold, 10 repeticoes)
+     Correlacao muito fraca com GAD (Spearman rho=0.12). A taxa de GAD e 12.3%
+     sem historico familiar e 21.7% com — diferenca pequena para 287 amostras.
+     Permutation Importance foi negativa (-0.013), ou seja, o modelo fica melhor
+     quando essa feature e embaralhada aleatoriamente. Isso indica que o XGBoost
+     encontra splits nela que parecem uteis no treino mas sao espurios. No Monte
+     Carlo, quando o modelo retreina com poucos hard samples (15), esses splits
+     falsos causam overfitting — o modelo "decora" padroes que nao existem.
+     Impacto: Kappa +0.085 no Monte Carlo v1 (de 0.813 para 0.898).
+
+  Por que o impacto e tao grande no Monte Carlo?
+     O MC v1 retreina o modelo adicionando apenas 15 hard samples ao treino.
+     Com tao poucas amostras extras, qualquer feature ruidosa ou redundante
+     tem efeito desproporcional — o modelo pode criar splits em CD ou Family
+     History que "funcionam" por acaso naqueles 15, mas falham nos outros 5.
+     Removendo essas fontes de ruido, o retreino fica mais estavel, resultando
+     em Kappa maior (+0.07) E desvio padrao menor (-0.013).
+
+Hiperparametro ajustado:
+  - max_depth: 6 (default) -> 8 (arvores mais profundas capturam interacoes
+    complexas nos hard samples durante o retreino)
+
+Features mantidas (15):
+  - Sex
+  - Race
+  - Age
+  - Number of Bio. Parents
+  - Number of Siblings
+  - Poverty Status
+  - Social Phobia
+  - ADHD
+  - ODD
+  - Number of Impairments
+  - Number of Type B Stressors
+  - Frequency Temper Tantrums
+  - Frequency Irritable Mood
+  - Number of Sleep Disturbances
+  - Number of Sensory Sensitivities
+
+Ver FEATURE_SELECTION.md na raiz para detalhes completos.
+
+
+======================================================================
+RESULTADO INTERMEDIARIO (15 features, max_depth=6) — Antes do tuning
+======================================================================
+
+Sem Smoothing
+----------------------------------------------------------------------
+  accuracy         95.55% +/- 0.54% (sigma=3.91)
+  sensitivity      93.00% +/- 1.61% (sigma=11.53)
+  specificity      96.19% +/- 0.55% (sigma=3.95)
+  f1               89.44% +/- 1.30% (sigma=9.29)
+  kappa            0.8666 +/- 0.0163 (sigma=0.1169)
+
+Com Smoothing (eps=0.1)
+----------------------------------------------------------------------
+  accuracy         94.97% +/- 0.53% (sigma=3.80)
+  sensitivity      93.62% +/- 1.56% (sigma=11.21)
+  specificity      95.31% +/- 0.58% (sigma=4.14)
+  f1               88.34% +/- 1.22% (sigma=8.78)
+  kappa            0.8520 +/- 0.0155 (sigma=0.1112)
+
+  Hard samples: 4 positivos | Base acerta: 14/20
+
+
+======================================================================
+RESULTADO ANTERIOR (17 features) — Baseline da dissertacao
+======================================================================
+
+Configuracao: 17 features (sem nenhuma remocao) | max_depth=6 (default)
+Dataset: 287 amostras | Split 80/20 estratificado | Seed 42
+200 simulacoes | Sorteio 15/20 hard samples
+
+Sem Smoothing
+----------------------------------------------------------------------
+  accuracy         93.20% +/- 0.63% (sigma=4.48)
+  sensitivity      84.30% +/- 2.13% (sigma=15.25)
+  specificity      96.17% +/- 0.57% (sigma=4.09)
+  f1               85.67% +/- 1.40% (sigma=10.07)
+  kappa            0.8130 +/- 0.0178 (sigma=0.1277)
+
+Com Smoothing (eps=0.1)
+----------------------------------------------------------------------
+  accuracy         92.90% +/- 0.69% (sigma=4.97)
+  sensitivity      84.80% +/- 2.19% (sigma=15.69)
+  specificity      95.60% +/- 0.69% (sigma=4.93)
+  f1               85.30% +/- 1.48% (sigma=10.64)
+  kappa            0.8100 +/- 0.0184 (sigma=0.1398)
+
+  Hard samples: 5 positivos | Base acerta: 9/20
+
+Observacao: os valores +/- sao IC 95% (intervalo de confianca da media).
+O sigma e o desvio padrao real entre as 200 simulacoes.

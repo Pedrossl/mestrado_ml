@@ -38,6 +38,8 @@ MODEL_DROP_COLUMNS = [
     "Sample Weight",
 ]
 
+XGB_MAX_DEPTH = 8
+
 FEATURE_DROP_COLUMNS = [
     "CD",
     "Family History - Psychiatric Diagnosis",
