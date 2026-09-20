@@ -15,9 +15,9 @@
 #     está no platô.
 #
 # Saídas:
-#   output/experimento_hard_samples_v2/convergencia_monte_carlo.txt
-#   output/experimento_hard_samples_v2/convergencia_monte_carlo.csv
-#   output/experimento_hard_samples_v2/plots/convergencia_sigma.png
+#   output/gad/experimento_hard_samples_v2/convergencia_monte_carlo.txt
+#   output/gad/experimento_hard_samples_v2/convergencia_monte_carlo.csv
+#   output/gad/experimento_hard_samples_v2/plots/convergencia_sigma.png
 # =============================================================================
 
 import os
@@ -36,8 +36,8 @@ ALVO            = 'GAD'
 
 METRICAS = ['accuracy', 'sensitivity', 'specificity', 'f1', 'kappa']
 
-OUTPUT_V1 = 'output/experimento_hard_samples'
-OUTPUT    = 'output/experimento_hard_samples_v2'
+OUTPUT_V1 = 'output/gad/experimento_hard_samples'
+OUTPUT    = 'output/gad/experimento_hard_samples_v2'
 PLOTS     = f'{OUTPUT}/plots'
 os.makedirs(PLOTS, exist_ok=True)
 

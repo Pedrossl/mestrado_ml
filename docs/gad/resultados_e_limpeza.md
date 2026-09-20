@@ -58,7 +58,10 @@ Conclusao: a limpeza de features deve ser feita por ablation study, nao por cort
 
 ## Ablation inicial de features
 
-A primeira limpeza ativa esta registrada em `scripts/config.py` (`FEATURE_DROP_COLUMNS`) e remove:
+A primeira limpeza ativa esta registrada em `scripts/config.py`
+(`FEATURE_DROP_COLUMNS_BY_TARGET["GAD"]`, hoje com uma lista diferente da
+descrita abaixo — ver `docs/gad/FEATURE_SELECTION.md` para a decisao final)
+e removia:
 
 - `Poverty Status`
 - `Number of Siblings`

@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 OUT_PATH = ROOT / "output" / "plots" / "resultado_monte_carlo_padrao_dissertacao.png"
 
 # Dados do bloco "COMPARATIVO COM RESULTADO ORIGINAL"

@@ -5,8 +5,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parents[2]
-TXT_PATH = ROOT / "resultados" / "melhor_resultado_monte_carlo.txt"
+ROOT = Path(__file__).resolve().parents[3]
+TXT_PATH = ROOT / "resultados" / "gad" / "melhor_resultado_monte_carlo.txt"
 OUT_PATH = ROOT / "output" / "plots" / "resultado_monte_carlo_bonito.png"
 
 

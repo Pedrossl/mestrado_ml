@@ -141,17 +141,19 @@ Candidatas testadas que NAO foram removidas (pioraram Monte Carlo):
 
 ```bash
 # Permutation Importance
-python3 -m scripts.analysis.permutation_importance
+python3 -m scripts.gad.analysis.permutation_importance
 
 # Correlacao de Spearman
 python3 -m scripts.analysis.correlation
 
 # Monte Carlo v1 comparativo completo
-python3 -m scripts.analysis.mc_v1_comparativo_completo
+python3 -m scripts.gad.analysis.mc_v1_comparativo_completo
 ```
 
 ## Configuracao
 
 As features removidas estao definidas em `scripts/config.py` na variavel
-`FEATURE_DROP_COLUMNS`. A funcao `preparar_dados()` aplica a remocao
-automaticamente.
+`FEATURE_DROP_COLUMNS_BY_TARGET["GAD"]`. A funcao `preparar_dados()` aplica a
+remocao automaticamente com base no `target` passado. O SAD tem sua propria
+entrada nesse dicionario (vazia ate que a selecao de features de SAD seja
+feita) — ver `scripts/sad/README.md`.

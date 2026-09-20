@@ -38,16 +38,30 @@ MODEL_DROP_COLUMNS = [
     "Sample Weight",
 ]
 
+# Hiperparametro do XGBoost tunado para o Monte Carlo v1 de GAD.
+# Pode nao ser o ideal para SAD (nao testado ainda) - reavaliar quando o
+# tuning de SAD for feito.
 XGB_MAX_DEPTH = 8
 
-FEATURE_DROP_COLUMNS = [
-    "CD",
-    "Family History - Psychiatric Diagnosis",
-]
+# Features a remover por alvo. Cada alvo tem sua propria lista porque a
+# selecao de features (Spearman + Permutation Importance + validacao Monte
+# Carlo) e feita separadamente para cada um - nao ha garantia de que uma
+# feature ruidosa/redundante para GAD tambem seja para SAD, e vice-versa.
+# Ver docs/gad/FEATURE_SELECTION.md para a estrategia completa de GAD.
+FEATURE_DROP_COLUMNS_BY_TARGET = {
+    "GAD": [
+        "CD",
+        "Family History - Psychiatric Diagnosis",
+    ],
+    "SAD": [],
+}
 
-FEATURE_DROP_RATIONALE = {
-    "CD": "Redundante com ODD (Spearman rho=0.48). ODD carrega mais sinal com GAD. Remocao melhora CV (+0.008 Kappa) e Monte Carlo v1 (+0.028 Kappa).",
-    "Family History - Psychiatric Diagnosis": "Correlacao fraca com GAD (Spearman rho=0.12). Permutation Importance negativa (-0.013). Remocao melhora Monte Carlo v1 (+0.085 Kappa, de 0.813 para 0.898).",
+FEATURE_DROP_RATIONALE_BY_TARGET = {
+    "GAD": {
+        "CD": "Redundante com ODD (Spearman rho=0.48). ODD carrega mais sinal com GAD. Remocao melhora CV (+0.008 Kappa) e Monte Carlo v1 (+0.028 Kappa).",
+        "Family History - Psychiatric Diagnosis": "Correlacao fraca com GAD (Spearman rho=0.12). Permutation Importance negativa (-0.013). Remocao melhora Monte Carlo v1 (+0.085 Kappa, de 0.813 para 0.898).",
+    },
+    "SAD": {},
 }
 
 SENSITIVE_FEATURES = [

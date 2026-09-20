@@ -23,7 +23,8 @@ from scripts.utils import calcular_ic, calcular_metricas_fold, preparar_dados
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 RUN_ID = "02_sweep_feature_candidates"
-OUTPUT_PATH = OUTPUT_DIR / "feature_removal_runs" / RUN_ID
+def _output_path(target):
+    return OUTPUT_DIR / target.lower() / "feature_removal_runs" / RUN_ID
 
 MONTE_CARLO_SIMULACOES = 200
 MONTE_CARLO_HARD_SAMPLES = 20
@@ -289,6 +290,7 @@ def linha_cv(scenario, modo, df, metricas):
 
 
 def rodar_cv_sweep(target="GAD"):
+    OUTPUT_PATH = _output_path(target)
     OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
     df_baseline, target_name = preparar_cenario(target, [])
     baseline_index = df_baseline.index
@@ -425,6 +427,7 @@ def rodar_monte_carlo_v1_para_cenario(target, scenario, baseline_index=None, mod
 
 
 def rodar_monte_carlo_sweep(target="GAD"):
+    OUTPUT_PATH = _output_path(target)
     OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
     df_baseline, _ = preparar_cenario(target, [])
     baseline_index = df_baseline.index
@@ -516,7 +519,7 @@ def salvar_resumo_monte_carlo(df):
 def main():
     rodar_cv_sweep("GAD")
     rodar_monte_carlo_sweep("GAD")
-    print(f"Resultados salvos em: {OUTPUT_PATH}")
+    print(f"Resultados salvos em: {_output_path('GAD')}")
 
 
 if __name__ == "__main__":

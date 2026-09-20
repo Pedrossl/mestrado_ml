@@ -24,8 +24,8 @@ TAMANHO_SORTEIO = 15    # Quantos dos 20 hard samples incluir por simulação
 SMOOTH_EPSILON  = 0.1   # Peso mínimo dos hard samples com smoothing
 ALVO            = 'GAD'
 
-OUTPUT_V1 = 'output/experimento_hard_samples'
-OUTPUT    = 'output/experimento_hard_samples_v2'
+OUTPUT_V1 = 'output/gad/experimento_hard_samples'
+OUTPUT    = 'output/gad/experimento_hard_samples_v2'
 os.makedirs(OUTPUT, exist_ok=True)
 
 # Carrega splits do passo 1 (já salvos pela v1)

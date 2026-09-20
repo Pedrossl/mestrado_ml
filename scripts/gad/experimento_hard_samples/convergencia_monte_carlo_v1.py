@@ -21,7 +21,7 @@ ALVO            = 'GAD'
 
 METRICAS = ['accuracy', 'sensitivity', 'specificity', 'f1', 'kappa']
 
-OUTPUT = 'output/experimento_hard_samples'
+OUTPUT = 'output/gad/experimento_hard_samples'
 PLOTS  = f'{OUTPUT}/plots'
 os.makedirs(PLOTS, exist_ok=True)
 

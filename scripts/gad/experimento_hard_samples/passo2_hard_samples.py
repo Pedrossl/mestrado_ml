@@ -14,7 +14,7 @@ from scripts.utils import preparar_dados
 ALVO   = 'GAD'
 N_HARD = 20       # Quantos hard samples selecionar
 
-OUTPUT = 'output/experimento_hard_samples'
+OUTPUT = 'output/gad/experimento_hard_samples'
 os.makedirs(OUTPUT, exist_ok=True)
 
 # Carrega split salvo pelo passo 1

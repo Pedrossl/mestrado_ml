@@ -4,7 +4,7 @@ Consolida TODOS os experimentos de selecao de features e tuning do Monte Carlo v
 com explicacao objetiva do motivo de cada resultado. Todos os numeros abaixo foram
 re-executados e conferidos nesta rodada (seeds fixas, 100% reprodutiveis).
 
-Ver tambem: [FEATURE_SELECTION.md](../FEATURE_SELECTION.md) (estrategia de selecao)
+Ver tambem: [FEATURE_SELECTION.md](../../docs/gad/FEATURE_SELECTION.md) (estrategia de selecao)
 e [melhor_resultado_monte_carlo.txt](melhor_resultado_monte_carlo.txt) (resultado oficial).
 
 
@@ -27,7 +27,7 @@ e [melhor_resultado_monte_carlo.txt](melhor_resultado_monte_carlo.txt) (resultad
    binario/ordinal nas categoricas, listwise deletion para valores faltantes
    (307 -> 287 registros). Ver `scripts/preprocessing/`.
 
-2. **Selecao de features (3 etapas)** — ver [FEATURE_SELECTION.md](../FEATURE_SELECTION.md)
+2. **Selecao de features (3 etapas)** — ver [FEATURE_SELECTION.md](../../docs/gad/FEATURE_SELECTION.md)
    para o detalhamento completo:
    - **Correlacao de Spearman**: filtro de redundancia entre pares de features e
      de relevancia de cada feature com o alvo (GAD). Nao assume relacao linear

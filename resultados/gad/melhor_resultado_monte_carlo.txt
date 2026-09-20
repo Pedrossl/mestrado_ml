@@ -98,7 +98,7 @@ Features mantidas (15):
   - Number of Sleep Disturbances
   - Number of Sensory Sensitivities
 
-Ver FEATURE_SELECTION.md na raiz para detalhes completos.
+Ver docs/gad/FEATURE_SELECTION.md para detalhes completos.
 
 
 ======================================================================

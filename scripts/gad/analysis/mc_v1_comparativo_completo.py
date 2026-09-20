@@ -16,7 +16,7 @@ N_HARD = 20
 ALVO = 'GAD'
 SEED = 42
 
-OUTPUT = 'output/feature_removal_runs/05_comparativo_completo'
+OUTPUT = 'output/gad/feature_removal_runs/05_comparativo_completo'
 os.makedirs(OUTPUT, exist_ok=True)
 
 

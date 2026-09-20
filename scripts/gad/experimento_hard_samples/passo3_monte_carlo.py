@@ -24,7 +24,7 @@ TAMANHO_SORTEIO = 15   # Quantos dos 20 hard samples usar por simulação
 SMOOTH_EPSILON  = 0.1  # Grau de suavização (0 = sem, 0.1 = leve, 0.3 = forte)
 ALVO = 'GAD'
 
-OUTPUT = 'output/experimento_hard_samples'
+OUTPUT = 'output/gad/experimento_hard_samples'
 PRE_FEATURE_CLEANUP_FILE = f'{OUTPUT}/monte_carlo_resultado_pre_feature_cleanup.txt'
 os.makedirs(OUTPUT, exist_ok=True)
 

@@ -13,8 +13,8 @@ from sklearn.model_selection import StratifiedKFold
 from xgboost import XGBClassifier
 
 from scripts.config import (
-    FEATURE_DROP_COLUMNS,
-    FEATURE_DROP_RATIONALE,
+    FEATURE_DROP_COLUMNS_BY_TARGET,
+    FEATURE_DROP_RATIONALE_BY_TARGET,
     N_SPLITS,
     OUTPUT_DIR,
     RANDOM_STATE,
@@ -23,8 +23,14 @@ from scripts.utils import agregar_metricas_com_ic, calcular_metricas_fold, prepa
 
 
 RUN_ID = "01_sem_4_features"
-OUTPUT_PATH = OUTPUT_DIR / "feature_ablation"
-RUN_OUTPUT_PATH = OUTPUT_DIR / "feature_removal_runs" / RUN_ID
+
+
+def _output_path(target):
+    return OUTPUT_DIR / target.lower() / "feature_ablation"
+
+
+def _run_output_path(target):
+    return OUTPUT_DIR / target.lower() / "feature_removal_runs" / RUN_ID
 
 
 def treinar_xgboost_smote(df, target_name):
@@ -92,10 +98,11 @@ def escrever_relatorio(txt_path, target, linhas, features_antes, features_depois
         f.write("Modelo: XGBoost + SMOTE com 10-fold CV\n")
         f.write("Objetivo: comparar baseline completo vs conjunto limpo.\n\n")
 
+        rationale = FEATURE_DROP_RATIONALE_BY_TARGET.get(target, {})
         f.write("FEATURES REMOVIDAS\n")
         f.write("-" * 80 + "\n")
-        for feature in FEATURE_DROP_COLUMNS:
-            f.write(f"- {feature}: {FEATURE_DROP_RATIONALE.get(feature, '')}\n")
+        for feature in FEATURE_DROP_COLUMNS_BY_TARGET.get(target, []):
+            f.write(f"- {feature}: {rationale.get(feature, '')}\n")
 
         f.write("\nFEATURES ANTES\n")
         f.write("-" * 80 + "\n")
@@ -137,13 +144,15 @@ def escrever_relatorio(txt_path, target, linhas, features_antes, features_depois
 
 
 def salvar_relatorio(target, linhas, features_antes, features_depois):
-    OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
-    RUN_OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
+    output_path = _output_path(target)
+    run_output_path = _run_output_path(target)
+    output_path.mkdir(parents=True, exist_ok=True)
+    run_output_path.mkdir(parents=True, exist_ok=True)
 
-    csv_path = OUTPUT_PATH / f"comparativo_ablation_{target.lower()}.csv"
-    txt_path = OUTPUT_PATH / f"comparativo_ablation_{target.lower()}.txt"
-    run_csv_path = RUN_OUTPUT_PATH / f"feature_ablation_{target.lower()}.csv"
-    run_txt_path = RUN_OUTPUT_PATH / f"feature_ablation_{target.lower()}.txt"
+    csv_path = output_path / f"comparativo_ablation_{target.lower()}.csv"
+    txt_path = output_path / f"comparativo_ablation_{target.lower()}.txt"
+    run_csv_path = run_output_path / f"feature_ablation_{target.lower()}.csv"
+    run_txt_path = run_output_path / f"feature_ablation_{target.lower()}.txt"
 
     df_linhas = pd.DataFrame(linhas)
     df_linhas.to_csv(csv_path, index=False)

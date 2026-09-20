@@ -8,7 +8,7 @@ binária com dados severamente desbalanceados (85%/15%), contexto clínico.
 
 Cada método é rastreável a uma referência bibliográfica.
 Todos usam 10-fold Stratified CV (sem data leakage).
-Output: output/sensibilidade_gad/
+Output: output/gad/sensibilidade_gad/
 
 Referência geral (survey canônico):
   He & Garcia (2009). Learning from imbalanced data.
@@ -50,9 +50,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from imblearn.pipeline import Pipeline as ImbPipeline
 
 
-import sys
-sys.path.insert(0, os.path.dirname(__file__))
-from utils import (
+from scripts.utils import (
     preparar_dados, calcular_ic, calcular_metricas_fold,
     agregar_metricas_com_ic,
     coletar_roc_folds,
@@ -63,7 +61,7 @@ warnings.filterwarnings('ignore')
 # ─── Constantes ────────────────────────────────────────────────────────────────
 
 TARGET = 'GAD'
-OUTPUT_DIR = 'output/sensibilidade_gad'
+OUTPUT_DIR = 'output/gad/sensibilidade_gad'
 PLOTS_DIR = f'{OUTPUT_DIR}/plots'
 FOLDS_DIR = f'{OUTPUT_DIR}/resultados_individuais'
 N_FOLDS = 10

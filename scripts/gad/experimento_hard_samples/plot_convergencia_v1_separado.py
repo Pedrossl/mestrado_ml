@@ -9,7 +9,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-OUTPUT = 'output/experimento_hard_samples'
+OUTPUT = 'output/gad/experimento_hard_samples'
 PLOTS  = f'{OUTPUT}/plots'
 os.makedirs(PLOTS, exist_ok=True)
 
