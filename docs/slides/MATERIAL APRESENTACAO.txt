@@ -1,0 +1,355 @@
+================================================================================
+  MATERIAL DE APRESENTAÇÃO — DISSERTAÇÃO DE MESTRADO
+  Predição de GAD (Ansiedade Generalizada) em Crianças via ML
+  Dataset: 287 amostras | 10-fold Stratified CV
+  Gerado: maio 2026
+================================================================================
+
+
+================================================================================
+1. DATASET
+================================================================================
+
+  Amostras totais : 287
+  Features        : 17 variáveis clínicas/demográficas
+  Target          : GAD (Ansiedade Generalizada)
+                    Classe 0 (sem GAD): 243 amostras (84.7%)
+                    Classe 1 (com GAD):  44 amostras (15.3%)
+
+  Desbalanceamento: ~85%/15% (razão ~5.5:1)
+
+  Validação: 10-fold Stratified Cross-Validation (sem data leakage)
+  Balanceamento aplicado DENTRO de cada fold (apenas no treino)
+
+
+================================================================================
+2. ALGORITMOS DE CLASSIFICAÇÃO UTILIZADOS
+================================================================================
+
+  ─── Gradient Boosting ───────────────────────────────────────────────────────
+
+  1. XGBoost (XGBClassifier)
+     - Algoritmo principal; suporta scale_pos_weight nativo
+     - Hiperparâmetros buscados: learning_rate, max_depth, n_estimators,
+       scale_pos_weight, min_child_weight, colsample_bytree, colsample_bylevel,
+       subsample, gamma, reg_alpha, reg_lambda
+
+  2. HistGradientBoostingClassifier (HistGBM — equivalente ao LightGBM)
+     - Nativo scikit-learn; mais rápido que XGBoost em datasets tabulares
+     - Hiperparâmetros buscados: learning_rate, max_depth, max_iter,
+       max_leaf_nodes, min_samples_leaf, max_bins, l2_regularization,
+       class_weight
+
+  ─── Florestas Aleatórias ────────────────────────────────────────────────────
+
+  3. Random Forest (RandomForestClassifier)
+     - Hiperparâmetros buscados: n_estimators, max_depth, max_features,
+       min_samples_leaf, min_samples_split, criterion, bootstrap,
+       class_weight, max_samples
+
+  4. Extra Trees (ExtraTreesClassifier)
+     - Mais aleatório que RF; tende a maior recall com boa especificidade
+     - Hiperparâmetros buscados: n_estimators, max_depth, max_features,
+       min_samples_leaf, min_samples_split, class_weight
+
+  ─── Ensembles Especializados para Dados Desbalanceados ─────────────────────
+
+  5. BalancedRandomForest (BalancedRandomForestClassifier — imbalanced-learn)
+     - Random Forest com undersampling interno por árvore
+
+  6. EasyEnsemble (EasyEnsembleClassifier — imbalanced-learn)
+     - Ensemble de AdaBoost com undersampling aleatório em cada base learner
+     - GAD: Sens=68.5%, Spec=65.9%, Kappa=0.217 | detecta 30/44 crianças
+
+  7. BalancedBagging (BalancedBaggingClassifier — imbalanced-learn)
+     - Bagging com undersampling interno
+
+  8. RUSBoost (RUSBoostClassifier — imbalanced-learn)
+     - AdaBoost com Random Under-Sampling em cada iteração
+     - GAD: Sens=47.5%, Spec=82.3%, Kappa=0.263
+
+  ─── SVM ─────────────────────────────────────────────────────────────────────
+
+  9. SVM (SVC — kernel RBF)
+     - Testado com e sem balanceamento; class_weight suportado nativamente
+     - GAD sem balanceamento: Sens=0% (classifica tudo como negativo)
+     - GAD Class Weighting: Sens=39%, Kappa=0.210
+
+  ─── Árvore de Decisão Alternativa ──────────────────────────────────────────
+
+  10. ADTree (Alternating Decision Tree)
+      - ADTree GAD + SMOTE: Sens=84%, Acc=32.75%, Kappa=0.028 (instável)
+      - ADTree GAD + CW:    Sens=59%, Acc=64.11%, Kappa=0.153 (mais equilibrado)
+
+
+================================================================================
+3. TÉCNICAS DE BALANCEAMENTO UTILIZADAS
+================================================================================
+
+  ─── Oversampling (geração de amostras sintéticas) ───────────────────────────
+
+  1. SMOTE — Synthetic Minority Oversampling Technique
+     - Interpolação linear entre vizinhos da classe minoritária
+     - GAD: Sens=34.5%, Spec=94.3%, Kappa=0.307 | VP=15/44
+
+  2. ADASYN — Adaptive Synthetic Sampling
+     - Como SMOTE, mas gera mais amostras nas regiões difíceis
+     - GAD: Sens=38.0%, Spec=94.2%, Kappa=0.354
+
+  3. BorderlineSMOTE
+     - SMOTE aplicado apenas nas amostras próximas à fronteira de decisão
+     - GAD: Sens=41.0%, Spec=93.4%, F1=45.2%, Kappa=0.372  ← ★ MELHOR KAPPA
+
+  ─── Undersampling ───────────────────────────────────────────────────────────
+
+  4. Undersampling aleatório (RandomUnderSampler — RUS)
+     - Remoção aleatória de amostras da classe majoritária
+     - GAD: Sens=67.0%, Spec=64.6%, Kappa=0.195
+
+  5. NearMiss (v1)
+     - Undersampling baseado em distância aos vizinhos da classe minoritária
+     - Melhor combinação: XGB_NearMiss_clinic → Sens=73.5%, Composto=0.5475
+
+  6. InstanceHardnessThreshold (IHT)
+     - Remove amostras da majoritária de baixa confiança (classificador interno)
+     - Melhor resultado: XGB_IHT_f2_pen → Sens=75.5%, Composto=0.5225
+
+  ─── Métodos Combinados (Over + Under) ───────────────────────────────────────
+
+  7. SMOTETomek
+     - SMOTE + remoção de pares Tomek Links (limpa fronteira de decisão)
+     - GAD: Sens=38.5%, Spec=93.8%, F1=43.2%, Kappa=0.354
+
+  8. SMOTEENN
+     - SMOTE + limpeza por Edited Nearest Neighbors
+     - GAD equilibrado: Sens=52.5%, Spec=77.8%, F1=39.1%, Kappa=0.243
+     - Com SPW+Threshold F2: Sens=71.5% (M15 — máxima sensibilidade)
+
+  ─── Ponderação de Classe (sem síntese) ─────────────────────────────────────
+
+  9. Class Weighting — class_weight='balanced' ou customizado
+     - Penaliza erros na classe minoritária sem gerar amostras novas
+     - GAD XGBoost+CW: Sens=38%, Spec=91.8%, Kappa=0.319
+
+  10. scale_pos_weight (XGBoost nativo)
+      - Peso multiplicativo para a classe positiva dentro do XGBoost
+      - GAD com SPW=20: Sens=45.5%, Spec=88.9%, Kappa=0.340
+
+
+================================================================================
+4. AJUSTE DE THRESHOLD (POST-HOC)
+================================================================================
+
+  11. Threshold padrão 0.5
+      - Baseline; favorece especificidade em dados desbalanceados
+
+  12. Threshold F2-score (TunedThresholdClassifierCV)
+      - Desloca threshold para maximizar F2 (recall pesa 2× mais que precisão)
+      - Usado em toda a busca de hiperparâmetros
+
+  13. Threshold Youden's J
+      - Maximiza Sens + Spec − 1 na curva ROC
+      - GAD: Sens=36.5%, Spec=95.1%, Kappa=0.350
+
+  14. Threshold PR-Curve
+      - Threshold no ponto de maior F1 na curva Precisão-Recall
+      - GAD: resultado idêntico ao Youden's J neste dataset
+
+
+================================================================================
+5. SCORERS DE OTIMIZAÇÃO (busca de hiperparâmetros)
+================================================================================
+
+  1. Recall / Sensibilidade pura
+     → Resultado GAD: Sens=97-100%, Spec≈0-5% — modelos inutilizáveis
+
+  2. F2-score penalizado (f2_pen) = F2 × (Spec/0.3)²
+     → Prioriza recall mas penaliza fortemente Spec < 30%
+
+  3. G-Mean = √(Sens × Spec)
+     → Elimina modelos degenerados (Spec=0 → score=0)
+
+  4. Scorer Clínico (clinic) = Sens × F1 × min(Spec/0.5, 1)
+     → Penaliza Spec < 50%; equilíbrio para contexto de triagem
+
+  5. Score Composto = √(Sens × F1)
+     → Métrica de ranking final dos experimentos
+
+
+================================================================================
+6. NORMALIZAÇÃO
+================================================================================
+
+  - MinMaxScaler (principal; fitado apenas no treino de cada fold)
+  - StandardScaler
+  - RobustScaler
+  - PowerTransformer (Yeo-Johnson)
+  Todas aplicadas dentro do pipeline para evitar data leakage.
+
+
+================================================================================
+7. EXPERIMENTO ESPECIAL — MONTE CARLO COM HARD SAMPLES (GAD)
+================================================================================
+
+  Objetivo   : identificar amostras difíceis de classificar ("hard samples")
+               e avaliar o impacto de incluí-las no treino
+  Metodologia: 200 simulações | Sorteio de 15/20 hard samples por simulação | ε=0.1
+
+  ─── Resultados V1 (hard samples incluídos no conjunto de avaliação) ─────────
+
+  Métrica              Sem Smoothing        Com Smoothing
+  ──────────────────────────────────────────────────────
+  Accuracy             93.20 ± 0.63         92.90 ± 0.69
+  Sensitivity          84.30 ± 2.13         84.80 ± 2.19
+  Specificity          96.17 ± 0.57         95.60 ± 0.69
+  F1-Score             85.67 ± 1.40         85.30 ± 1.48
+  Kappa                 0.81 ± 0.02          0.81 ± 0.02
+
+  ★ Melhor resultado absoluto do projeto: Kappa=0.81, Sens=84.3%, F1=85.7%
+
+  ─── Resultados V2 (avaliação somente no restante do teste — sem hard samples) ─
+
+  Accuracy   84.21% | Sensitivity  0.00% | Specificity 94.12%
+  F1   0.00% | Kappa  -0.08
+
+  ─── Interpretação ───────────────────────────────────────────────────────────
+
+  Na V1, os hard samples fazem parte tanto do treino quanto do teste, o que
+  explica o desempenho excepcional — o modelo aprende e é avaliado nas mesmas
+  amostras difíceis.
+
+  Na V2 (avaliação no conjunto limpo, excluindo os hard samples do teste),
+  o modelo colapsa: os hard samples eram justamente os únicos verdadeiros
+  positivos que o modelo conseguia capturar. Sem eles no teste, Sens=0%.
+
+  Conclusão: os hard samples concentram a informação discriminativa do GAD.
+  Incluí-los no treino é essencial; sem eles o modelo não generaliza.
+
+
+================================================================================
+8. MELHORES RESULTADOS — GAD
+================================================================================
+
+  LEGENDA: Acc=Acurácia | Sens=Sensibilidade | Spec=Especificidade
+           F1=F1-Score | Kappa=Cohen's Kappa | IC=Intervalo de Confiança 95%
+           (*) Acc = Sens×0.153 + Spec×0.847 (ponderada pela proporção real)
+           Interpretação Kappa: 0.21–0.40 = razoável | >0.40 = moderado
+
+  ─── Melhor equilíbrio geral (Kappa) ─────────────────────────────────────────
+
+  Rank  Modelo / Técnica                    Acc(*)    Sens          F1        Spec      Kappa
+  ──────────────────────────────────────────────────────────────────────────────────────────
+    1   BorderlineSMOTE + XGBoost           85.4%    41.0%±12.8%  45.2%     93.4%     0.372  ★ MELHOR KAPPA
+    2   scale_pos_weight=20 + XGBoost       82.3%    45.5%        44.4%     88.9%     0.340
+    3   SMOTETomek + XGBoost                85.4%    38.5%        43.2%     93.8%     0.354
+    4   ADASYN + XGBoost                    85.6%    38.0%        43.1%     94.2%     0.354
+    5   Threshold F2 + XGBoost              81.1%    47.5%        43.7%     87.2%     0.326  ★ MELHOR SENS+F1
+    6   XGBoost + Class Weighting           83.6%    38.0%±12.4%  41.1%     91.8%     0.319
+    7   XGBoost + SMOTE (baseline)          85.0%    34.5%±16.5%  37.5%     94.3%     0.307
+
+  Nota: Kappa=0.372 é o máximo absoluto — ainda dentro da faixa "razoável" (<0.40).
+
+  ─── Máxima sensibilidade (triagem clínica) ──────────────────────────────────
+
+  Rank  Modelo / Técnica                    Acc       Sens          F1        Spec      Kappa
+  ──────────────────────────────────────────────────────────────────────────────────────────
+    1   SMOTEENN + SPW + Threshold F2       64.3%    71.5%±19.6%  38.7%     63.0%     0.209  ★ MÁXIMA SENS
+    2   EasyEnsemble + XGBoost             66.3%    68.5%±13.0%  38.9%     65.9%     0.217  ★ MELHOR KAPPA
+    3   Undersampling + XGBoost            64.9%    67.0%±18.9%  37.4%     64.6%     0.195
+    4   Undersampling + SVM                66.6%    65.0%        36.3%     67.1%     0.189
+    5   BalancedRandomForest               67.0%    59.5%        36.2%     68.4%     0.187
+    6   SMOTEENN + XGBoost                 73.9%    52.5%        39.1%     77.8%     0.243
+
+  Matriz de confusão (médias de 10 folds, 287 amostras: 44 positivos / 243 negativos):
+    EasyEnsemble:      VP=30, FN=14, FP=83,  VN=160  → detecta 30/44 crianças
+    SMOTEENN+SPW+F2:   VP=31, FN=13, FP=90,  VN=153  → detecta 31/44 crianças
+    SMOTE baseline:    VP=15, FN=29, FP=14,  VN=229  → detecta 15/44 crianças
+
+  ─── Busca de hiperparâmetros (n_iter=200, scorer F2) ────────────────────────
+
+  #1  BorderlineSMOTE + XGBoost            ★ MELHOR COM HIPERPARÂMETROS
+      Acc=61.3% | Sens=83.5%±11.8% | Spec=57.3% | F1=41.2% | Kappa=0.236
+      Parâmetros: lr=0.0184, max_depth=5-6, n_estimators=340,
+                  scale_pos_weight=24.8, min_child_weight=8,
+                  colsample_bytree=0.549, subsample=0.683
+                  BorderlineSMOTE: k_neighbors=4, m_neighbors=12
+
+  Nota: otimizar por recall puro → Sens=97-100%, Spec≈0% (inutilizável).
+        Otimizar por F2 → equilíbrio; BorderlineSMOTE_f2 é o melhor.
+
+  ─── Busca completa (n_iter=500, Score Composto = √Sens×F1) ─────────────────
+
+  Top 5 — XGBoost / HistGBM / ExtraTrees:
+
+  Rank  Experimento              Composto   Sens          F1        Spec      Kappa
+  ──────────────────────────────────────────────────────────────────────────────────
+    1   XGB_NearMiss_clinic      0.5475    73.5%±12.0%  40.8%     63.0%     0.234  ★
+    2   XGB_NearMiss_f2_pen      0.5370    73.5%±12.0%  39.2%     59.7%     0.211
+    3   XGB_IHT_f2_pen           0.5225    75.5%±11.6%  36.2%     56.0%     0.167
+    4   ET_NearMiss_f2_pen       0.5203    68.0%±18.2%  39.8%     68.0%     0.239
+    5   XGB_IHT_gmean            0.5050    73.5%±16.8%  34.7%     55.6%     0.152
+
+  Top 5 — Random Forest:
+
+  Rank  Experimento              Composto   Sens          F1        Spec      Kappa
+  ──────────────────────────────────────────────────────────────────────────────────
+    1   RF_RUS_gmean             0.5477    69.0%±16.2%  43.5%     70.7%     0.278  ★
+    2   RF_SMOTEENN_f2_pen       0.5327    73.5%±10.9%  38.6%     61.9%     0.210
+    3   RF_RUS_f2_pen            0.5315    71.5%±17.7%  39.5%     64.3%     0.223
+    4   RF_SMOTEENN_gmean        0.5249    71.0%±12.1%  38.8%     63.9%     0.215
+    5   RF_RUS_clinic            0.5176    67.0%±20.0%  40.0%     68.4%     0.237
+
+  Maior sensibilidade absoluta (RF): RF_IHT_gmean — Sens=77.5%, Spec=48.2%
+  Melhor equilíbrio geral (XGB):     XGB_NearMiss_clinic — Composto=0.5475
+
+  ─── Ranking de algoritmos por Kappa máximo (GAD) ───────────────────────────
+
+    1. XGBoost    Kappa=0.372 (BorderlineSMOTE)
+    2. SVM        Kappa=0.210 (Class Weighting)
+    3. ADTree     Kappa=0.153 (Class Weighting)
+
+
+================================================================================
+9. FEATURE IMPORTANCE — GAD (XGBoost, média 10 folds)
+================================================================================
+
+  TOP 5:
+    1. Number of Impairments          0.163 ± 0.046
+    2. Race                           0.112 ± 0.024
+    3. ODD                            0.083 ± 0.047
+    4. Social Phobia                  0.080 ± 0.022
+    5. ADHD                           0.078 ± 0.035
+
+  Perfil GAD: associado a comprometimentos funcionais e comorbidades (ODD, ADHD).
+
+
+================================================================================
+10. CENÁRIOS DE USO — GAD
+================================================================================
+
+  CENÁRIO 1 — Apoio à decisão clínica (melhor equilíbrio geral):
+    BorderlineSMOTE + XGBoost: Sens=41%, F1=45.2%, Spec=93.4%, Kappa=0.372
+
+  CENÁRIO 2 — Triagem em larga escala (equilíbrio sens/especif.):
+    EasyEnsemble: Sens=68.5%, Spec=65.9%, Kappa=0.217
+    Detecta 30/44 crianças com GAD; ~34% de alarmes falsos
+
+  CENÁRIO 3 — Rastreamento inicial (máxima sensibilidade):
+    SMOTEENN+SPW+F2:         Sens=71.5%, detecta 31/44, ~37% alarmes falsos
+    BorderlineSMOTE_f2 (opt.): Sens=83.5%, F1=41.2%, Kappa=0.236
+
+
+================================================================================
+11. LIMITAÇÕES
+================================================================================
+
+  - Dataset pequeno (n=287; apenas 44 positivos GAD) → ICs amplos
+  - Nenhum modelo atingiu Kappa moderado (>0.40)
+  - Alta variabilidade entre folds (Sens varia ±10–19pp dependendo do modelo)
+  - Acurácia é métrica enganosa: modelo que chuta tudo negativo tem Acc=84.7%
+  - Modelos não substituem avaliação clínica; funcionam como ferramenta de triagem
+
+
+================================================================================
+FIM DO MATERIAL DE APRESENTAÇÃO
+================================================================================

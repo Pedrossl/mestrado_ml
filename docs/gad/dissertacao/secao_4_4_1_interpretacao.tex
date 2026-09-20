@@ -1,0 +1,29 @@
+% ------------------------------------------------------------
+\subsection{Interpretação dos Resultados}
+\label{subsec:interpretacao_resultados}
+% ------------------------------------------------------------
+
+Os resultados confirmam o \textit{XGBoost} como o algoritmo mais adequado ao
+rastreio do GAD nesta base, com o maior Kappa (0,372) e a maior AUC (0,751).
+A vantagem do \textit{boosting} sobre o SVM e a ADTree evidencia que a
+capacidade de modelar interações não lineares entre poucos sintomas pesa mais,
+neste problema, do que a fronteira de decisão do hiperplano ou da árvore
+alternada.
+
+A escolha da técnica de balanceamento não define um vencedor absoluto, mas um
+compromisso (\textit{trade-off}) atrelado ao objetivo clínico. O
+\textit{BorderlineSMOTE} maximiza a concordância e preserva a Especificidade,
+sendo preferível quando um falso positivo implica encaminhamento desnecessário.
+Já o \textit{EasyEnsemble} eleva a Sensibilidade para 68,5\%, mostrando-se mais
+adequado ao rastreio populacional em larga escala, no qual não detectar um caso
+real é o erro mais grave.
+
+O achado mais importante, contudo, é o teto de desempenho imposto pela amostra.
+O experimento de Monte Carlo mostrou que os \textit{hard samples} permanecem
+intrinsecamente difíceis mesmo sob reamostragem repetida, e a correção do
+vazamento de dados (que derrubou o Kappa de 0,81 para $-0,08$) confirma que a
+limitação vem da escassez de sinal na classe positiva, não da instabilidade do
+treino. Como nenhuma configuração ultrapassou a concordância razoável
+(\textit{fair}), os modelos devem ser lidos como ferramentas auxiliares de
+triagem, capazes de priorizar crianças em risco, mas não de substituir a
+avaliação clínica especializada.

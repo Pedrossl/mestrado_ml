@@ -1,0 +1,4 @@
+Algoritmo,Accuracy_%,Accuracy_IC95,Sensibilidade_%,Sensibilidade_IC95,Especificidade_%,Especificidade_IC95,PPV_%,PPV_IC95,F1_%,F1_IC95,Kappa,Kappa_IC95
+XGBoost + SMOTE,85.0,2.4,34.5,16.5,94.3,3.7,48.0,24.7,37.5,15.9,0.307,0.151
+SVM + SMOTE,75.7,4.1,22.5,11.0,85.3,3.8,24.0,12.3,22.5,10.5,0.084,0.127
+ADTree + SMOTE,32.8,7.9,83.0,14.6,23.5,10.9,16.6,2.6,27.4,4.1,0.028,0.04

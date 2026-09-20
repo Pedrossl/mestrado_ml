@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -n '/def carregar_teste_normalizado/,/return/p' /Users/pedrolobato/mestrado/mestrado_ml/scripts/preprocessing/normalizacao.py | head -40)",
+      "Read(//opt/homebrew/opt/python@3.12/bin/**)",
+      "Bash(brew list *)",
+      "Bash(/opt/homebrew/opt/python@3.13/bin/python3.13 -m venv /private/tmp/claude-501/-Users-pedrolobato-mestrado-mestrado-ml/b679faf6-5a35-486b-a37f-c2a46152d97b/scratchpad/venv313)",
+      "Bash(/private/tmp/claude-501/-Users-pedrolobato-mestrado-mestrado-ml/b679faf6-5a35-486b-a37f-c2a46152d97b/scratchpad/venv313/bin/pip install *)",
+      "Bash(PYTHONPATH=. /private/tmp/claude-501/-Users-pedrolobato-mestrado-mestrado-ml/b679faf6-5a35-486b-a37f-c2a46152d97b/scratchpad/venv313/bin/python scripts/analysis/curva_roc_gad_ic95.py)",
+      "Bash(/private/tmp/claude-501/-Users-pedrolobato-mestrado-mestrado-ml/b679faf6-5a35-486b-a37f-c2a46152d97b/scratchpad/venv313/bin/pip list *)",
+      "Bash(git -C /Users/pedrolobato/mestrado/mestrado_ml log --oneline -5 -- '*.txt')",
+      "Bash(python -c ' *)",
+      "Bash(PYTHONWARNINGS=ignore python3 -m scripts.experimento_hard_samples_v2.convergencia_monte_carlo)",
+      "Read(//Library/Frameworks/Python.framework/**)",
+      "Bash(find / -maxdepth 4 -name \"python3.1[0-9]\" -type f)"
+    ],
+    "additionalDirectories": [
+      "/Users/pedrolobato/mestrado/mestrado_ml/scripts/preprocessing"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+Alternating decision tree:
+
+: -0.845
+|  (1)Number of Impairments = 0: -0.395
+|  |  (2)Age = 3: 0.557
+|  |  (2)Age != 3: -0.37
+|  |  |  (5)Age = 5: 0.418
+|  |  |  (5)Age != 5: -0.414
+|  |  |  |  (6)Frequency Temper Tantrums = 7: 0.981
+|  |  |  |  (6)Frequency Temper Tantrums != 7: -0.341
+|  |  |  |  |  (7)Frequency Temper Tantrums = 424: 1.131
+|  |  |  |  |  (7)Frequency Temper Tantrums != 424: -1.166
+|  |  |  (9)Poverty Status = 0: -0.292
+|  |  |  (9)Poverty Status = 1: 0.688
+|  (1)Number of Impairments != 0: 0.334
+|  |  (3)Number of Impairments = 1: -0.513
+|  |  (3)Number of Impairments != 1: 0.188
+|  (4)Sex = 0: -0.227
+|  (4)Sex = 1: 0.213
+|  (8)Frequency Irritable Mood = 0: -0.255
+|  |  (10)Race = 0: 0.298
+|  |  (10)Race = 1: -0.649
+|  (8)Frequency Irritable Mood != 0: 0.162
+Legend: -ve = 0, +ve = 1
+Tree size (total number of nodes): 31
+Leaves (number of predictor nodes): 21

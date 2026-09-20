@@ -1,0 +1,53 @@
+COMPARATIVO MONTE CARLO V1 - ANTES VS DEPOIS DA LIMPEZA DE FEATURES
+================================================================================
+
+Contexto
+--------------------------------------------------------------------------------
+O fluxo v1 foi restaurado como experimento em uso. A limpeza ativa remove:
+
+- Poverty Status
+- Number of Siblings
+- Family History - Psychiatric Diagnosis
+- Number of Bio. Parents
+
+O resultado antigo foi preservado em:
+output/experimento_hard_samples/monte_carlo_resultado_pre_feature_cleanup.txt
+
+O resultado novo, gerado com a limpeza ativa, esta em:
+output/experimento_hard_samples/monte_carlo_resultado.txt
+
+Comparativo numerico
+--------------------------------------------------------------------------------
+Antes da limpeza:
+- Features: 17
+- Hard samples: 20
+- Composicao: 5 positivos, 15 negativos
+- Acertos do modelo base nos hard samples: 9/20
+- Probabilidade media dos hard samples: 0.484
+- Sem smoothing: accuracy 93.20, sensitivity 84.30, specificity 96.17, F1 85.67, Kappa 0.81
+- Com smoothing: accuracy 92.90, sensitivity 84.80, specificity 95.60, F1 85.30, Kappa 0.81
+
+Depois da limpeza:
+- Features: 13
+- Hard samples: 20
+- Composicao: 4 positivos, 16 negativos
+- Acertos do modelo base nos hard samples: 12/20
+- Probabilidade media dos hard samples: 0.371
+- Sem smoothing: accuracy 88.42, sensitivity 81.12, specificity 90.25, F1 73.35, Kappa 0.66
+- Com smoothing: accuracy 87.28, sensitivity 81.38, specificity 88.75, F1 71.75, Kappa 0.64
+
+Leitura
+--------------------------------------------------------------------------------
+O Monte Carlo v1 nao melhorou com a limpeza de features quando comparado ao
+relatorio antigo. As metricas cairam, principalmente F1 e Kappa.
+
+Porem, a comparacao nao e perfeitamente isolada: ao remover colunas com valores
+faltantes, o conjunto preparado passou a ter 306 amostras em vez de 287, o split
+80/20 mudou e os 20 hard samples selecionados tambem mudaram.
+
+Conclusao conservadora
+--------------------------------------------------------------------------------
+Para validacao cruzada, a limpeza de 4 features continua defensavel. Para o
+Monte Carlo v1, o resultado recomenda cautela: antes de declarar a limpeza como
+final, vale rodar uma variante controlada do v1 usando as mesmas linhas e o mesmo
+split do baseline antigo.

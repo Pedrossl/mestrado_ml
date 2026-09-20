@@ -1,0 +1,24 @@
+Correlacao de Pearson com GAD
+==================================================
+
+Feature                                              r
+-------------------------------------------------------
+Number of Impairments                           0.3168 ***
+ODD                                             0.2929 **
+Social Phobia                                   0.2889 **
+Number of Sleep Disturbances                    0.2636 **
+CD                                              0.2409 **
+Number of Type B Stressors                      0.2237 **
+Number of Sensory Sensitivities                 0.1957 *
+Age                                             0.1837 *
+Frequency Irritable Mood                        0.1754 *
+Race                                           -0.1282 *
+Sex                                             0.1241 *
+Family History - Psychiatric Diagnosis          0.1222 *
+Number of Bio. Parents                         -0.0867 
+ADHD                                            0.0591 
+Frequency Temper Tantrums                       0.0529 
+Number of Siblings                             -0.0409 
+Poverty Status                                  0.0339 
+
+* |r| > 0.1  ** |r| > 0.2  *** |r| > 0.3

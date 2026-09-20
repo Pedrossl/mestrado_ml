@@ -1,0 +1,20 @@
+MÉTODO: RUSBoost
+Código: M13_RUSBoost
+Referência: Seiffert et al. (2010). RUSBoost: A Hybrid Approach to Alleviating Class Imbalance. IEEE TSMC 40(1), 185-197.
+Descrição: Undersampling aleatório integrado diretamente no loop de boosting do AdaBoost: em cada iteração, re-balanceia antes de treinar o classificador fraco.
+============================================================
+
+MÉTRICAS (média ± IC 95% — 10-fold Stratified CV)
+------------------------------------------------------------
+Accuracy:     77.03% ± 7.18%
+Sensitivity:  47.50% ± 16.97%
+Specificity:  82.32% ± 7.81%
+PPV:          39.63% ± 18.69%
+NPV:          89.70% ± 3.21%
+F1-Score:     39.13% ± 12.75%
+Kappa:        0.2633 ± 0.1573
+
+MATRIZ DE CONFUSÃO AGREGADA
+------------------------------------------------------------
+  VN= 200  FP=  43
+  FN=  23  VP=  21

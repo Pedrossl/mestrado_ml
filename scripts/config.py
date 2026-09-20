@@ -1,0 +1,72 @@
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATASETS_DIR = PROJECT_ROOT / "datasets"
+OUTPUT_DIR = PROJECT_ROOT / "output"
+
+TRAIN_DATASET = DATASETS_DIR / "mestrado-treino.csv"
+TEST_DATASET = DATASETS_DIR / "mestrado-teste.csv"
+
+RANDOM_STATE = 42
+N_SPLITS = 10
+TARGETS = ("GAD", "SAD")
+
+NUMERIC_COLUMNS = [
+    "Age",
+    "Number of Impairments",
+    "Number of Type A Stressors",
+    "Number of Type B Stressors",
+    "Frequency Temper Tantrums",
+    "Frequency Irritable Mood",
+    "Number of Sleep Disturbances",
+    "Number of Physical Symptoms",
+    "Number of Sensory Sensitivities",
+]
+
+PREPROCESSING_DROP_COLUMNS = [
+    "Depression",
+    "Number of Type A Stressors",
+    "Number of Physical Symptoms",
+    "Family History - Substance Abuse",
+]
+
+MODEL_DROP_COLUMNS = [
+    "Subject",
+    "GAD Probabiliy - Gamma",
+    "SAD Probability - Gamma",
+    "Sample Weight",
+]
+
+# Hiperparametro do XGBoost tunado para o Monte Carlo v1 de GAD.
+# Pode nao ser o ideal para SAD (nao testado ainda) - reavaliar quando o
+# tuning de SAD for feito.
+XGB_MAX_DEPTH = 8
+
+# Features a remover por alvo. Cada alvo tem sua propria lista porque a
+# selecao de features (Spearman + Permutation Importance + validacao Monte
+# Carlo) e feita separadamente para cada um - nao ha garantia de que uma
+# feature ruidosa/redundante para GAD tambem seja para SAD, e vice-versa.
+# Ver docs/gad/FEATURE_SELECTION.md para a estrategia completa de GAD.
+FEATURE_DROP_COLUMNS_BY_TARGET = {
+    "GAD": [
+        "CD",
+        "Family History - Psychiatric Diagnosis",
+    ],
+    "SAD": [],
+}
+
+FEATURE_DROP_RATIONALE_BY_TARGET = {
+    "GAD": {
+        "CD": "Redundante com ODD (Spearman rho=0.48). ODD carrega mais sinal com GAD. Remocao melhora CV (+0.008 Kappa) e Monte Carlo v1 (+0.028 Kappa).",
+        "Family History - Psychiatric Diagnosis": "Correlacao fraca com GAD (Spearman rho=0.12). Permutation Importance negativa (-0.013). Remocao melhora Monte Carlo v1 (+0.085 Kappa, de 0.813 para 0.898).",
+    },
+    "SAD": {},
+}
+
+SENSITIVE_FEATURES = [
+    "Race",
+    "Sex",
+    "Poverty Status",
+    "Number of Bio. Parents",
+]

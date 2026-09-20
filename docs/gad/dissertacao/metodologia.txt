@@ -1,0 +1,149 @@
+================================================================================
+METODOLOGIA
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. AQUISIÇÃO DE DADOS
+--------------------------------------------------------------------------------
+
+  Dataset de Teste (PTRTS):
+    - 307 registros de pacientes pediátricos
+    - 27 indicadores clínicos, demográficos e socioeconômicos
+    - 8.289 medições totais, sendo 20 campos sem preenchimento (0,24% de incompletude)
+    - Formato CSV com mistura de medidas numéricas, categorias binárias e textos
+    - Duas variáveis alvo: GAD e SAD
+        • SAD: 46 pacientes positivos (16,0%)
+        • GAD: 44 pacientes positivos (15,3%)
+
+
+--------------------------------------------------------------------------------
+2. PRÉ-PROCESSAMENTO
+--------------------------------------------------------------------------------
+
+2.1 Tratamento de Valores Ausentes
+  Identificados 20 registros com campos ausentes:
+      • Poverty Status:  19 ausentes (6,19%)
+      • Social Phobia:    1 ausente  (0,33%)
+  Esses registros foram removidos via dropna(), resultando em 287 amostras.
+
+2.2 Eliminação de Variáveis
+  Foram removidas 8 colunas ao total:
+
+  Por critério clínico/técnico (irrelevantes para o modelo):
+      • Depression              — requer estudo clínico específico; apenas 17 casos positivos (5,5%)
+      • Number of Type A Stressors — ausência do valor 0 (distribuição problemática; mín=1, máx=7)
+      • Number of Physical Symptoms — fora do escopo dos modelos definidos
+      • Family History - Substance Abuse — fora do escopo dos modelos definidos
+
+  Por serem identificadores ou pesos externos (não são features):
+      • Subject                 — identificador único do paciente
+      • GAD Probability - Gamma — probabilidade externa, não usada como feature
+      • SAD Probability - Gamma — probabilidade externa, não usada como feature
+      • Sample Weight           — peso amostral externo
+
+  Resultado: de 27 colunas originais, restaram 19 após as remoções.
+
+2.3 Transformações e Padronização de Variáveis
+  Foram aplicadas as seguintes transformações:
+
+      • Sex (codificação): M → 0 | F → 1
+
+      • Number of Siblings (binarização):
+        De contagem ordinal (0, 1, 2, 3) para binário
+        0 = sem irmãos | 1 = tem pelo menos 1 irmão
+        Antes: {0:82 | 1:128 | 2:60 | 3:37} → Depois: {0:82 | 1:225}
+
+      • Number of Bio. Parents (normalização customizada):
+        0 pais → 0.0 | 1 pai → 0.5 | 2 pais → 1.0
+
+      • MinMax Scaling (variáveis contínuas):
+        Aplicado em 9 colunas numéricas para escalar valores ao intervalo [0, 1]:
+          - Age
+          - Number of Impairments
+          - Number of Type A Stressors
+          - Number of Type B Stressors
+          - Frequency Temper Tantrums
+          - Frequency Irritable Mood
+          - Number of Sleep Disturbances
+          - Number of Physical Symptoms
+          - Number of Sensory Sensitivities
+
+        IMPORTANTE: nas execuções com validação cruzada, o MinMaxScaler foi
+        fitado APENAS nos dados de treino de cada fold e aplicado ao conjunto
+        de teste sem re-fitting — prevenindo data leakage na normalização.
+
+2.4 Definição das Variáveis Alvo e Features
+  Após todo o pré-processamento:
+      • Total de amostras: 287
+      • Features por modelo: 17
+      • Quando o alvo é GAD → SAD é removida das features (e vice-versa)
+
+  Distribuição das classes (desbalanceadas ~85/15):
+      • GAD: 44 positivos (15,3%) | 243 negativos (84,7%)
+      • SAD: 46 positivos (16,0%) | 241 negativos (84,0%)
+
+
+--------------------------------------------------------------------------------
+3. ANÁLISE EXPLORATÓRIA
+--------------------------------------------------------------------------------
+
+  - Mapeamento dos tipos de variáveis (booleanas, inteiras, decimais, texto)
+  - Análise de balanceamento das variáveis alvo (GAD e SAD)
+  - Matriz de correlação de Spearman entre as variáveis numéricas
+  - Identificação das variáveis mais correlacionadas com GAD e SAD
+
+
+--------------------------------------------------------------------------------
+4. CONSTRUÇÃO DE PIPELINES
+--------------------------------------------------------------------------------
+
+4.1 Validação
+  - 10-fold Stratified Cross-Validation (CV externo)
+    Mantém a proporção das classes (~15% positivos) em cada fold.
+  - Busca de hiperparâmetros: Nested CV (CV externo 10-fold + CV interno 5-fold)
+    com RandomizedSearchCV (n_iter=50 rápida / n_iter=200 completa)
+
+4.2 Algoritmos Avaliados
+  - ADTree (Alternating Decision Tree) — via Weka; modelo interpretável de referência
+  - SVM com kernel RBF
+  - XGBoost (algoritmo principal)
+  - HistGradientBoosting (HistGBM)
+  - Extra Trees (ET)
+
+4.3 Técnicas de Balanceamento Testadas (13 no total)
+  Oversampling:
+      • SMOTE, ADASYN, BorderlineSMOTE, SMOTEENN, SMOTETomek
+
+  Undersampling:
+      • NearMiss, Random Undersampling (RUS), IHT (Instance Hardness Threshold)
+
+  Ensemble balanceado:
+      • EasyEnsemble, Balanced Random Forest, RUSBoost
+
+  Ponderação de classes:
+      • Class Weighting (scale_pos_weight natural ~5.5x e extremo ~20x)
+
+  Sem balanceamento:
+      • Baseline para comparação
+
+
+--------------------------------------------------------------------------------
+5. MÉTRICAS E AVALIAÇÃO DE DESEMPENHO
+--------------------------------------------------------------------------------
+
+  Dado o desbalanceamento (~85/15) e o contexto clínico de triagem,
+  a acurácia foi descartada como métrica principal (um modelo que classifica
+  tudo como negativo atinge 84,7% de acurácia com sensibilidade = 0%).
+
+  Métricas adotadas:
+      • Sensibilidade (Recall)  — métrica PRIMÁRIA; detectar casos reais de GAD/SAD
+      • F1-Score                — equilíbrio entre precisão e recall
+      • Score Composto          — sqrt(Sensibilidade × F1); penaliza queda em qualquer um
+      • Kappa de Cohen          — concordância além do acaso (escala Landis & Koch 1977)
+      • Especificidade          — complementar; avalia o trade-off de falsos positivos
+
+  Otimização de threshold:
+      • Threshold F2-score (Van Rijsbergen, 1979): maximiza F2 (FN custam 4x mais)
+      • Youden's J (Youden, 1950): maximiza Sensibilidade + Especificidade - 1
+      • Curva Precisão-Recall (Davis & Goadrich, 2006)

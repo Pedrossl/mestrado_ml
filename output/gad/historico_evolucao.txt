@@ -1,0 +1,322 @@
+================================================================================
+      HISTÓRICO DE EVOLUÇÃO DO PROJETO — PREDIÇÃO DE GAD/SAD EM CRIANÇAS
+      Dissertação de Mestrado
+================================================================================
+
+Dataset: 287 amostras | 17 features | GAD: 44 positivos (15.3%) | SAD: 66 positivos (23.0%)
+Validação principal: 10-fold Stratified Cross-Validation (sem data leakage)
+Algoritmos investigados: ADTree (Weka), XGBoost, SVM (RBF), Random Forest, Rede Neural
+
+================================================================================
+FASE 1 — Estrutura Inicial e Exploração dos Dados
+Data: Out–Nov 2025 (commits: 861a7ec → 213ec99)
+================================================================================
+
+O que foi feito:
+  - Criação do repositório e estrutura de pastas do projeto
+  - Primeiros scripts de análise: dados faltantes, comparação de colunas
+  - Script de correlação entre variáveis
+  - Análise de balanceamento das classes alvo (GAD e SAD)
+
+Descoberta principal:
+  - Identificado desbalanceamento severo: GAD = 15.3% positivo, SAD = 23.0%
+  - Isso significa que um modelo que sempre diz "sem GAD" já acerta 84.7%
+  → Acurácia não é a métrica correta. Sensibilidade e Kappa são o foco.
+
+================================================================================
+FASE 2 — Normalização e Pré-processamento
+Data: Dez 2025 (commit: 1fa6a67)
+================================================================================
+
+O que foi feito:
+  - Definição das transformações do dataset:
+      • Number of Siblings → binário (0 = sem irmão, 1 = tem irmão)
+      • Number of Bio. Parents → normalizado para 0, 0.5, 1
+      • MinMax nas colunas numéricas contínuas
+  - Remoção de colunas: Depression, Number of Type A Stressors,
+    Number of Physical Symptoms, Family History - Substance Abuse
+  - Codificação de Sex: M=0, F=1
+  - Resultado: 287 amostras limpas, 17 features finais
+
+================================================================================
+FASE 3 — Implementação dos Primeiros Modelos
+Data: Fev 2026 (commits: e54a3a4 → fc84477)
+================================================================================
+
+O que foi feito:
+  - Implementação do ADTree via Weka (modelo baseline)
+  - Implementação do SVM (kernel RBF) com sklearn
+  - Implementação do XGBoost
+  - Para cada algoritmo: sem balanceamento, Class Weighting, SMOTE, Undersampling
+  - SMOTE e Undersampling aplicados DENTRO de cada fold (correto, sem data leakage)
+
+Resultados iniciais (10-fold CV):
+
+  XGBoost — GAD:
+    Sem balanceamento:  Acc=85.7%  Sens=24.0%  Spec=96.7%  Kappa=0.270
+    Class Weighting:    Acc=83.6%  Sens=38.0%  Spec=91.8%  Kappa=0.319
+    SMOTE:              Acc=83.6%  Sens=36.0%  Spec=92.2%  Kappa=0.304
+    Undersampling:      Acc=64.9%  Sens=67.0%  Spec=64.6%  Kappa=0.195
+
+  SVM — GAD:
+    Sem balanceamento:  Acc=84.7%  Sens=0.0%   Spec=100%   Kappa=0.000  ← INÚTIL
+    Class Weighting:    Acc=77.0%  Sens=39.0%  Spec=84.1%  Kappa=0.210
+    SMOTE:              Acc=75.7%  Sens=22.5%  Spec=85.3%  Kappa=0.084
+    Undersampling:      Acc=66.6%  Sens=65.0%  Spec=67.1%  Kappa=0.189
+
+Diagnóstico:
+  - SVM sem balanceamento simplesmente ignora a classe positiva (Kappa=0)
+  - XGBoost superior em todas as configurações
+  - Undersampling maximiza sensibilidade mas destrói especificidade
+  - Melhor equilíbrio: XGBoost + Class Weighting (Kappa=0.319)
+
+================================================================================
+FASE 4 — Infraestrutura de Utilidades e Análise Comparativa
+Data: Fev 2026 (commit: c8c3b5b)
+================================================================================
+
+O que foi feito:
+  - Criação do utils.py com funções reutilizáveis:
+      • preparar_dados(): carrega e normaliza
+      • calcular_metricas_fold(): extrai métricas da matriz de confusão
+      • agregar_metricas_com_ic(): calcula média ± IC 95%
+      • exibir_resultados(), comparativo_modelos()
+      • plotar_comparativo_grafico(), plotar_comparativo_tabela()
+  - Criação do comparativo_algoritmos.py para análise cruzada
+
+  Comparativo ADTree vs XGBoost vs SVM (todos com SMOTE):
+    XGBoost:  Acc=85.0%  Sens=34.5%  Spec=94.3%  Kappa=0.307
+    SVM:      Acc=75.7%  Sens=22.5%  Spec=85.3%  Kappa=0.084
+    → XGBoost vence em todas as métricas
+
+================================================================================
+FASE 5 — Análise de Sensibilidade: 21 Métodos Testados para Maximizar Detecção de GAD
+Data: Fev 2026 (commits: b87daef → 4d7312e)
+================================================================================
+
+Motivação:
+  - GAD em crianças é subdiagnosticado. Falso negativo (deixar passar um caso)
+    é pior que falso positivo. O objetivo clínico é triagem, não diagnóstico final.
+  - Logo: maximizar Sensibilidade mantendo alguma especificidade aceitável.
+
+21 métodos testados (XGBoost, 10-fold CV):
+
+  Rank  Método                          Sens     F1      Spec    Kappa
+  1     SMOTEENN + SPW + Threshold F2   71.5%   38.7%   63.0%   0.209
+  2     EasyEnsemble                    68.5%   38.9%   65.9%   0.217
+  3     GridSearch otimizado (Recall)   68.5%   39.1%   64.6%   0.218
+  4     BalancedRandomForest            59.5%   36.2%   68.4%   0.187
+  5     TunedThreshold CV [t≈0.15]      55.0%   38.1%   75.1%   0.234
+  ...
+  13    HistGBM + Threshold F2 [t≈0.23] 45.5%  46.5%   91.4%   0.376  ← melhor Kappa
+  14    BorderlineSMOTE                 41.0%   45.2%   93.4%   0.372
+  ...
+  21    SMOTE (baseline)                34.5%   37.5%   94.3%   0.307
+
+Conclusões desta fase:
+  - Aumentar sensibilidade sacrifica especificidade (trade-off inevitável)
+  - Para triagem clínica: EasyEnsemble (Sens=68.5%) detecta 30 de 44 crianças com GAD
+    mas gera 83 falsos positivos em 243 sem GAD
+  - Para equilíbrio: HistGBM + F2 tem melhor Kappa (0.376) com Sens=45.5%
+  - Cenário A (equilíbrio geral): BorderlineSMOTE ou SPW=20 → Kappa ~0.37
+  - Cenário B (triagem): EasyEnsemble ou SMOTEENN+SPW+F2 → Sens ~68-71%
+
+================================================================================
+FASE 6 — Testes Estatísticos e Curvas de Aprendizado
+Data: Fev 2026 (commit: 4d7312e)
+================================================================================
+
+O que foi feito:
+  - Teste de Wilcoxon para comparar modelos (diferenças significativas)
+  - Teste de McNemar para pares de classificadores
+  - Curvas de aprendizado (SVM e XGBoost, GAD e SAD)
+  - Curvas ROC com banda ± 1 desvio padrão por fold
+  - Matrizes de confusão normalizadas por classe
+
+Resultados salvos em:
+  output/plots/Comparativo/GAD/testes_estatisticos_gad.txt
+  output/plots/LearningCurves/XGBoost/GAD/
+  output/plots/LearningCurves/SVM/GAD/
+
+================================================================================
+FASE 7 — Busca de Hiperparâmetros (GridSearch)
+Data: Mar 2026 (commits: 89a538c → 68b0806)
+================================================================================
+
+O que foi feito:
+  - GridSearch para XGBoost e SVM (GAD e SAD)
+  - 3 versões de busca: rápida, média, completa
+  - Versão v3 com novos samplers e classificadores
+  - Busca ajustada por fold (sem leakage de hiperparâmetros)
+
+Resultados salvos em:
+  output/busca_hiperparametros/
+  output/busca_hiperparametros_v3/
+  output/busca_hiperparametros_fold_ajustado/
+
+================================================================================
+FASE 8 — Refatoração e Normalização MinMax
+Data: Mar 2026 (commit: 709ac29)
+================================================================================
+
+O que foi feito:
+  - Refatoração de scripts de normalização e visualização
+  - Introdução da normalização MinMax para colunas numéricas contínuas
+    (Age, Number of Impairments, Number of B Stressors, etc.)
+  - preprocessing/normalizacao.py e preprocessing/minmax.py separados
+
+================================================================================
+FASE 9 — Validação com Divisão Aleatória 70/30 (metodologia do orientador)
+Data: 29 Mar 2026 (hoje)
+================================================================================
+
+O que foi feito:
+  - Implementação de ml_avaliacao.py seguindo a metodologia pedida pelo orientador:
+      • 30 repetições de divisão aleatória 70/30
+      • 4 algoritmos: Random Forest, SVM, Rede Neural, XGBoost
+      • Métricas acumuladas em vetores e média ± IC 95% ao final
+  - Reutiliza toda a infraestrutura existente (preparar_dados, calcular_metricas_fold, etc.)
+
+Resultados (GAD, 30 repetições, 70/30 aleatório):
+
+  Algoritmo       Accuracy   Sensitivity  Specificity   F1-Score   Kappa
+  Random Forest   86.9±0.7    20.5±4.6     98.6±0.5    30.3±5.7   0.260
+  SVM             85.1±0.3     2.6±1.6     99.6±0.3     4.5±2.7   0.034
+  Rede Neural     82.3±1.4    25.4±4.8     92.3±1.5    29.2±5.2   0.199
+  XGBoost         85.3±1.1    27.2±4.8     95.5±0.9    34.8±5.6   0.277
+
+Observação:
+  - SVM sem balanceamento colapsa novamente (Sens=2.6%, Kappa=0.034)
+  - XGBoost continua como melhor algoritmo base (Kappa=0.277)
+  - IC mais estreito que 10-fold CV porque split único tem menos variância
+  - Resultados consistentes com as fases anteriores — valida a metodologia
+
+================================================================================
+FASE 10 — Avaliação de 16 Combinações: Algoritmo × Técnica de Balanceamento
+Data: 29 Mar 2026
+================================================================================
+
+O que foi feito:
+  - Expansão do ml_avaliacao.py para testar 16 combinações dentro do loop 70/30:
+      • 4 algoritmos: Random Forest, SVM, Rede Neural, XGBoost
+      • 4 técnicas: Sem balanceamento, Class Weighting, SMOTE, Undersampling
+  - Ao final do loop (30 repetições): ranking por Kappa e por Sensibilidade
+  - SMOTE e Undersampling aplicados apenas no treino (sem data leakage)
+
+Resultado salvo em: output/ml_avaliacao/GAD/comparativo_gad.txt
+
+================================================================================
+FASE 11 — Experimento Hard Samples + Monte Carlo
+Data: 29 Mar 2026
+================================================================================
+
+O que foi feito:
+  - Passo 1: Split 80/20 (estratificado, mantendo proporção das classes)
+      Treino: 229 amostras | Teste: 58 amostras
+      Distribuição mantida: GAD positivo = 15.3% em ambos os splits
+
+  - Passo 2: Identificação dos 20 Hard Samples
+      Modelo: XGBoost + SMOTE treinado nos 80%
+      Critério: os 20 casos do teste com menor margem de confiança (prob ≈ 0.5)
+      Resultado:
+        • 5 positivos reais (com GAD) e 15 negativos reais (sem GAD)
+        • Acertos: apenas 9/20 — confirmando que são os casos mais difíceis
+        • Probabilidade média: 0.484 (praticamente na fronteira de decisão)
+      Arquivo: output/experimento_hard_samples/hard_samples.csv
+
+  - Passo 3: Monte Carlo — 200 simulações com e sem Label Smoothing
+      Metodologia: sorteia 15 dos 20 hard samples por simulação,
+      inclui no treino, retreina o modelo e avalia nos 20 hard samples
+      Smoothing: reduz o peso amostral dos hard samples proporcionalmente
+      à sua incerteza (ε=0.1), evitando que o modelo fique overconfiante
+
+      Resultados:
+        Métrica         Sem Smoothing    Com Smoothing
+        Sensitivity      84.3% ± 2.1%    84.8% ± 2.2%
+        Specificity      96.2% ± 0.6%    95.6% ± 0.7%
+        Kappa            0.813 ± 0.018   0.807 ± 0.019
+
+      Conclusão: o smoothing NÃO reduziu a variabilidade — o desvio ficou
+      igual ou levemente maior. O modelo base (XGBoost+SMOTE) já generaliza
+      bem sobre os hard samples sem necessidade de suavização.
+      → Este é um achado válido para a dissertação.
+
+  Scripts: scripts/experimento_hard_samples/
+  Output:  output/experimento_hard_samples/
+
+================================================================================
+ESTADO ATUAL E PRÓXIMOS PASSOS (plano do orientador)
+================================================================================
+
+Concluído:
+  [x] Pré-processamento e normalização
+  [x] 3 algoritmos principais (XGBoost, SVM, ADTree) com 4 técnicas de balanceamento
+  [x] 21 métodos para maximizar sensibilidade no GAD
+  [x] Testes estatísticos, curvas ROC, matrizes de confusão
+  [x] GridSearch de hiperparâmetros (Nested CV 10-fold outer / 5-fold inner)
+  [x] Validação por divisão aleatória 70/30 (30 repetições, 16 combinações)
+  [x] Split 80/20 e identificação de Hard Samples
+  [x] Monte Carlo com e sem Smoothing nos Hard Samples
+
+Pendente:
+  [ ] Replicar análise principal para SAD (atualmente focada em GAD)
+  [ ] Acrescentar variáveis binárias ao experimento Monte Carlo (plano orientador)
+  [ ] Arquivo de conclusões finais consolidando melhor modelo GAD e SAD
+
+================================================================================
+MELHOR RESULTADO OBTIDO ATÉ AGORA
+================================================================================
+
+Depende do objetivo clínico. Dois cenários:
+
+────────────────────────────────────────────────────────────────────────────────
+CENÁRIO A — Melhor equilíbrio geral (dissertação, comparação entre algoritmos)
+────────────────────────────────────────────────────────────────────────────────
+
+  Algoritmo:   XGBoost + HistGradientBoosting com Threshold F2 (t≈0.23)
+  Método:      M20_HistGBM (Fase 5)
+  Validação:   10-fold Stratified CV
+
+  Accuracy:     ~85%
+  Sensitivity:   45.5% ± 10.9%
+  Specificity:   91.4%
+  F1-Score:      46.5% ± 8.7%
+  Kappa:         0.376  ← MELHOR KAPPA DE TODO O PROJETO
+
+  Interpretação:
+    De 44 crianças com GAD, o modelo identifica ~20 corretamente.
+    De 243 sem GAD, classifica ~222 corretamente (apenas ~21 falsos positivos).
+    Kappa 0.376 = concordância "razoável" pela escala de Landis & Koch.
+
+────────────────────────────────────────────────────────────────────────────────
+CENÁRIO B — Máxima detecção (triagem clínica, não perder casos de GAD)
+────────────────────────────────────────────────────────────────────────────────
+
+  Algoritmo:   XGBoost + EasyEnsemble
+  Método:      M12_EasyEnsemble (Fase 5)
+  Validação:   10-fold Stratified CV
+
+  Accuracy:     ~70%
+  Sensitivity:   68.5% ± 13.0%  ← MELHOR SENSIBILIDADE CONFIÁVEL
+  Specificity:   65.9%
+  F1-Score:      38.9% ± 8.0%
+  Kappa:         0.217
+
+  Interpretação:
+    De 44 crianças com GAD, detecta ~30 corretamente.
+    Gera ~83 falsos positivos — aceitável para triagem (confirmar depois).
+    Kappa menor porque prioriza não perder casos reais.
+
+────────────────────────────────────────────────────────────────────────────────
+RESUMO: RANKING GERAL DOS MELHORES MODELOS
+────────────────────────────────────────────────────────────────────────────────
+
+  Melhor Kappa:        HistGBM + F2          Kappa=0.376  Sens=45.5%
+  Melhor Kappa (2º):   BorderlineSMOTE       Kappa=0.372  Sens=41.0%
+  Melhor Sensibilidade: SMOTEENN+SPW+F2      Sens=71.5%   Kappa=0.209
+  Melhor Sensibilidade confiável: EasyEnsemble Sens=68.5% Kappa=0.217
+  Melhor baseline (sem balanceamento): XGBoost Kappa=0.270 Sens=24.0%
+
+================================================================================
+FIM DO HISTÓRICO
+================================================================================

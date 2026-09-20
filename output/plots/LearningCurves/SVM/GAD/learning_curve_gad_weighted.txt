@@ -1,0 +1,20 @@
+Learning Curve - SVM Class Weighting - GAD
+============================================================
+
+ Tam. Treino    F1 Treino    F1 Valid.        Gap
+--------------------------------------------------
+          25       0.8889       0.2711     0.6178
+          51       0.9054       0.2677     0.6377
+          77       0.9398       0.2801     0.6597
+         103       0.8664       0.2947     0.5717
+         129       0.8345       0.3113     0.5232
+         154       0.8324       0.3567     0.4758
+         180       0.8117       0.3184     0.4933
+         206       0.7991       0.3479     0.4513
+         232       0.7595       0.3445     0.4150
+         258       0.7884       0.3393     0.4492
+
+Diagnostico:
+  OVERFITTING: Gap treino-validacao alto (0.449)
+  Sugestao: Mais dados, regularizacao ou modelo mais simples
+  PLATEAU: Curva estabilizou (melhoria=-0.009)
