@@ -1,0 +1,169 @@
+MONTE CARLO v1 — Leave-one-out | SAD
+200 simulacoes | Sorteio 15/20 | max_depth=4
+================================================================================
+
+[baseline (17 features)]
+  17 features | Hard: 4 pos | Base: 14/20
+  accuracy       95.38 +/- 0.59 (sigma=4.25)
+  sensitivity    82.38 +/- 2.52 (sigma=18.04)
+  specificity    98.62 +/- 0.37 (sigma=2.67)
+  f1             86.84 +/- 1.79 (sigma=12.84)
+  kappa          0.8415 +/- 0.0211 (sigma=0.1516)
+
+[sem Sex]
+  16 features | Hard: 4 pos | Base: 15/20
+  accuracy       91.78 +/- 0.64 (sigma=4.62)
+  sensitivity    78.62 +/- 2.48 (sigma=17.79)
+  specificity    95.06 +/- 0.58 (sigma=4.18)
+  f1             78.74 +/- 1.76 (sigma=12.60)
+  kappa          0.7376 +/- 0.0212 (sigma=0.1519)
+
+[sem Race]
+  16 features | Hard: 3 pos | Base: 15/20
+  accuracy       94.72 +/- 0.50 (sigma=3.62)
+  sensitivity    81.83 +/- 2.86 (sigma=20.54)
+  specificity    97.00 +/- 0.50 (sigma=3.59)
+  f1             81.56 +/- 1.90 (sigma=13.64)
+  kappa          0.7862 +/- 0.0215 (sigma=0.1540)
+
+[sem Age]
+  16 features | Hard: 6 pos | Base: 11/20
+  accuracy       88.58 +/- 0.76 (sigma=5.48)
+  sensitivity    77.83 +/- 2.11 (sigma=15.14)
+  specificity    93.18 +/- 0.83 (sigma=5.96)
+  f1             79.90 +/- 1.46 (sigma=10.47)
+  kappa          0.7208 +/- 0.0193 (sigma=0.1383)
+
+[sem Number of Bio. Parents]
+  16 features | Hard: 6 pos | Base: 12/20
+  accuracy       90.67 +/- 0.65 (sigma=4.67)
+  sensitivity    78.08 +/- 2.10 (sigma=15.09)
+  specificity    96.07 +/- 0.63 (sigma=4.51)
+  f1             82.82 +/- 1.31 (sigma=9.37)
+  kappa          0.7660 +/- 0.0170 (sigma=0.1217)
+
+[sem Number of Siblings]
+  16 features | Hard: 2 pos | Base: 13/20
+  accuracy       93.33 +/- 0.62 (sigma=4.46)
+  sensitivity    73.00 +/- 4.30 (sigma=30.83)
+  specificity    95.58 +/- 0.59 (sigma=4.22)
+  f1             67.04 +/- 3.38 (sigma=24.25)
+  kappa          0.6366 +/- 0.0362 (sigma=0.2598)
+
+[sem Poverty Status]
+  16 features | Hard: 2 pos | Base: 17/20
+  accuracy       94.28 +/- 0.57 (sigma=4.05)
+  sensitivity    71.25 +/- 4.10 (sigma=29.42)
+  specificity    96.83 +/- 0.49 (sigma=3.50)
+  f1             69.52 +/- 3.28 (sigma=23.50)
+  kappa          0.6666 +/- 0.0348 (sigma=0.2498)
+
+[sem Social Phobia]
+  16 features | Hard: 4 pos | Base: 15/20
+  accuracy       93.15 +/- 0.62 (sigma=4.44)
+  sensitivity    79.38 +/- 2.46 (sigma=17.62)
+  specificity    96.59 +/- 0.58 (sigma=4.19)
+  f1             81.74 +/- 1.69 (sigma=12.15)
+  kappa          0.7765 +/- 0.0204 (sigma=0.1465)
+
+[sem ADHD]
+  16 features | Hard: 4 pos | Base: 16/20
+  accuracy       94.75 +/- 0.58 (sigma=4.16)
+  sensitivity    79.12 +/- 2.47 (sigma=17.68)
+  specificity    98.66 +/- 0.38 (sigma=2.72)
+  f1             84.93 +/- 1.77 (sigma=12.67)
+  kappa          0.8190 +/- 0.0208 (sigma=0.1489)
+
+[sem CD]
+  16 features | Hard: 4 pos | Base: 14/20
+  accuracy       93.53 +/- 0.55 (sigma=3.94)
+  sensitivity    80.88 +/- 2.59 (sigma=18.58)
+  specificity    96.69 +/- 0.57 (sigma=4.10)
+  f1             82.56 +/- 1.65 (sigma=11.82)
+  kappa          0.7876 +/- 0.0192 (sigma=0.1377)
+
+[sem ODD]
+  16 features | Hard: 4 pos | Base: 16/20
+  accuracy       94.90 +/- 0.57 (sigma=4.07)
+  sensitivity    81.12 +/- 2.46 (sigma=17.63)
+  specificity    98.34 +/- 0.42 (sigma=3.04)
+  f1             85.66 +/- 1.66 (sigma=11.91)
+  kappa          0.8269 +/- 0.0197 (sigma=0.1416)
+
+[sem Number of Impairments]
+  16 features | Hard: 4 pos | Base: 14/20
+  accuracy       91.50 +/- 0.63 (sigma=4.48)
+  sensitivity    74.12 +/- 3.03 (sigma=21.76)
+  specificity    95.84 +/- 0.63 (sigma=4.49)
+  f1             76.32 +/- 2.11 (sigma=15.10)
+  kappa          0.7148 +/- 0.0235 (sigma=0.1685)
+
+[sem Number of Type B Stressors]
+  16 features | Hard: 3 pos | Base: 14/20
+  accuracy       92.90 +/- 0.65 (sigma=4.63)
+  sensitivity    75.67 +/- 3.25 (sigma=23.32)
+  specificity    95.94 +/- 0.58 (sigma=4.19)
+  f1             75.15 +/- 2.50 (sigma=17.94)
+  kappa          0.7122 +/- 0.0280 (sigma=0.2006)
+
+[sem Frequency Temper Tantrums]
+  16 features | Hard: 4 pos | Base: 12/20
+  accuracy       92.90 +/- 0.64 (sigma=4.60)
+  sensitivity    82.38 +/- 2.56 (sigma=18.38)
+  specificity    95.53 +/- 0.63 (sigma=4.49)
+  f1             81.71 +/- 1.77 (sigma=12.71)
+  kappa          0.7745 +/- 0.0212 (sigma=0.1518)
+
+[sem Frequency Irritable Mood]
+  16 features | Hard: 5 pos | Base: 13/20
+  accuracy       93.30 +/- 0.56 (sigma=3.99)
+  sensitivity    77.00 +/- 2.09 (sigma=14.97)
+  specificity    98.73 +/- 0.38 (sigma=2.71)
+  f1             84.51 +/- 1.40 (sigma=10.07)
+  kappa          0.8041 +/- 0.0171 (sigma=0.1227)
+
+[sem Number of Sleep Disturbances]
+  16 features | Hard: 2 pos | Base: 13/20
+  accuracy       95.12 +/- 0.57 (sigma=4.12)
+  sensitivity    84.75 +/- 3.51 (sigma=25.16)
+  specificity    96.28 +/- 0.57 (sigma=4.10)
+  f1             77.34 +/- 2.83 (sigma=20.32)
+  kappa          0.7486 +/- 0.0306 (sigma=0.2196)
+
+[sem Number of Sensory Sensitivities]
+  16 features | Hard: 5 pos | Base: 14/20
+  accuracy       92.47 +/- 0.64 (sigma=4.59)
+  sensitivity    78.60 +/- 2.33 (sigma=16.72)
+  specificity    97.10 +/- 0.56 (sigma=4.04)
+  f1             83.22 +/- 1.56 (sigma=11.22)
+  kappa          0.7855 +/- 0.0192 (sigma=0.1376)
+
+[sem Family History - Psychiatric Diagnosis]
+  16 features | Hard: 4 pos | Base: 16/20
+  accuracy       93.25 +/- 0.66 (sigma=4.75)
+  sensitivity    83.00 +/- 2.49 (sigma=17.86)
+  specificity    95.81 +/- 0.61 (sigma=4.35)
+  f1             82.62 +/- 1.84 (sigma=13.22)
+  kappa          0.7855 +/- 0.0220 (sigma=0.1579)
+
+Resumo (ordenado por delta de Kappa, melhor primeiro):
+Cenario                                       Feat      Kappa     Delta     Sens     Spec
+------------------------------------------------------------------------------------------
+baseline (17 features)                          17     0.8415         -   82.38%   98.62%
+sem ODD                                         16     0.8269   -0.0147   81.12%   98.34%
+sem ADHD                                        16     0.8190   -0.0226   79.12%   98.66%
+sem Frequency Irritable Mood                    16     0.8041   -0.0374   77.00%   98.73%
+sem CD                                          16     0.7876   -0.0540   80.88%   96.69%
+sem Race                                        16     0.7862   -0.0553   81.83%   97.00%
+sem Family History - Psychiatric Diagnosis      16     0.7855   -0.0560   83.00%   95.81%
+sem Number of Sensory Sensitivities             16     0.7855   -0.0560   78.60%   97.10%
+sem Social Phobia                               16     0.7765   -0.0650   79.38%   96.59%
+sem Frequency Temper Tantrums                   16     0.7745   -0.0671   82.38%   95.53%
+sem Number of Bio. Parents                      16     0.7660   -0.0755   78.08%   96.07%
+sem Number of Sleep Disturbances                16     0.7486   -0.0930   84.75%   96.28%
+sem Sex                                         16     0.7376   -0.1040   78.62%   95.06%
+sem Age                                         16     0.7208   -0.1207   77.83%   93.18%
+sem Number of Impairments                       16     0.7148   -0.1268   74.12%   95.84%
+sem Number of Type B Stressors                  16     0.7122   -0.1293   75.67%   95.94%
+sem Poverty Status                              16     0.6666   -0.1749   71.25%   96.83%
+sem Number of Siblings                          16     0.6366   -0.2049   73.00%   95.58%

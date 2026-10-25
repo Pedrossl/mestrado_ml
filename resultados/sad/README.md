@@ -1,5 +1,6 @@
 # resultados/sad — melhores resultados de SAD
 
-Vazio ate que os experimentos de SAD comecem. Quando houver um resultado
-oficial de Monte Carlo v1 (ou outro) para SAD, ele entra aqui, seguindo o
-mesmo padrao de `resultados/gad/melhor_resultado_monte_carlo.txt`.
+[melhor_resultado_monte_carlo.txt](melhor_resultado_monte_carlo.txt) — resultado
+final validado: **17 features (nenhuma removida), max_depth=4, Kappa 0.8415**.
+Inclui o teste das 18 remocoes individuais (todas rejeitadas) e o tuning de
+hiperparametros — ver `docs/sad/FEATURE_SELECTION.md` para a analise completa.

@@ -1,0 +1,9 @@
+baseline (17 features)                        MC=0.8992±0.160 TC=0.8476±0.086 hard+=2
+sem Sex + ADHD                                MC=0.7600±0.278 TC=0.8541±0.085 hard+=2
+sem Number of Bio. Parents + ADHD             MC=0.8272±0.242 TC=0.8505±0.086 hard+=2
+sem Number of Impairments + ODD               MC=0.8073±0.136 TC=0.8510±0.088 hard+=5
+sem Sex + Number of Bio. Parents + Number of Impairments MC=0.8731±0.132 TC=0.8787±0.082 hard+=4
+sem Sex + Number of Impairments + Poverty Status MC=0.8281±0.162 TC=0.8672±0.086 hard+=4
+sem Sex + Poverty Status + ODD                MC=0.8550±0.127 TC=0.8571±0.084 hard+=4
+sem Number of Bio. Parents + Number of Impairments + ODD MC=0.8358±0.135 TC=0.8633±0.084 hard+=4
+sem Number of Impairments + Poverty Status + ADHD MC=0.8005±0.135 TC=0.8598±0.089 hard+=5

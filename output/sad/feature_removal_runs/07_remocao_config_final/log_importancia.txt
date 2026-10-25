@@ -1,0 +1,18 @@
+                               feature  permutation_kappa    gain  spearman_sad
+                        Poverty Status            -0.0206 +0.0466       +0.0592
+                 Number of Impairments            -0.0203 +0.0542       +0.2329
+Family History - Psychiatric Diagnosis            -0.0168 +0.0461       +0.0459
+       Number of Sensory Sensitivities            -0.0153 +0.0731       +0.2588
+                                   Sex            -0.0108 +0.0492       -0.0290
+                                  ADHD            +0.0000 +0.0372       -0.0188
+                                    CD            +0.0009 +0.0301       +0.1954
+                                   ODD            +0.0034 +0.0015       +0.1631
+                Number of Bio. Parents            +0.0094 +0.0415       -0.0486
+                    Number of Siblings            +0.0174 +0.0471       -0.0922
+            Number of Type B Stressors            +0.0217 +0.0600       +0.2354
+                         Social Phobia            +0.0245 +0.1068       +0.3149
+                                  Race            +0.0245 +0.0494       -0.0892
+             Frequency Temper Tantrums            +0.0323 +0.0632       +0.1554
+              Frequency Irritable Mood            +0.0404 +0.0637       +0.1708
+                                   Age            +0.0554 +0.0608       +0.0025
+          Number of Sleep Disturbances            +0.1010 +0.1695       +0.3882

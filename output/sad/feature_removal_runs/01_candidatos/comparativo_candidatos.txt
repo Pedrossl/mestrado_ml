@@ -1,0 +1,61 @@
+MONTE CARLO v1 — Candidatas a remocao | SAD
+200 simulacoes | Sorteio 15/20 | max_depth=4
+================================================================================
+
+[baseline (17 features)]
+  17 features | Hard: 4 pos | Base: 14/20
+  accuracy       95.38 +/- 0.59 (sigma=4.25)
+  sensitivity    82.38 +/- 2.52 (sigma=18.04)
+  specificity    98.62 +/- 0.37 (sigma=2.67)
+  f1             86.84 +/- 1.79 (sigma=12.84)
+  kappa          0.8415 +/- 0.0211 (sigma=0.1516)
+
+[sem ODD]
+  16 features | Hard: 4 pos | Base: 16/20
+  accuracy       94.90 +/- 0.57 (sigma=4.07)
+  sensitivity    81.12 +/- 2.46 (sigma=17.63)
+  specificity    98.34 +/- 0.42 (sigma=3.04)
+  f1             85.66 +/- 1.66 (sigma=11.91)
+  kappa          0.8269 +/- 0.0197 (sigma=0.1416)
+
+[sem Family History]
+  16 features | Hard: 4 pos | Base: 16/20
+  accuracy       93.25 +/- 0.66 (sigma=4.75)
+  sensitivity    83.00 +/- 2.49 (sigma=17.86)
+  specificity    95.81 +/- 0.61 (sigma=4.35)
+  f1             82.62 +/- 1.84 (sigma=13.22)
+  kappa          0.7855 +/- 0.0220 (sigma=0.1579)
+
+[sem Number of Bio. Parents]
+  16 features | Hard: 6 pos | Base: 12/20
+  accuracy       90.67 +/- 0.65 (sigma=4.67)
+  sensitivity    78.08 +/- 2.10 (sigma=15.09)
+  specificity    96.07 +/- 0.63 (sigma=4.51)
+  f1             82.82 +/- 1.31 (sigma=9.37)
+  kappa          0.7660 +/- 0.0170 (sigma=0.1217)
+
+[sem Sex]
+  16 features | Hard: 4 pos | Base: 15/20
+  accuracy       91.78 +/- 0.64 (sigma=4.62)
+  sensitivity    78.62 +/- 2.48 (sigma=17.79)
+  specificity    95.06 +/- 0.58 (sigma=4.18)
+  f1             78.74 +/- 1.76 (sigma=12.60)
+  kappa          0.7376 +/- 0.0212 (sigma=0.1519)
+
+[sem Number of Impairments]
+  16 features | Hard: 4 pos | Base: 14/20
+  accuracy       91.50 +/- 0.63 (sigma=4.48)
+  sensitivity    74.12 +/- 3.03 (sigma=21.76)
+  specificity    95.84 +/- 0.63 (sigma=4.49)
+  f1             76.32 +/- 2.11 (sigma=15.10)
+  kappa          0.7148 +/- 0.0235 (sigma=0.1685)
+
+Resumo (delta vs baseline):
+Cenario                          Feat      Kappa    Delta     Sens       F1     Spec
+----------------------------------------------------------------------------------
+baseline (17 features)             17     0.8415        -   82.38%   86.84%   98.62%
+sem ODD                            16     0.8269  -0.0147   81.12%   85.66%   98.34%
+sem Family History                 16     0.7855  -0.0560   83.00%   82.62%   95.81%
+sem Number of Bio. Parents         16     0.7660  -0.0755   78.08%   82.82%   96.07%
+sem Sex                            16     0.7376  -0.1040   78.62%   78.74%   95.06%
+sem Number of Impairments          16     0.7148  -0.1268   74.12%   76.32%   95.84%

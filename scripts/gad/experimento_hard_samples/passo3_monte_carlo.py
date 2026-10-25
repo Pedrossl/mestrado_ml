@@ -17,7 +17,7 @@ from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from sklearn.metrics import accuracy_score
 from scripts.utils import calcular_metricas_fold, agregar_metricas_com_ic
-from scripts.config import XGB_MAX_DEPTH
+from scripts.config import XGB_MAX_DEPTH_BY_TARGET
 
 N_SIMULACOES  = 200    # Número de sorteios Monte Carlo
 TAMANHO_SORTEIO = 15   # Quantos dos 20 hard samples usar por simulação
@@ -43,7 +43,7 @@ print(f"{'=' * 60}\n")
 smote = SMOTE(random_state=42)
 X_tr_res, y_tr_res = smote.fit_resample(X_treino, y_treino)
 
-modelo_base = XGBClassifier(eval_metric='logloss', verbosity=0, random_state=42, max_depth=XGB_MAX_DEPTH)
+modelo_base = XGBClassifier(eval_metric='logloss', verbosity=0, random_state=42, max_depth=XGB_MAX_DEPTH_BY_TARGET[ALVO])
 modelo_base.fit(X_tr_res, y_tr_res)
 
 # =============================================================================
@@ -87,7 +87,7 @@ def rodar_monte_carlo(usar_smoothing):
         pesos = np.concatenate([pesos_treino, pesos_hard])
 
         # Treina novo modelo com hard samples incluídos
-        modelo = XGBClassifier(eval_metric='logloss', verbosity=0, random_state=42, max_depth=XGB_MAX_DEPTH)
+        modelo = XGBClassifier(eval_metric='logloss', verbosity=0, random_state=42, max_depth=XGB_MAX_DEPTH_BY_TARGET[ALVO])
         modelo.fit(X_combinado, y_combinado, sample_weight=pesos)
 
         # Avalia nos próprios hard samples (o que nos interessa: estabilidade)

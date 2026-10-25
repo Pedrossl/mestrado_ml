@@ -1,5 +1,71 @@
 # TODO - Mestrado ML
 
+## 📅 16/10/2026 — Pendências da reunião
+
+### Hiperparâmetros do XGBoost (hoje)
+
+| Parâmetro | GAD | SAD | Origem |
+|---|---|---|---|
+| n_estimators (nº de árvores) | 100 | 100 | padrão do XGBoost |
+| max_depth | 8 | 3 | tunado (config.py) |
+| learning_rate | 0.3 | 0.3 | padrão |
+| subsample, colsample_bytree | 1.0 | 1.0 | padrão |
+| min_child_weight | 1 | 1 | padrão |
+| reg_lambda / reg_alpha | 1 / 0 | 1 / 0 | padrão |
+| eval_metric | logloss | logloss | definido no código |
+| random_state | 42 | 42 | definido no código |
+| Balanceamento | SMOTE 1.0 | SMOTE 0.2 | tunado (config.py) |
+
+- [ ] **Colocar 300 estimadores** (`n_estimators=300`) e comparar com os 100 atuais
+
+### Modelo só com as variáveis principais
+
+- [ ] Rodar o modelo **só com estas variáveis**: Fobia social (Social Phobia), CD,
+      Frequência de humor irritável (Frequency Irritable Mood), ODD, ADHD, Idade (Age)
+  - [ ] Criar o código em uma **pasta separada**
+  - [ ] Ir **adicionando as outras variáveis aos poucos** e ver o que acontece com o resultado
+  - [ ] Avaliar o **peso** que cada variável tem
+  - [ ] Objetivo: achar a **melhor assertividade** na saída
+  - Obs: definir o alvo (SAD, GAD ou os dois). Pelo Spearman, Age é significativa só
+    para GAD e ADHD não é significativa para nenhum dos dois (ver
+    `output/sad/correlacao/significancia_spearman_sad_gad.csv`)
+
+### SHAP (sugestão do Sergio)
+
+- [ ] Usar a biblioteca **SHAP** para explicar o modelo (peso de cada variável em cada previsão)
+  - [ ] Instalar: `pip install shap`
+  - [ ] Adaptar o exemplo abaixo para o nosso `XGBClassifier` (o exemplo usa `XGBRegressor`)
+  - [ ] Gerar o beeswarm (importância global) e o waterfall (explicação de um paciente)
+
+> **[19:44, 16/10/2026] Sergio:** A biblioteca SHAP (SHapley Additive exPlanations) no Python
+> serve para explicar as previsões feitas por modelos de Machine Learning. Ela transforma
+> modelos de "caixa-preta" (como XGBoost, Random Forest, Redes Neurais e LightGBM) em modelos
+> interpretáveis, mostrando com precisão quanto cada variável (feature) contribuiu para um
+> determinado resultado.
+
+```python
+import shap
+from sklearn.model_selection import train_test_split
+from xgboost import XGBRegressor
+
+# 1. Carrega dados e treina um modelo de exemplo
+X, y = shap.datasets.california()
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = XGBRegressor(n_estimators=100)
+model.fit(X_train, y_train)
+
+# 2. Inicializa o explicador (TreeExplainer para árvores)
+explainer = shap.TreeExplainer(model)
+shap_values = explainer(X_test)
+
+# 3. Gráfico global: Mostra a importância e o impacto das variáveis
+shap.plots.beeswarm(shap_values)
+
+# 4. Gráfico local: Explica a predição da primeira linha do teste
+shap.plots.waterfall(shap_values[0])
+```
+
 ## Concluido
 
 ### Pre-processamento

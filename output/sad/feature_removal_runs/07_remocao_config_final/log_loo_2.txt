@@ -1,0 +1,4 @@
+sem Race                                      MC=0.8339±0.152 TC=0.8470±0.088 hard+=4
+sem Poverty Status                            MC=0.9002±0.169 TC=0.8509±0.084 hard+=2
+sem ODD                                       MC=0.7858±0.263 TC=0.8479±0.087 hard+=2
+sem Frequency Irritable Mood                  MC=0.6725±0.132 TC=0.7681±0.081 hard+=4

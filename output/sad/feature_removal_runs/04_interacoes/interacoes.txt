@@ -1,0 +1,11 @@
+MONTE CARLO v1 — Features de Interacao | SAD | max_depth=4
+==========================================================================================
+
+baseline (17 features)                   17   0.8415        -   82.38%   98.62%
++ sleep_x_social                         18   0.7601  -0.0814   78.25%   95.54%
++ sleep_x_sensory                        18   0.8346  -0.0070   84.00%   98.12%
++ social_x_sensory                       18   0.8038  -0.0378   79.90%   97.47%
++ impair_x_stress                        18   0.8152  -0.0263   81.25%   97.81%
++ score_severidade                       18   0.7583  -0.0833   81.83%   95.74%
++ todas as 5 interacoes                  22   0.7181  -0.1234   80.62%   93.25%
++ so os 2 produtos de sleep              19   0.7795  -0.0620   79.50%   96.66%

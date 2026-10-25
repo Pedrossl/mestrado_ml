@@ -1,0 +1,32 @@
+Correlacao de Spearman com SAD
+======================================================================
+
+Number of Sleep Disturbances                  rho=+0.388
+Social Phobia                                 rho=+0.315
+Number of Sensory Sensitivities               rho=+0.259
+Number of Type B Stressors                    rho=+0.235
+Number of Impairments                         rho=+0.233
+CD                                            rho=+0.195
+Frequency Irritable Mood                      rho=+0.171
+ODD                                           rho=+0.163
+Frequency Temper Tantrums                     rho=+0.155
+Number of Siblings                            rho=-0.092 <- fraca (candidata a remocao por baixo sinal)
+Race                                          rho=-0.089 <- fraca (candidata a remocao por baixo sinal)
+Poverty Status                                rho=+0.059 <- fraca (candidata a remocao por baixo sinal)
+Number of Bio. Parents                        rho=-0.049 <- fraca (candidata a remocao por baixo sinal)
+Family History - Psychiatric Diagnosis        rho=+0.046 <- fraca (candidata a remocao por baixo sinal)
+Sex                                           rho=-0.029 <- fraca (candidata a remocao por baixo sinal)
+ADHD                                          rho=-0.019 <- fraca (candidata a remocao por baixo sinal)
+Age                                           rho=+0.002 <- fraca (candidata a remocao por baixo sinal)
+
+
+Pares com |rho| >= 0.4 entre si (candidatos a redundancia)
+======================================================================
+ODD <-> Number of Impairments: rho=+0.528  (ODD vs SAD=+0.163, Number of Impairments vs SAD=+0.233)  candidata a remover: ODD
+CD <-> ODD: rho=+0.502  (CD vs SAD=+0.195, ODD vs SAD=+0.163)  candidata a remover: ODD
+ODD <-> Frequency Irritable Mood: rho=+0.501  (ODD vs SAD=+0.163, Frequency Irritable Mood vs SAD=+0.171)  candidata a remover: ODD
+Number of Impairments <-> Frequency Irritable Mood: rho=+0.473  (Number of Impairments vs SAD=+0.233, Frequency Irritable Mood vs SAD=+0.171)  candidata a remover: Frequency Irritable Mood
+Frequency Temper Tantrums <-> Frequency Irritable Mood: rho=+0.468  (Frequency Temper Tantrums vs SAD=+0.155, Frequency Irritable Mood vs SAD=+0.171)  candidata a remover: Frequency Temper Tantrums
+Race <-> Number of Bio. Parents: rho=-0.414  (Race vs SAD=-0.089, Number of Bio. Parents vs SAD=-0.049)  candidata a remover: Number of Bio. Parents
+Social Phobia <-> Number of Sensory Sensitivities: rho=+0.409  (Social Phobia vs SAD=+0.315, Number of Sensory Sensitivities vs SAD=+0.259)  candidata a remover: Number of Sensory Sensitivities
+Social Phobia <-> Number of Impairments: rho=+0.408  (Social Phobia vs SAD=+0.315, Number of Impairments vs SAD=+0.233)  candidata a remover: Number of Impairments

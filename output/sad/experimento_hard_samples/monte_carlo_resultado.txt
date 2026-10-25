@@ -1,0 +1,10 @@
+MONTE CARLO — SAD
+200 simulações | Sorteio de 15/20 hard samples | ε=0.1
+
+Métrica                 Sem Smoothing          Com Smoothing
+------------------------------------------------------------
+accuracy                 98.50 ± 0.34           98.33 ± 0.34
+sensitivity              87.25 ± 3.05           87.25 ± 3.05
+specificity              99.75 ± 0.18           99.56 ± 0.21
+f1                       90.65 ± 2.08           89.93 ± 2.09
+kappa                     0.90 ± 0.02            0.89 ± 0.02

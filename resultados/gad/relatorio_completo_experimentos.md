@@ -364,7 +364,56 @@ Evolucao total: Kappa 0.8130 (17 feat, baseline original) -> 0.8832/0.8867
 todas as metricas.
 
 
-## 7. Limitacao estrutural (nao resolvida por tuning)
+## 7. Segunda rodada de busca (regularizacao + algoritmo alternativo)
+
+Depois de fechar features + `max_depth=8`, testamos mais duas frentes para
+ver se dava pra melhorar ainda mais.
+
+### 7.1 — Regularizacao do XGBoost
+
+Script: `scripts/gad/analysis/mc_v1_tuning_round2.py`. Testado sobre o
+baseline (15 features, max_depth=8):
+
+```
+learning_rate=0.2                Kappa=0.8608 (-0.0224)
+reg_alpha=1.0                    Kappa=0.8597 (-0.0235)
+scale_pos_weight=2               Kappa=0.8435 (-0.0397)
+reg_lambda=3.0                   Kappa=0.8431 (-0.0401)
+colsample_bytree=0.8             Kappa=0.8420 (-0.0412)
+learning_rate=0.05               Kappa=0.8408 (-0.0424)
+min_child_weight=5               Kappa=0.8390 (-0.0442)
+colsample_bytree=0.6             Kappa=0.8357 (-0.0475)
+subsample=0.8                    Kappa=0.8115 (-0.0717)
+ADASYN                           Kappa=0.8111 (-0.0721)
+subsample=0.8+colsample=0.8      Kappa=0.8108 (-0.0724)
+min_child_weight=3               Kappa=0.8077 (-0.0755)
+BorderlineSMOTE                  Kappa=0.7868 (-0.0964)
+subsample=0.6                    Kappa=0.7775 (-0.1057)
+```
+
+Todas as 14 configuracoes pioraram. `max_depth=8` sozinho (sem regularizacao
+adicional) continua sendo o melhor ponto encontrado.
+
+### 7.2 — Troca de algoritmo
+
+Script: `scripts/gad/analysis/mc_v1_algoritmos.py`. Mesmas 15 features,
+trocando XGBoost por LightGBM, CatBoost, RandomForest e HistGradientBoosting:
+
+```
+CatBoost depth=8                 Kappa=0.8421 (-0.0411)
+CatBoost depth=6 (default)       Kappa=0.8412 (-0.0420)
+RandomForest (default)           Kappa=0.8387 (-0.0445)
+LightGBM depth=8                 Kappa=0.7960 (-0.0872)
+HistGradientBoosting (default)   Kappa=0.7824 (-0.1008)
+LightGBM depth=-1 (default)      Kappa=0.7585 (-0.1247)
+HistGradientBoosting max_depth=8 Kappa=0.7528 (-0.1304)
+```
+
+XGBoost continua claramente a melhor opcao — nenhum concorrente chegou perto
+de 0.8832. **Total de tentativas de melhorar o Monte Carlo v1 de GAD alem da
+config atual: 14 (regularizacao) + 7 (algoritmos) = 21, nenhuma superou.**
+
+## 8. Limitacao estrutural (nao resolvida por tuning)
 
 Todo o tuning acima opera dentro do protocolo do Monte Carlo v1, que tem
 vazamento de dados por construcao (secao 0). Isso significa que o teto de

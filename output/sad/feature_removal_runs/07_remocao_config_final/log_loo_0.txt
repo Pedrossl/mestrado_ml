@@ -1,0 +1,5 @@
+baseline (17 features)                        MC=0.8992±0.160 TC=0.8476±0.086 hard+=2
+sem Number of Bio. Parents                    MC=0.8282±0.241 TC=0.8520±0.085 hard+=2
+sem ADHD                                      MC=0.8843±0.171 TC=0.8486±0.086 hard+=2
+sem Number of Type B Stressors                MC=0.7977±0.195 TC=0.7857±0.091 hard+=3
+sem Number of Sensory Sensitivities           MC=0.7349±0.259 TC=0.8385±0.091 hard+=2

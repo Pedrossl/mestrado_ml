@@ -38,10 +38,25 @@ MODEL_DROP_COLUMNS = [
     "Sample Weight",
 ]
 
-# Hiperparametro do XGBoost tunado para o Monte Carlo v1 de GAD.
-# Pode nao ser o ideal para SAD (nao testado ainda) - reavaliar quando o
-# tuning de SAD for feito.
-XGB_MAX_DEPTH = 8
+# Hiperparametro do XGBoost usado no Monte Carlo v1, por alvo. Cada alvo foi
+# tunado separadamente porque a direcao do ajuste pode ser oposta: GAD
+# melhorou com arvores MAIS profundas (default 6 -> 8), SAD melhorou com
+# arvores MAIS RASAS (default 6 -> 3). Ver docs/gad/FEATURE_SELECTION.md e
+# docs/sad/FEATURE_SELECTION.md.
+XGB_MAX_DEPTH_BY_TARGET = {
+    "GAD": 8,
+    "SAD": 3,
+}
+
+# Estrategia de balanceamento (sampling_strategy do SMOTE) por alvo. GAD usa
+# balanceamento completo ("auto" = 1.0, classes 50/50). SAD e menos
+# desbalanceado (16% positivos) e respondeu melhor a SMOTE leve (0.2): o
+# oversampling agressivo distorcia a distribuicao. Ver
+# docs/sad/FEATURE_SELECTION.md, etapa 8.
+SMOTE_STRATEGY_BY_TARGET = {
+    "GAD": "auto",
+    "SAD": 0.2,
+}
 
 # Features a remover por alvo. Cada alvo tem sua propria lista porque a
 # selecao de features (Spearman + Permutation Importance + validacao Monte

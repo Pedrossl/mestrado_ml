@@ -4,6 +4,8 @@ scipy
 scikit-learn
 imbalanced-learn
 xgboost
+lightgbm
+catboost
 matplotlib
 seaborn
 statsmodels

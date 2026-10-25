@@ -1,0 +1,3 @@
+=== smote=0.2 depth=5 n_est=50 lr=0.2 | hard: 1 pos | base acerta 19/20 ===
+  sem smoothing: kappa=0.9879 (sig=0.0863) sens=99.50% spec=99.89% f1=98.83% acc=99.88%
+  com smoothing: kappa=0.9950 (sig=0.0707) sens=99.50% spec=100.00% f1=99.50% acc=99.97%

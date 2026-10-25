@@ -1,0 +1,16 @@
+MONTE CARLO v1 — Balanceamento | SAD | max_depth=4
+==========================================================================================
+
+SMOTE 1.0 (baseline)                   Kappa=0.8415 Sens=82.38% F1=86.84% Spec=98.62% sig_k=0.1516
+SMOTE ratio=0.3                        Kappa=0.8710 Sens=84.17% F1=88.60% Spec=99.44% sig_k=0.1606
+SMOTE ratio=0.5                        Kappa=0.7958 Sens=83.00% F1=83.34% Spec=96.34% sig_k=0.1389
+SMOTE ratio=0.75                       Kappa=0.7809 Sens=77.80% F1=82.83% Spec=97.20% sig_k=0.1347
+SMOTE k_neighbors=3                    Kappa=0.7842 Sens=82.00% F1=82.51% Spec=96.06% sig_k=0.1523
+SMOTE k_neighbors=7                    Kappa=0.7877 Sens=78.88% F1=82.48% Spec=97.38% sig_k=0.1493
+RandomOverSampler                      Kappa=0.7824 Sens=83.33% F1=81.38% Spec=96.38% sig_k=0.1696
+RandomUnderSampler                     Kappa=0.7476 Sens=85.38% F1=80.00% Spec=93.00% sig_k=0.1329
+SMOTE 0.5 + RUS 0.8                    Kappa=0.7192 Sens=83.10% F1=79.09% Spec=91.20% sig_k=0.1375
+Sem balanc + scale_pos_weight(auto)    Kappa=0.7446 Sens=81.83% F1=78.32% Spec=95.26% sig_k=0.1616
+Sem balanceamento nenhum               Kappa=0.8678 Sens=83.83% F1=88.32% Spec=99.41% sig_k=0.1577
+
+baseline SMOTE 1.0 = 0.8415

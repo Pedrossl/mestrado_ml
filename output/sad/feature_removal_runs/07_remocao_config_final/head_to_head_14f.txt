@@ -1,0 +1,27 @@
+SAD — 17 features vs 14 features (sem Sex, Number of Bio. Parents, Number of Impairments)
+Config: SMOTE 0.2, 200 simulacoes. Todas as configs avaliadas NOS MESMOS CASOS em cada prova.
+
+=== Prova A: hard samples da config atual (17f) -> 2 positivos / 20 ===
+  17f depth3 (atual)   kappa=0.8992 sig=0.160 sens=87.2% spec=99.8% f1=90.7%
+  14f depth3           kappa=0.9552 sig=0.123 sens=94.0% spec=99.9% f1=95.8%
+  14f depth2           kappa=0.9179 sig=0.151 sens=88.5% spec=100.0% f1=92.3%
+  14f depth4           kappa=0.9156 sig=0.151 sens=88.5% spec=99.9% f1=92.1%
+  14f depth5           kappa=0.9037 sig=0.163 sens=87.2% spec=99.9% f1=91.0%
+
+=== Prova B: hard samples da 14f -> 4 positivos / 20 ===
+  17f depth3 (atual)   kappa=0.8390 sig=0.160 sens=81.4% spec=98.9% f1=86.6%
+  14f depth3           kappa=0.8731 sig=0.132 sens=82.9% spec=99.8% f1=89.3%
+  14f depth2           kappa=0.8139 sig=0.155 sens=75.2% spec=99.8% f1=84.1%
+  14f depth4           kappa=0.8598 sig=0.148 sens=81.4% spec=99.8% f1=88.1%
+  14f depth5           kappa=0.8513 sig=0.148 sens=81.4% spec=99.4% f1=87.5%
+
+=== Prova C: teste inteiro -> 9 positivos / 58 ===
+  17f depth3 (atual)   kappa=0.8476 sig=0.086 sens=80.0% spec=99.4% f1=86.8%
+  14f depth3           kappa=0.8787 sig=0.082 sens=83.0% spec=99.7% f1=89.5%
+  14f depth2           kappa=0.6221 sig=0.093 sens=50.2% spec=99.9% f1=66.0%
+  14f depth4           kappa=0.8682 sig=0.087 sens=81.8% spec=99.6% f1=88.6%
+  14f depth5           kappa=0.8550 sig=0.083 sens=80.2% spec=99.6% f1=87.4%
+
+Conclusao: 14f depth3 vence a 17f nas tres provas (Kappa, sensibilidade e sigma).
+No MC oficial (hard samples proprios) o numero cai de 0.8992 para 0.8731 porque a
+prova da 14f e mais dificil (4 positivos, mesma composicao do GAD).

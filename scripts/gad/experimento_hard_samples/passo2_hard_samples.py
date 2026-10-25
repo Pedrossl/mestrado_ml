@@ -10,6 +10,7 @@ import pandas as pd
 from xgboost import XGBClassifier
 from imblearn.over_sampling import SMOTE
 from scripts.utils import preparar_dados
+from scripts.config import XGB_MAX_DEPTH_BY_TARGET
 
 ALVO   = 'GAD'
 N_HARD = 20       # Quantos hard samples selecionar
@@ -32,7 +33,7 @@ n_neg, n_pos = np.bincount(y_treino.astype(int))
 smote = SMOTE(random_state=42)
 X_tr_res, y_tr_res = smote.fit_resample(X_treino, y_treino)
 
-modelo = XGBClassifier(eval_metric='logloss', verbosity=0, random_state=42)
+modelo = XGBClassifier(eval_metric='logloss', verbosity=0, random_state=42, max_depth=XGB_MAX_DEPTH_BY_TARGET[ALVO])
 modelo.fit(X_tr_res, y_tr_res)
 
 # Obtém probabilidade de ser positivo para cada amostra do teste

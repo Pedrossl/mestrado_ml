@@ -1,0 +1,5 @@
+sem Sex                                       MC=0.7621±0.277 TC=0.8542±0.084 hard+=2
+sem Number of Siblings                        MC=0.8489±0.153 TC=0.8327±0.092 hard+=3
+sem CD                                        MC=0.8512±0.164 TC=0.8340±0.094 hard+=3
+sem Frequency Temper Tantrums                 MC=0.7869±0.119 TC=0.8302±0.089 hard+=6
+sem Family History - Psychiatric Diagnosis    MC=0.8893±0.173 TC=0.8419±0.089 hard+=2

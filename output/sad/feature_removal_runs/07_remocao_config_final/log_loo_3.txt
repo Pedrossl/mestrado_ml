@@ -1,0 +1,4 @@
+sem Age                                       MC=0.7721±0.138 TC=0.8327±0.089 hard+=4
+sem Social Phobia                             MC=0.8678±0.146 TC=0.8316±0.089 hard+=3
+sem Number of Impairments                     MC=0.7773±0.169 TC=0.8516±0.088 hard+=4
+sem Number of Sleep Disturbances              MC=0.8651±0.171 TC=0.7340±0.107 hard+=2

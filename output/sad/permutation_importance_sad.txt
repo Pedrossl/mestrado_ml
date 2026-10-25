@@ -1,0 +1,28 @@
+Permutation Importance — SAD | 17 features | CV 10-fold
+======================================================================
+
+RANKING — Permutation Importance (Kappa)
+Quanto maior, mais importante. Negativo = remover pode ajudar.
+======================================================================
+#    Feature                                   Importância      ± Std
+--------------------------------------------------------------------
+1    Sex                                           -0.0548     0.0541 <- candidata
+2    Family History - Psychiatric Diagnosis        -0.0527     0.0571 <- candidata
+3    Number of Impairments                         -0.0468     0.0627 <- candidata
+4    Number of Siblings                            -0.0436     0.0401 <- candidata
+5    Number of Bio. Parents                        -0.0305     0.0510 <- candidata
+6    Frequency Temper Tantrums                     -0.0297     0.1041 <- candidata
+7    Number of Sensory Sensitivities               -0.0296     0.0498 <- candidata
+8    Poverty Status                                -0.0253     0.0432 <- candidata
+9    ADHD                                          -0.0173     0.0146 <- candidata
+10   Race                                          -0.0139     0.0689 <- candidata
+11   Age                                           -0.0137     0.1246 <- candidata
+12   Social Phobia                                 -0.0116     0.0395 <- candidata
+13   ODD                                           +0.0000     0.0000 <- candidata
+14   Frequency Irritable Mood                      +0.0212     0.1003
+15   CD                                            +0.0219     0.0099
+16   Number of Type B Stressors                    +0.0406     0.1485
+17   Number of Sleep Disturbances                  +0.1018     0.1521
+
+Features com importância < 0.005 são candidatas a remoção.
+Features com importância negativa podem estar atrapalhando o modelo.

@@ -1,0 +1,9 @@
+sem Sex + Number of Bio. Parents              MC=0.8651±0.136 TC=0.8602±0.085 hard+=4
+sem Sex + ODD                                 MC=0.7984±0.185 TC=0.8534±0.083 hard+=3
+sem Number of Bio. Parents + ODD              MC=0.8444±0.223 TC=0.8525±0.085 hard+=2
+sem Poverty Status + ADHD                     MC=0.8942±0.173 TC=0.8513±0.087 hard+=2
+sem Sex + Number of Bio. Parents + Poverty Status MC=0.8738±0.153 TC=0.8583±0.083 hard+=3
+sem Sex + Number of Impairments + ADHD        MC=0.7969±0.169 TC=0.8673±0.088 hard+=4
+sem Sex + ADHD + ODD                          MC=0.7976±0.185 TC=0.8537±0.084 hard+=3
+sem Number of Bio. Parents + Poverty Status + ADHD MC=0.7549±0.289 TC=0.8533±0.085 hard+=2
+sem Number of Impairments + Poverty Status + ODD MC=0.7960±0.158 TC=0.8604±0.088 hard+=5

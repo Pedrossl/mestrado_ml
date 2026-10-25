@@ -1,12 +1,17 @@
 # docs/sad — documentacao especifica de SAD
 
-Vazio ate que o trabalho de SAD comece. Quando houver, segue o padrao de
-`docs/gad/`:
+## Status atual — CONCLUIDO
 
-- `FEATURE_SELECTION.md` (estrategia de selecao de features para SAD —
-  provavelmente diferente da de GAD, ja que a normalizacao e as variaveis a
-  remover tendem a mudar)
-- `manifesto_resultados_oficiais.md` (quais resultados sustentam o texto)
+[FEATURE_SELECTION.md](FEATURE_SELECTION.md) — **selecao de features e tuning
+de hiperparametros concluidos**. Conclusao: nenhuma feature removida (18
+remocoes individuais testadas, todas pioraram); `max_depth=4` (arvores mais
+rasas) foi o unico ajuste que ajudou — o oposto de GAD, que precisou de
+arvores mais profundas. Configuracao final: 17 features, max_depth=4,
+Kappa 0.8415 (era 0.7788 sem tuning).
+
+Ainda faltam (seguindo o padrao de `docs/gad/`):
+
+- `manifesto_resultados_oficiais.md` (quando houver resultados oficiais de SAD)
 - `dissertacao/` e `slides/` especificos de SAD, se a secao entrar na
   dissertacao ou em apresentacoes futuras
 
